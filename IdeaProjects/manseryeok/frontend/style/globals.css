@@ -1,0 +1,397 @@
+@import 'tailwindcss';
+@import './font.css';
+
+:root {
+    /* Font */
+    --font-suit-sans: 'SUIT', san-serif;
+    --font-jalnan-sans: 'YeogiOttaeJalnan', san-serif;
+
+    /* Color */
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+@theme inline {
+    /* Font */
+    --font-sans: var(--font-suit-sans);
+    --font-jalnan: var(--font-jalnan-sans);
+
+    /* Color */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-mint-50: #f1f9f7;
+    --color-mint-100: #e0f2ee;
+    --color-mint-200: #bee6dd;
+    --color-mint-300: #9ad4c7;
+    --color-mint-400: #76c7b0;
+    --color-mint-500: #56b39a;
+    --color-mint-600: #429480;
+    --color-mint-700: #337565;
+    --color-mint-800: #29594e;
+    --color-mint-900: #233d37;
+    --color-mint-950: #1a2925;
+
+    --color-mocha-50: #f9f6f3;
+    --color-mocha-100: #f1e9e2;
+    --color-mocha-200: #e6d6c7;
+    --color-mocha-300: #dfcbba;
+    --color-mocha-400: #d8bfa9;
+    --color-mocha-500: #c5a589;
+    --color-mocha-600: #a6876d;
+    --color-mocha-700: #856c58;
+    --color-mocha-800: #635244;
+    --color-mocha-900: #3d3732;
+    --color-mocha-950: #2b2724;
+
+    --color-coral-50: #faf8f7;
+    --color-coral-100: #fcebe9;
+    --color-coral-200: #f9d2ce;
+    --color-coral-300: #f6aa9f;
+    --color-coral-400: #f3827a;
+    --color-coral-500: #e06b62;
+    --color-coral-600: #d1665c;
+    --color-coral-700: #b04d45;
+    --color-coral-800: #7a352e;
+    --color-coral-900: #3b2e2d;
+    --color-coral-950: #291f1e;
+
+    --color-greenmint-50: #f8faf8;
+    --color-greenmint-100: #ebf4ed;
+    --color-greenmint-200: #d4e9d9;
+    --color-greenmint-300: #a6dbb4;
+    --color-greenmint-400: #7ccd8e;
+    --color-greenmint-500: #65b276;
+    --color-greenmint-600: #56a36a;
+    --color-greenmint-700: #448255;
+    --color-greenmint-800: #31593b;
+    --color-greenmint-900: #2d362f;
+    --color-greenmint-950: #1f2620;
+
+    --color-lemon-50: #fafaf5;
+    --color-lemon-100: #fef8e1;
+    --color-lemon-200: #fef0bc;
+    --color-lemon-300: #fde194;
+    --color-lemon-400: #fcd26b;
+    --color-lemon-500: #eebf4d;
+    --color-lemon-600: #dbb041;
+    --color-lemon-700: #b58d2b;
+    --color-lemon-800: #7a5f1d;
+    --color-lemon-900: #38352d;
+    --color-lemon-950: #292721;
+
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f4f4f4;
+    --color-gray-200: #e5e5e5;
+    --color-gray-300: #d4d4d4;
+    --color-gray-400: #a3a3a3;
+    --color-gray-500: #737373;
+    --color-gray-600: #525252;
+    --color-gray-700: #454545;
+    --color-gray-800: #3d3d3d;
+    --color-gray-900: #333333;
+    --color-gray-950: #292929;
+
+    --color-blue-50: #f7f9fa;
+    --color-blue-100: #dbeafe;
+    --color-blue-200: #bfdbfe;
+    --color-blue-300: #93c5fd;
+    --color-blue-400: #60a5fa;
+    --color-blue-500: #3b82f6;
+    --color-blue-600: #2563eb;
+    --color-blue-700: #1d4ed8;
+    --color-blue-800: #1e40af;
+    --color-blue-900: #25324d;
+    --color-blue-950: #2b2214;
+
+    --color-red-50: #faf7f7;
+    --color-red-100: #fee2e2;
+    --color-red-200: #fecaca;
+    --color-red-300: #f87171;
+    --color-red-400: #ef4444;
+    --color-red-500: #dc2626;
+    --color-red-600: #b91c1c;
+    --color-red-700: #991b1b;
+    --color-red-800: #7f1d1d;
+    --color-red-900: #452727;
+    --color-red-950: #2a1a1a;
+
+    --color-yellow-50: #fafaf2;
+    --color-yellow-100: #fef3c7;
+    --color-yellow-200: #fde68a;
+    --color-yellow-300: #fcd34d;
+    --color-yellow-400: #fbbf24;
+    --color-yellow-500: #f59e0b;
+    --color-yellow-600: #d97706;
+    --color-yellow-700: #b45309;
+    --color-yellow-800: #92400e;
+    --color-yellow-900: #453821;
+    --color-yellow-900: #2b2214;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        box-sizing: border-box;
+        font-family: 'SUIT', sans-serif;
+        font-feature-settings: 'tnum' 1;
+        color: var(--color-gray-900);
+
+        border-color: var(--color-gray-300, currentColor);
+        accent-color: var(--color-mint-500);
+
+        :where(.dark) & {
+            border-color: var(--color-gray-800, currentColor);
+        }
+    }
+
+    *:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--color-mint-500);
+    }
+
+    p,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        cursor: default;
+    }
+
+    a {
+        cursor: pointer;
+        text-wrap: nowrap;
+
+        & span {
+            pointer-events: none;
+            text-wrap: nowrap;
+        }
+
+        &.small {
+            font-size: small;
+            padding: 0.375rem 0.625rem;
+        }
+
+        &.medium {
+            padding: 0.5rem 0.75rem;
+        }
+
+        &.large {
+            padding: 1rem 0.75rem;
+            font-weight: bold;
+        }
+    }
+
+    button {
+        border-radius: 0.5rem;
+        cursor: pointer;
+        text-wrap: nowrap;
+
+        &:disabled {
+            background-color: var(--color-gray-200);
+        }
+
+        :where(.dark) &:disabled {
+            background-color: var(--color-gray-800);
+        }
+
+        &.small {
+            font-size: small;
+            padding: 0.375rem 0.625rem;
+        }
+
+        &.medium {
+            padding: 0.5rem 0.75rem;
+        }
+
+        &.large {
+            padding: 1rem 0.75rem;
+            font-weight: bold;
+        }
+    }
+
+    input[type='checkbox'] {
+        appearance: none;
+        position: relative;
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.5rem;
+        border: 1px solid var(--color-gray-300);
+        border-radius: 25%;
+
+        &:checked {
+            background-color: var(--color-mint-500);
+
+            &::after {
+                position: absolute;
+                top: 0;
+                left: 0;
+                content: '';
+                width: 100%;
+                height: 100%;
+                background-image: url('/svg/check.svg');
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+        }
+
+        :where(.dark) & {
+            border: 1px solid var(--color-gray-700);
+        }
+    }
+
+    form {
+        &
+            input:is(
+                [type='text'],
+                [type='date'],
+                [type='time'],
+                [type='url'],
+                [type='search'],
+                [type='password'],
+                [type='number'],
+                [type='email']
+            ) {
+            min-width: 10rem;
+            height: 2.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 3rem;
+            border: 1px solid var(--color-gray-300);
+
+            &:disabled {
+                color: var(--color-gray-400);
+            }
+
+            :where(.dark) & {
+                border: 1px solid var(--color-gray-700);
+            }
+        }
+
+        & select {
+            height: 2.5rem;
+            padding: 0.375rem 2rem 0.375rem 1rem;
+            border-radius: 3rem;
+            border: 1px solid var(--color-gray-300);
+            background-image: url('/svg/ArrowDropDown.svg');
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1rem 1rem;
+
+            & > option {
+                background-color: var(--color-gray-50);
+            }
+
+            :where(.dark) & {
+                border: 1px solid var(--color-gray-700);
+
+                & > option {
+                    background-color: var(--color-gray-950);
+                }
+            }
+        }
+    }
+}
+
+@layer utilities {
+    .button-bg-primary {
+        background-color: var(--color-mint-500);
+        color: var(--background);
+
+        &:active,
+        &:hover {
+            background-color: var(--color-mint-600);
+        }
+
+        & svg {
+            stroke: var(--background);
+        }
+    }
+
+    .button-bg-secondary {
+        background-color: var(--color-mocha-500);
+        color: var(--background);
+
+        &:active,
+        &:hover {
+            background-color: var(--color-mocha-600);
+        }
+
+        & svg {
+            stroke: var(--background);
+        }
+    }
+
+    .toggle-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 3rem;
+
+        & button {
+            height: 100%;
+            padding: 0 1rem;
+            border-radius: 3rem;
+        }
+    }
+
+    .text-full-ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .loader-area {
+        position: relative;
+        width: 7rem;
+        height: 7rem;
+
+        & .loader {
+            width: 6rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(farthest-side, var(--color-mint-500) 94%, #0000) top/10px
+                    10px no-repeat,
+                conic-gradient(#0000 30%, var(--color-mint-500));
+            -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 10px), #000 0);
+            animation: l13 1s infinite linear;
+        }
+
+        & .loader-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3rem;
+            height: 3rem;
+            margin: 1.5rem;
+            background-image: url('/svg/yarn.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            animation: l13 3s infinite linear;
+        }
+    }
+}
+
+@keyframes l13 {
+    100% {
+        transform: rotate(1turn);
+    }
+}

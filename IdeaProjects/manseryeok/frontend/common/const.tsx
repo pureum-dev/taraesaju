@@ -1,0 +1,155 @@
+export const timeList = [
+    {
+        key: '자',
+        startTime: '23:30',
+        endTime: '01:29',
+        label: '子',
+    },
+    {
+        key: '축',
+        startTime: '01:30',
+        endTime: '03:29',
+        label: '丑',
+    },
+    {
+        key: '인',
+        startTime: '03:30',
+        endTime: '05:29',
+        label: '寅',
+    },
+    {
+        key: '묘',
+        startTime: '05:30',
+        endTime: '07:29',
+        label: '卯',
+    },
+    {
+        key: '진',
+        startTime: '07:30',
+        endTime: '09:29',
+        label: '辰',
+    },
+    {
+        key: '사',
+        startTime: '09:30',
+        endTime: '11:29',
+        label: '巳',
+    },
+    {
+        key: '오',
+        startTime: '11:30',
+        endTime: '13:29',
+        label: '午',
+    },
+    {
+        key: '미',
+        startTime: '13:30',
+        endTime: '15:29',
+        label: '未',
+    },
+    {
+        key: '신',
+        startTime: '15:30',
+        endTime: '17:29',
+        label: '申',
+    },
+    {
+        key: '유',
+        startTime: '17:30',
+        endTime: '19:29',
+        label: '酉',
+    },
+    {
+        key: '술',
+        startTime: '19:30',
+        endTime: '21:29',
+        label: '戌',
+    },
+    {
+        key: '해',
+        startTime: '21:30',
+        endTime: '23:29',
+        label: '亥',
+    },
+];
+
+export const divideTimeList = [
+    {
+        key: '야자',
+        startTime: '23:30',
+        endTime: '00:29',
+        label: '夜子',
+    },
+    {
+        key: '조자',
+        startTime: '00:30',
+        endTime: '01:29',
+        label: '朝子',
+    },
+    {
+        key: '축',
+        startTime: '01:30',
+        endTime: '03:29',
+        label: '丑',
+    },
+    {
+        key: '인',
+        startTime: '03:30',
+        endTime: '05:29',
+        label: '寅',
+    },
+    {
+        key: '묘',
+        startTime: '05:30',
+        endTime: '07:29',
+        label: '卯',
+    },
+    {
+        key: '진',
+        startTime: '07:30',
+        endTime: '09:29',
+        label: '辰',
+    },
+    {
+        key: '사',
+        startTime: '09:30',
+        endTime: '11:29',
+        label: '巳',
+    },
+    {
+        key: '오',
+        startTime: '11:30',
+        endTime: '13:29',
+        label: '午',
+    },
+    {
+        key: '미',
+        startTime: '13:30',
+        endTime: '15:29',
+        label: '未',
+    },
+    {
+        key: '신',
+        startTime: '15:30',
+        endTime: '17:29',
+        label: '申',
+    },
+    {
+        key: '유',
+        startTime: '17:30',
+        endTime: '19:29',
+        label: '酉',
+    },
+    {
+        key: '술',
+        startTime: '19:30',
+        endTime: '21:29',
+        label: '戌',
+    },
+    {
+        key: '해',
+        startTime: '21:30',
+        endTime: '23:29',
+        label: '亥',
+    },
+];
