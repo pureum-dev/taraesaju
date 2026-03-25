@@ -1,30 +1,26 @@
-import { NextResponse } from 'next/server';
+/** Data */
+import region from '@/backend/data/region.json';
 
-export async function POST({ keyword }: { keyword: string }) {
+export async function POST(request: Request) {
     try {
+        console.log('run');
+        const body = await request.json();
+        const keyword = body.keyword?.toLowerCase().trim();
+
         if (!keyword) {
             return Response.json([]);
         }
 
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-            keyword
-        )}&format=json&addressdetails=1&limit=10`;
+        const result = region.filter((item: any, idx: number) => {
+            if (idx <= 5) console.log(item);
 
-        const res = await fetch(url, {
-            headers: {
-                'User-Agent': 'tarea',
-            },
+            return (
+                item.geo_name?.toLowerCase().includes(keyword) ||
+                item.alternate_name?.toLowerCase().includes(keyword)
+            );
         });
 
-        const data = await res.json();
-
-        return Response.json(
-            data.map((item: any) => ({
-                name: item.display_name,
-                lat: item.lat,
-                lon: item.lon,
-            }))
-        );
+        return Response.json(result);
     } catch (err: any) {
         return Response.json({ error: err.message }, { status: 500 });
     }

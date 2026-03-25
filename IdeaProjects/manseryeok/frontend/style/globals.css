@@ -177,36 +177,25 @@
     }
 
     a {
-        cursor: pointer;
-        text-wrap: nowrap;
-
-        & span {
-            pointer-events: none;
-            text-wrap: nowrap;
-        }
-
-        &.small {
-            font-size: small;
-            padding: 0.375rem 0.625rem;
-        }
-
-        &.medium {
-            padding: 0.5rem 0.75rem;
-        }
-
-        &.large {
-            padding: 1rem 0.75rem;
-            font-weight: bold;
-        }
+        display: inline-block;
     }
 
     button {
-        border-radius: 0.5rem;
+        font-weight: bold;
+    }
+
+    button,
+    a {
+        border-radius: 0.625rem;
         cursor: pointer;
         text-wrap: nowrap;
 
         &:disabled {
             background-color: var(--color-gray-200);
+        }
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--color-gray-900) 5%, transparent);
         }
 
         :where(.dark) &:disabled {
@@ -219,12 +208,19 @@
         }
 
         &.medium {
+            min-width: 4.5rem;
             padding: 0.5rem 0.75rem;
         }
 
         &.large {
+            min-width: 4.5rem;
             padding: 1rem 0.75rem;
             font-weight: bold;
+        }
+
+        &.icon-button {
+            padding: 0.5rem;
+            border-radius: 50%;
         }
     }
 
@@ -323,6 +319,20 @@
 
         & svg {
             stroke: var(--background);
+        }
+    }
+
+    .button-outline-primary {
+        border: 1px solid var(--color-mint-500);
+        color: var(--color-mint-500);
+
+        &:active,
+        &:hover {
+            background-color: color-mix(in srgb, var(--color-gray-900) 4%, transparent);
+        }
+
+        & svg {
+            stroke: var(--color-mint-500);
         }
     }
 

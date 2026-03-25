@@ -187,7 +187,7 @@ export default function BirthdayInputComp() {
                             onFocus={onFocusBirthLocate}
                             {...register('birthLocation', { required: true, maxLength: 80 })}
                         />
-                        <div className="absolute top-1/2 left-0 translate-x-4 -translate-y-1/2">
+                        <div className="absolute top-1/2 left-0 translate-x-5 -translate-y-1/2">
                             <Search size={18} />
                         </div>
                     </div>
