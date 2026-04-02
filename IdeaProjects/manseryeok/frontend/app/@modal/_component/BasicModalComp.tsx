@@ -36,7 +36,7 @@ export default function BasicModalComp({
 
     return (
         <div className="absolute top-0 left-0 w-full h-dvh bg-gray-900/30">
-            <div className="absolute top-1/2 left-1/2 -translate-1/2 flex flex-col bg-background px-6 py-8 w-auto min-w-80 max-w-[calc(100% - 8rem)] min-h-1/2 max-h-4/5 rounded-3xl">
+            <div className="absolute top-1/2 left-1/2 -translate-1/2 flex flex-col bg-background px-6 py-8 w-auto min-w-96 max-w-[calc(100% - 8rem)] min-h-1/2 max-h-4/5 rounded-3xl">
                 <div className="flex flex-1 flex-col">{children}</div>
                 <div className="flex flex-row justify-end w-full gap-3">
                     <button className="medium button-outline-primary" onClick={onClickCloseEvent}>

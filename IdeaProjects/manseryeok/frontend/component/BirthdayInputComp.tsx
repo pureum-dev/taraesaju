@@ -1,28 +1,21 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 /** Lib */
-import { Mars, Venus, Search, FileText } from 'lucide-react';
+import { Mars, Venus, Search } from 'lucide-react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+
+import { useRegionStore } from '@/lib/store/useRegionStore';
 
 /** Custom */
 import { timeList, divideTimeList } from '@/common/const';
-import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { createBirthGapjaData } from '@/server/service/birthDataServerService';
 
-type Inputs = {
-    example: string;
-    exampleRequired: string;
-    nickName: string;
-    gender: 'M' | 'F';
-    calendarType: 'solar' | 'lunar' | 'leap';
-    birthday: Date;
-    birthtime: string;
-    isNone: boolean;
-    isDivideTime: boolean;
-    birthLocation: string;
-};
+/** Type & Interface */
+import { regionInterface } from '@/service/regionService';
+import { birthDataInterface } from '@/service/birthDataService';
 
 const genderList = [
     { value: 'M', label: '남성', icon: <Mars size={15} className="mr-1" /> },
@@ -34,13 +27,17 @@ export default function BirthdayInputComp() {
     const searchParam = useSearchParams();
     const type = searchParam.get('type');
 
+    const regionData = useRegionStore((state) => state.regionData);
+    const resetRegionData = useRegionStore((state) => state.resetRegionData);
+
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         control,
         formState: { errors },
-    } = useForm<Inputs>({
+    } = useForm<Omit<birthDataInterface, 'location'>>({
         defaultValues: {
             nickName: '',
             gender: 'M',
@@ -53,44 +50,58 @@ export default function BirthdayInputComp() {
     });
 
     const watchGender = watch('gender');
-    const watchIsNone = watch('isNone');
-    const watchIsDivideTime = watch('isDivideTime');
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-
-    const [birthTimeList, setBirthTimeList] = useState(timeList);
 
     useEffect(() => {
-        if (watchIsDivideTime) {
-            setBirthTimeList(divideTimeList);
-        } else {
-            setBirthTimeList(timeList);
-        }
-    }, [watchIsDivideTime]);
+        return () => resetRegionData();
+    }, []);
 
-    const onFocusBirthLocate = (e: React.MouseEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        if (regionData) {
+            setValue('birthLocation', `${regionData.geo_name} / ${regionData.alternate_name}`);
+        }
+    }, [regionData, setValue]);
+
+    const onFocusBirthLocate = (e: React.FocusEvent<HTMLInputElement>) => {
         e.preventDefault();
         router.push('/info/modal');
     };
 
-    const onClickEvent = useCallback(() => {
-        if (type) {
+    const onClickEvent = handleSubmit((data: Omit<birthDataInterface, 'location'>) => {
+        if (!regionData) return;
+
+        const request: birthDataInterface = {
+            ...data,
+            location: regionData as regionInterface,
+        };
+
+        if (type === 'chart') {
+            createBirthGapjaData(request);
+        } else {
         }
-    }, [type]);
+    });
 
     return (
         <div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col items-start gap-5 w-full px-8 py-12 border border-gray-200 rounded-3xl"
-            >
-                <label htmlFor="nickName" className="flex flex-col gap-2 w-full">
+            <form className="flex flex-col items-start gap-5 w-full px-8 py-12 border border-gray-200 rounded-3xl">
+                <label htmlFor="nickName" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">닉네임</span>
                     <input
+                        {...register('nickName', { required: true, maxLength: 80 })}
                         id="nickName"
                         type="text"
                         placeholder="닉네임을 입력해주세요."
-                        {...register('nickName', { required: true, maxLength: 80 })}
+                        className={`${errors.nickName && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                     />
+                    {errors.nickName?.type === 'required' && (
+                        <p role="alert" className="text-alert">
+                            닉네임을 입력해주세요
+                        </p>
+                    )}
+                    {errors.nickName?.type === 'maxLength' && (
+                        <p role="alert" className="text-alert">
+                            닉네임은 80자 이하로 입력해주세요
+                        </p>
+                    )}
                 </label>
                 <label htmlFor="gender" className="flex flex-col gap-2 w-full">
                     <span className="text-sm">성별</span>
@@ -98,7 +109,7 @@ export default function BirthdayInputComp() {
                         name="gender"
                         control={control}
                         render={({ field }) => (
-                            <div className="toggle-group w-full gap-2">
+                            <div className="toggle-group w-full gap-1">
                                 {genderList.map((item) => (
                                     <button
                                         key={item.value}
@@ -119,7 +130,7 @@ export default function BirthdayInputComp() {
                     />
                 </label>
 
-                <label htmlFor="birthday" className="flex flex-col gap-2 w-full">
+                <label htmlFor="birthday" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">생년월일</span>
                     <div className="flex flex-row gap-2 w-full">
                         <select
@@ -131,66 +142,87 @@ export default function BirthdayInputComp() {
                             <option value="lunar">음력</option>
                             <option value="leap">음력 윤달</option>
                         </select>
-                        <input
-                            id="birthday"
-                            type="date"
-                            className="w-3/4"
-                            {...register('birthday', { required: true, maxLength: 80 })}
-                        />
-                    </div>
-                </label>
-                <label htmlFor="birthtime" className="flex flex-col w-full gap-2">
-                    <span className="text-sm">태어난 시간</span>
-                    <div className="flex flex-row flex-wrap items-center w-full gap-4">
-                        <select
-                            id="birthtime"
-                            className="flex-1"
-                            {...register('birthtime', { required: true })}
-                            disabled={watchIsNone}
-                        >
-                            <option value="">--시간을 선택해주세요.--</option>
-                            {birthTimeList.map((item) => (
-                                <option key={item.key} value={item.key}>
-                                    {item.label + ' / ' + item.startTime + ' ~ ' + item.endTime}
-                                </option>
-                            ))}
-                        </select>
-
-                        <div className="flex flex-row items-center gap-4">
-                            <div className="flex flex-row items-center">
-                                <input {...register('isNone')} type="checkbox" name="isNone" />
-                                <label htmlFor="isNone" className="text-full-ellipsis">
-                                    시간 모름
-                                </label>
-                            </div>
-                            <div className="flex flex-row items-center">
-                                <input
-                                    {...register('isDivideTime')}
-                                    type="checkbox"
-                                    name="isDivideTime"
-                                />
-                                <label htmlFor="isDivideTime" className="text-full-ellipsis">
-                                    야/조자시 적용
-                                </label>
-                            </div>
+                        <div className="flex flex-col gap-1 w-3/4 ">
+                            <input
+                                {...register('birthday', { required: true })}
+                                id="birthday"
+                                type="date"
+                                min="1900-01-01"
+                                max="2050-12-31"
+                                className={`w-full ${errors.birthday && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
+                            />
+                            {errors.birthday?.type === 'required' && (
+                                <p role="alert" className="text-alert">
+                                    생년월일을 입력해주세요
+                                </p>
+                            )}
                         </div>
                     </div>
                 </label>
-                <label htmlFor="birthLocation" className="flex flex-col gap-2 w-full">
+                <label htmlFor="birthtime" className="flex flex-col w-full gap-1">
+                    <span className="text-sm">태어난 시간</span>
+                    <div className="flex flex-row flex-wrap items-center w-full gap-4">
+                        <div className="flex flex-col gap-1 w-68">
+                            <input
+                                {...register('birthtime', { required: true })}
+                                id="birthtime"
+                                type="time"
+                                className={`w-full ${errors.birthtime && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
+                            />
+                            {errors.birthtime?.message && (
+                                <p role="alert" className="text-alert">
+                                    {errors.birthtime.message}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <div className="flex flex-row items-center gap-4">
+                                <div className="flex flex-row items-center">
+                                    <input {...register('isNone')} type="checkbox" name="isNone" />
+                                    <label htmlFor="isNone" className="text-full-ellipsis">
+                                        시간 모름
+                                    </label>
+                                </div>
+                                <div className="flex flex-row items-center">
+                                    <input
+                                        {...register('isDivideTime')}
+                                        type="checkbox"
+                                        name="isDivideTime"
+                                    />
+                                    <label htmlFor="isDivideTime" className="text-full-ellipsis">
+                                        야/조자시 적용
+                                    </label>
+                                </div>
+                            </div>
+                            {errors.birthtime?.message && (
+                                <p role="alert" className="text-transparent">
+                                    {errors.birthtime.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </label>
+                <label htmlFor="birthLocation" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">태어난 장소</span>
                     <div className="relative">
                         <input
+                            {...register('birthLocation', { required: true, maxLength: 80 })}
                             id="birthLocation"
                             type="text"
                             placeholder="태어난 장소를 입력해주세요."
-                            className="w-full pl-12"
                             onFocus={onFocusBirthLocate}
-                            {...register('birthLocation', { required: true, maxLength: 80 })}
+                            className={`w-full pl-12 ${errors.birthLocation && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                         />
                         <div className="absolute top-1/2 left-0 translate-x-5 -translate-y-1/2">
                             <Search size={18} />
                         </div>
                     </div>
+                    {errors.birthLocation?.type === 'required' && (
+                        <p role="alert" className="text-alert">
+                            태어난 장소를 입력해주세요
+                        </p>
+                    )}
                 </label>
 
                 <div className="w-full h-[1px] my-4 bg-gray-100"></div>

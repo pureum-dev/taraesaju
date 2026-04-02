@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.100.0",
+    "@types/luxon": "^3.7.1",
     "dayjs": "^1.11.20",
+    "korean-lunar-calendar": "^0.3.6",
     "lucide-react": "^0.577.0",
+    "luxon": "^3.7.2",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-hook-form": "^7.71.2"
+    "react-hook-form": "^7.71.2",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

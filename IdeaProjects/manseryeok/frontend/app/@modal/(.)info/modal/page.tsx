@@ -4,21 +4,19 @@ import { useRef, useState } from 'react';
 
 /** Lib */
 import { Search } from 'lucide-react';
+import { useRegionStore } from '@/lib/store/useRegionStore';
 
 /** Custom */
 import BasicModalComp from '../../_component/BasicModalComp';
-import fetchConfig from '@/util/fetchConfig';
 
-interface regionInterface {
-    alternate_name: string;
-    geo_name: string;
-    geonameid: number;
-    latitude: number;
-    longitude: number;
-    timezone: string;
-}
+/** Type & Interface */
+import { regionService, regionInterface } from '@/service/regionService';
+import { useRouter } from 'next/navigation';
 
 export default function InfoModal() {
+    const router = useRouter();
+    const { setRegionData } = useRegionStore();
+
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const [regionList, setRegionList] = useState<regionInterface[]>([]);
@@ -29,22 +27,22 @@ export default function InfoModal() {
         if (!inputRef.current) return;
 
         const value = inputRef.current.value;
-        const res: regionInterface[] = await fetchConfig({
-            url: '/api/region',
-            method: 'POST',
-            body: { keyword: value },
-        });
+        const res: regionInterface[] = await regionService.getUserAttendanceApplication(value);
 
         setRegionList(res);
     };
 
     const onClickEachRegion = (e: React.MouseEvent<HTMLAnchorElement>, data: regionInterface) => {
         e.preventDefault();
+
+        console.log(data);
+        setRegionData(data);
+        router.back();
     };
 
     return (
         <BasicModalComp isSave={false}>
-            <form className="min-w-96">
+            <form role="search">
                 <div className="relative">
                     <input
                         ref={inputRef}
@@ -53,7 +51,7 @@ export default function InfoModal() {
                         className="w-full pr-12"
                     />
                     <button
-                        className="absolute top-1/2 right-0 -translate-x-1 -translate-1/2 flex flex-row gap-1 rounded-2xl button-bg-secondary small"
+                        className="absolute top-1/2 right-0 -translate-x-1 -translate-1/2 flex flex-row gap-1 rounded-2xl button-bg-primary small"
                         onClick={onClickSearchEvent}
                     >
                         <Search size={18} />
@@ -61,18 +59,20 @@ export default function InfoModal() {
                     </button>
                 </div>
             </form>
-            <ul className="flex flex-col flex-1 w-full my-4 py-4 bg-gray-50 rounded-2xl">
-                {regionList.map((item, idx) => {
-                    return (
-                        <li key={idx} className="w-full">
-                            <a
-                                className=" w-full medium rounded-xl"
-                                onClick={(e) => onClickEachRegion(e, item)}
-                            >{`${item.geo_name} / ${item.alternate_name}`}</a>
-                        </li>
-                    );
-                })}
-            </ul>
+            <div className="w-full h-80 my-2 overflow-y-auto">
+                <ul className="flex flex-col w-full ">
+                    {regionList.map((item, idx) => {
+                        return (
+                            <li key={idx} className="w-full">
+                                <a
+                                    className=" w-full medium rounded-xl"
+                                    onClick={(e) => onClickEachRegion(e, item)}
+                                >{`${item.geo_name} / ${item.alternate_name}`}</a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         </BasicModalComp>
     );
 }

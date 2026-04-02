@@ -1,9 +1,8 @@
 /** Data */
-import region from '@/backend/data/region.json';
+import region from '@/server/data/region.json';
 
 export async function POST(request: Request) {
     try {
-        console.log('run');
         const body = await request.json();
         const keyword = body.keyword?.toLowerCase().trim();
 
@@ -12,8 +11,6 @@ export async function POST(request: Request) {
         }
 
         const result = region.filter((item: any, idx: number) => {
-            if (idx <= 5) console.log(item);
-
             return (
                 item.geo_name?.toLowerCase().includes(keyword) ||
                 item.alternate_name?.toLowerCase().includes(keyword)

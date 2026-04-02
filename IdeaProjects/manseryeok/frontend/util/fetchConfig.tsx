@@ -1,9 +1,9 @@
-interface FetchConfigProps<T> {
+interface FetchConfigProps {
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     contentType?: string;
     params?: Record<string, any>;
-    body?: T;
+    body?: any;
 }
 
 export default async function fetchConfig<T>({
@@ -12,29 +12,32 @@ export default async function fetchConfig<T>({
     params,
     contentType = 'application/json',
     body,
-}: FetchConfigProps<T>) {
+}: FetchConfigProps): Promise<T> {
     let finalUrl = url;
 
     if (method === 'GET' && params) {
         const queryString = new URLSearchParams(
-            Object.entries(params).reduce((item, [key, value]) => {
-                if (value !== undefined && value !== null) {
-                    item[key] = String(value);
-                }
-                return item;
-            }, {} as Record<string, string>)
+            Object.entries(params).reduce(
+                (item, [key, value]) => {
+                    if (value !== undefined && value !== null) {
+                        item[key] = String(value);
+                    }
+                    return item;
+                },
+                {} as Record<string, string>,
+            ),
         ).toString();
 
         finalUrl += `?${queryString}`;
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(finalUrl, {
         method,
         next: { revalidate: 60 },
         headers: {
             'Content-Type': contentType,
         },
-        body: body ? JSON.stringify(body) : undefined,
+        body: method === 'GET' ? undefined : body ? JSON.stringify(body) : undefined,
     });
 
     if (!res.ok) {
@@ -42,5 +45,5 @@ export default async function fetchConfig<T>({
         throw new Error(errorText || 'API Error');
     }
 
-    return res.json();
+    return res.json() as Promise<T>;
 }
