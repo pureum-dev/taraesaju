@@ -1,16 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 /** Lib */
 import { Mars, Venus, Search } from 'lucide-react';
-import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { useRegionStore } from '@/lib/store/useRegionStore';
 
 /** Custom */
-import { timeList, divideTimeList } from '@/common/const';
 import { createBirthGapjaData } from '@/server/service/birthDataServerService';
 
 /** Type & Interface */

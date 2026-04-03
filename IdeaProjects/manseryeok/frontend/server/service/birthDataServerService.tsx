@@ -6,7 +6,6 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import objectSupport from 'dayjs/plugin/objectSupport'; // Luxon의 fromObject와 유사한 방식 지원
 
-import { DateTime } from 'luxon';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Type & Interface */
@@ -52,6 +51,7 @@ interface correctTargetDivisionInterface {
 }
 
 export const createBirthGapjaData = (birthDate: birthDataInterface) => {
+    //시간 모르는 경우 추가
     const birthDateTime = birthDate.birthday + 'T' + birthDate.birthtime;
     const correctBirth: correctBirthDayInterface = correctBirthDay(
         birthDateTime,
