@@ -2,6 +2,9 @@
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import objectSupport from 'dayjs/plugin/objectSupport'; // Luxon의 fromObject와 유사한 방식 지원
 
 import { DateTime } from 'luxon';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
@@ -19,6 +22,9 @@ import division24Json from '@/server/data/division24.json';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(objectSupport);
 
 interface divisionInterface {
     id: number;
@@ -37,6 +43,7 @@ interface correctBirthDayInterface {
     time: string;
     deltaMinutes: number;
     summertimeMinutes: number;
+    isCalculateDate: boolean;
 }
 
 interface correctTargetDivisionInterface {
@@ -49,6 +56,7 @@ export const createBirthGapjaData = (birthDate: birthDataInterface) => {
     const correctBirth: correctBirthDayInterface = correctBirthDay(
         birthDateTime,
         birthDate.location,
+        birthDate.isDivideTime,
     );
 
     const solarBirthDate = createSolarBirthData(correctBirth.date, birthDate.calendarType);
@@ -57,56 +65,80 @@ export const createBirthGapjaData = (birthDate: birthDataInterface) => {
         'YYYY-MM-DD',
     );
 
-    const targetYear = calculateYearDivision(solarBirth)?.targetYear;
-    const targetDivision = calculateYearDivision(solarBirth)?.targetDivision;
+    const yearDivision = calculateYearDivision(solarBirth);
+    const targetYear = yearDivision?.targetYear;
+    const targetDivision = yearDivision?.targetDivision;
 
     if (targetYear && targetDivision) {
         const yearColumn = calculateYearColumn(targetYear);
         const monthColumn = calculateMonthColumn(solarBirth, yearColumn.gan, targetDivision);
         const dayColumn = calculateDayColumn(solarBirth);
-        const timeColumn = calculateTimeColumn(correctBirth.date, correctBirth.time, dayColumn.gan);
+        const timeColumn = calculateTimeColumn(
+            correctBirth.date,
+            correctBirth.time,
+            dayColumn.gan,
+            correctBirth.isCalculateDate,
+        );
 
-        console.log(yearColumn);
-        console.log(monthColumn);
-        console.log(dayColumn);
-        console.log(timeColumn);
+        return {
+            year: yearColumn,
+            month: monthColumn,
+            day: dayColumn,
+            time: timeColumn,
+        };
     }
 };
 
 export const correctBirthDay = (
     birthDateTime: string,
     region: regionInterface,
+    isDivideTime: boolean,
 ): correctBirthDayInterface => {
-    const zoned = DateTime.fromISO(birthDateTime, { zone: region.timezone });
+    const zoned = dayjs.tz(birthDateTime, region.timezone);
 
-    // DST 보정 - summertime 보정
-    const januaryOffset = DateTime.fromObject(
-        { year: zoned.year, month: 1, day: 1 },
-        { zone: region.timezone },
-    ).offset;
+    // DST 보정 - 기준점 (썸머타임이 보통 없는 1월 1일의 오프셋과 현재 오프셋 비교 해서 썸머타임 계산)
+    const januaryOffset = dayjs.tz(`${zoned.year()}-01-01`, region.timezone).utcOffset();
+    const summertimeMinutes = (zoned.utcOffset() - januaryOffset) * -1;
 
-    const summertimeMinutes = (zoned.offset - januaryOffset) * -1;
-
-    // UTC offset → 표준 자오선
-    const utcOffset = zoned.offset / 60; // minutes → hours
+    // UTC offset → 표준 자오선 / 경도 보정
+    const utcOffset = zoned.utcOffset() / 60; // minutes → hours
     const standardMeridian = utcOffset * 15;
-
-    // 경도 보정
     const deltaMinutes = (region.longitude - standardMeridian) * 4;
+
     const finalMinutes = deltaMinutes + summertimeMinutes;
 
     // 태양시 계산
-    const solarTime = zoned.plus({ minutes: finalMinutes });
-    const date = solarTime.toFormat('yyyy-MM-dd');
-    const time = solarTime.toFormat('HH:mm');
+    const solarTime = zoned.add(finalMinutes, 'minute');
+    let date = solarTime.format('YYYY-MM-DD');
+    const time = solarTime.format('HH:mm');
 
-    //야자시 조자시 적용 필요!!!!!
+    /**
+     * 야자시 / 조자시 적용
+     * 1. 전통방식: 자시에 해당하는 경우 다음날로 처리
+     * 2. 야/조자시 적용: 00시 기준 이전이면 전날 00시 이후면 다음날 처리
+     */
+
+    //전통방식인 경우 적용
+    let isCalculateDate = false;
+    if (!isDivideTime) {
+        const yajasiStartTime = dayjs(
+            `${date}T${jiji['자'].startTime}`,
+            'YYYY-MM-DDTHH:mm',
+        ).subtract(1, 'days');
+        const yajasiEndTime = dayjs(`${date}T00:00`, 'YYYY-MM-DDTHH:mm');
+
+        if (solarTime.isSameOrAfter(yajasiStartTime) && solarTime.isBefore(yajasiEndTime)) {
+            isCalculateDate = true;
+            date = solarTime.add(1, 'days').format('YYYY-MM-DD');
+        }
+    }
 
     return {
         date: date,
         time: time,
         deltaMinutes: finalMinutes,
         summertimeMinutes: summertimeMinutes,
+        isCalculateDate: isCalculateDate,
     };
 };
 
@@ -249,15 +281,28 @@ export const calculateDayColumn = (solarBirth: Dayjs) => {
 /**
  * 시주계산
  */
-export const calculateTimeColumn = (date: string, time: string, dayCheongan: cheonganType) => {
+export const calculateTimeColumn = (
+    date: string,
+    time: string,
+    dayCheongan: cheonganType,
+    isCalculateDate: boolean,
+) => {
     const birthDateTime = dayjs(`${date}T${time}`, 'YYYY-MM-DDTHH:mm');
 
-    const timeJiji = Object.entries(jiji).find(([key, value]) => {
-        const startDateTime = dayjs(`${date}T${value.startTime}`, 'YYYY-MM-DDTHH:mm');
-        const endDateTime = dayjs(`${date}T${value.endTime}`, 'YYYY-MM-DDTHH:mm');
+    const timeJiji = isCalculateDate
+        ? '자'
+        : Object.entries(jiji).find(([key, value]) => {
+              let startDateTime = dayjs(`${date}T${value.startTime}`, 'YYYY-MM-DDTHH:mm');
+              const endDateTime = dayjs(`${date}T${value.endTime}`, 'YYYY-MM-DDTHH:mm');
 
-        return birthDateTime.isSameOrAfter(startDateTime) && birthDateTime.isBefore(endDateTime);
-    })?.[0];
+              if (key === '자') {
+                  startDateTime = startDateTime.subtract(1, 'days');
+              }
+
+              return (
+                  birthDateTime.isSameOrAfter(startDateTime) && birthDateTime.isBefore(endDateTime)
+              );
+          })?.[0];
 
     const timeGan = findTimeCheongan(dayCheongan, timeJiji as jijiType);
 
