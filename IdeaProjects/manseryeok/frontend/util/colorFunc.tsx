@@ -34,6 +34,25 @@ export const makeBgColor = (name: string, type: 'gan' | 'jiji') => {
     }
 };
 
+export const makeBgColorAlpha = (name: string, type: 'gan' | 'jiji') => {
+    const _colorName = makeColorName(name, type);
+
+    switch (_colorName) {
+        case '검은':
+            return 'bg-gray-700/20';
+        case '하얀':
+            return 'bg-gray-200/20';
+        case '푸른':
+            return 'bg-greenmint-400/20 dark:bg-greenmint-500/20';
+        case '붉은':
+            return 'bg-coral-400/20 dark:bg-coral-500/20';
+        case '노란':
+            return 'bg-lemon-400/20 dark:bg-lemon-500/20';
+        default:
+            return '';
+    }
+};
+
 export const textColor = (name: string, type: 'gan' | 'jiji') => {
     const _colorName = makeColorName(name, type);
     return _colorName === '검은' ? 'text-gray-50' : 'text-gray-900';

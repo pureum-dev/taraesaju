@@ -217,7 +217,9 @@ export default function ManseryeokPage() {
                     </div>
                     <div className="flex grow flex-col lg:w-full">
                         <div className="flex flex-row items-baseline mb-4 lg:flex-col lg:items-center lg:mb-6">
-                            <span className="mr-2 text-xl font-extrabold lg:mr-0"></span>
+                            <span className="mr-2 text-xl font-extrabold lg:mr-0">
+                                {profileData?.nickName}
+                            </span>
                             <span>{`${data.chartCol.day.gan}${data.chartCol.day.jiji} 일주 (${ohaeng[cheongan[data.chartCol.day.gan].element].color} ${jiji[data.chartCol.day.jiji].animal})`}</span>
                         </div>
                         <div className="flex flex-row items-center gap-6 lg:flex-col lg:w-full lg:items-start">

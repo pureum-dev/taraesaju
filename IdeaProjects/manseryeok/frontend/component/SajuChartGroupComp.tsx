@@ -5,7 +5,7 @@ import { ZapIcon, HeartIcon } from 'lucide-react';
 
 /** Custom */
 import { cheongan, ohaeng, jiji, division24, woonsung } from '@/common/const';
-import { makeBgColor, textColor } from '@/util/colorFunc';
+import { makeBgColor, textColor, makeBgColorAlpha } from '@/util/colorFunc';
 import SajuChartComp from './SajuChartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 
@@ -121,14 +121,30 @@ const SajuChartGroupComp = ({
                 key: 'gan',
                 className: '',
                 cellRender: (col) => {
-                    return <ElementBoxComp name={col.gan ?? ''} type="gan" />;
+                    const bgColor =
+                        col.ganDuplication !== '' ? makeBgColorAlpha(col.gan, 'gan') : '';
+                    return (
+                        <div
+                            className={`flex justify-center items-center w-full h-full p-2 ${bgColor}`}
+                        >
+                            <ElementBoxComp name={col.gan ?? ''} type="gan" />
+                        </div>
+                    );
                 },
             },
             jiji: {
                 key: 'jiji',
                 className: '',
                 cellRender: (col) => {
-                    return <ElementBoxComp name={col.jiji ?? ''} type="jiji" />;
+                    const bgColor =
+                        col.jijiDuplication !== '' ? makeBgColorAlpha(col.jiji, 'jiji') : '';
+                    return (
+                        <div
+                            className={`flex justify-center items-center w-full h-full p-2 ${bgColor}`}
+                        >
+                            <ElementBoxComp name={col.jiji ?? ''} type="jiji" />
+                        </div>
+                    );
                 },
             },
             jijanggan: {

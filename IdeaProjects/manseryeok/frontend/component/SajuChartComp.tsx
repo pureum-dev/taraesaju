@@ -42,7 +42,7 @@ const SajuChartComp = ({ columnData, rowData, hasSideHeader = true }: SajuChartP
                                             ? `calc((100% - 6rem) / ${columnData.length - 1})`
                                             : `calc(100% / ${columnData.length})`,
                                     }}
-                                    className={`flex justify-center items-center min-w-20 p-2  text-sm text-center  
+                                    className={`flex justify-center items-center min-w-20 text-sm text-center  
                                         ${cornerRadiusClass}
                                         ${isFirstRow && 'border-t'}
                                         ${rowIdx === 0 ? '' : 'border-r border-b'}

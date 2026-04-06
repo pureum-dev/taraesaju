@@ -234,6 +234,7 @@
         border-radius: 25%;
 
         &:checked {
+            border: 1px solid transparent;
             background-color: var(--color-mint-500);
 
             &::after {
