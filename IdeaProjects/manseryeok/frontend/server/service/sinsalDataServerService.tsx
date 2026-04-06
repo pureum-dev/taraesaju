@@ -3,7 +3,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
-import { DateTime } from 'luxon';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Type & Interface */
@@ -14,8 +13,43 @@ import { birthDataInterface } from '@/service/birthDataService';
 /** Custom */
 import { cheongan, jiji, division24 } from '@/common/const';
 
-/** Data */
-import division24Json from '@/server/data/division24.json';
+export const check12Sinsal = (yearji: jijiType, targetji: jijiType) => {
+    const sinsalList: string[] = [
+        '지살',
+        '년살',
+        '월살',
+        '망신살',
+        '장성살',
+        '반안살',
+        '역마살',
+        '육해살',
+        '화개살',
+        '겁살',
+        '재살',
+        '천살',
+    ];
 
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
+    let plusNum = 0;
+    switch (yearji) {
+        case '해':
+        case '묘':
+        case '미':
+            plusNum = 1;
+            break;
+        case '인':
+        case '오':
+        case '술':
+            plusNum = 10;
+            break;
+        case '사':
+        case '유':
+        case '축':
+            plusNum = 7;
+            break;
+        default:
+            plusNum = 4;
+    }
+
+    const number = jiji[targetji].number % 12;
+    return sinsalList[number];
+};

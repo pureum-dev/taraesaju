@@ -1,23 +1,24 @@
-import { cheonganType, jijiType, divisionType } from '@/type/basicType';
+import { cheonganType, jijiType, divisionType, ohaengType, sipsinType } from '@/type/basicType';
 
 export const cheongan: Record<
     cheonganType,
     {
+        hanja: string;
         number: number;
-        element: string;
+        element: ohaengType;
         eumyang: '양' | '음';
     }
 > = {
-    갑: { number: 0, element: '목', eumyang: '양' },
-    을: { number: 1, element: '목', eumyang: '음' },
-    병: { number: 2, element: '화', eumyang: '양' },
-    정: { number: 3, element: '화', eumyang: '음' },
-    무: { number: 4, element: '토', eumyang: '양' },
-    기: { number: 5, element: '토', eumyang: '음' },
-    경: { number: 6, element: '금', eumyang: '양' },
-    신: { number: 7, element: '금', eumyang: '음' },
-    임: { number: 8, element: '수', eumyang: '양' },
-    계: { number: 9, element: '수', eumyang: '음' },
+    갑: { hanja: '甲', number: 0, element: '목', eumyang: '양' },
+    을: { hanja: '乙', number: 1, element: '목', eumyang: '음' },
+    병: { hanja: '丙', number: 2, element: '화', eumyang: '양' },
+    정: { hanja: '丁', number: 3, element: '화', eumyang: '음' },
+    무: { hanja: '戊', number: 4, element: '토', eumyang: '양' },
+    기: { hanja: '己', number: 5, element: '토', eumyang: '음' },
+    경: { hanja: '庚', number: 6, element: '금', eumyang: '양' },
+    신: { hanja: '辛', number: 7, element: '금', eumyang: '음' },
+    임: { hanja: '壬', number: 8, element: '수', eumyang: '양' },
+    계: { hanja: '癸', number: 9, element: '수', eumyang: '음' },
 };
 
 export const cheonganRelation: Record<
@@ -45,17 +46,20 @@ export const cheonganRelation: Record<
 export const jiji: Record<
     jijiType,
     {
+        hanja: string;
         number: number;
         startTime: string;
         endTime: string;
-        element: string;
+        element: ohaengType;
         eumyang: '양' | '음';
         isEumyangInverse: boolean;
         animal: string;
-        jijanggan: string[];
+        jijanggan: cheonganType[];
+        samjae: jijiType[];
     }
 > = {
     자: {
+        hanja: '子',
         number: 0,
         startTime: '23:00',
         endTime: '01:00',
@@ -64,8 +68,10 @@ export const jiji: Record<
         isEumyangInverse: true,
         animal: '쥐',
         jijanggan: ['임', '계'],
+        samjae: ['인', '묘', '진'],
     },
     축: {
+        hanja: '丑',
         number: 1,
         startTime: '01:00',
         endTime: '03:00',
@@ -74,8 +80,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '소',
         jijanggan: ['계', '신', '기'],
+        samjae: ['해', '자', '축'],
     },
     인: {
+        hanja: '寅',
         number: 2,
         startTime: '03:00',
         endTime: '05:00',
@@ -84,8 +92,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '호랑이',
         jijanggan: ['무', '병', '갑'],
+        samjae: ['신', '유', '술'],
     },
     묘: {
+        hanja: '卯',
         number: 3,
         startTime: '05:00',
         endTime: '07:00',
@@ -94,8 +104,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '토끼',
         jijanggan: ['갑', '을'],
+        samjae: ['사', '오', '미'],
     },
     진: {
+        hanja: '辰',
         number: 4,
         startTime: '07:00',
         endTime: '09:00',
@@ -104,8 +116,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '용',
         jijanggan: ['을', '계', '무'],
+        samjae: ['인', '묘', '진'],
     },
     사: {
+        hanja: '巳',
         number: 5,
         startTime: '09:00',
         endTime: '11:00',
@@ -114,8 +128,10 @@ export const jiji: Record<
         isEumyangInverse: true,
         animal: '뱀',
         jijanggan: ['무', '경', '병'],
+        samjae: ['해', '자', '축'],
     },
     오: {
+        hanja: '午',
         number: 6,
         startTime: '11:00',
         endTime: '13:00',
@@ -124,8 +140,10 @@ export const jiji: Record<
         isEumyangInverse: true,
         animal: '말',
         jijanggan: ['병', '기', '정'],
+        samjae: ['신', '유', '술'],
     },
     미: {
+        hanja: '未',
         number: 7,
         startTime: '13:00',
         endTime: '15:00',
@@ -134,8 +152,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '양',
         jijanggan: ['정', '을', '기'],
+        samjae: ['사', '오', '미'],
     },
     신: {
+        hanja: '申',
         number: 8,
         startTime: '15:00',
         endTime: '17:00',
@@ -144,8 +164,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '원숭이',
         jijanggan: ['무', '임', '경'],
+        samjae: ['인', '묘', '진'],
     },
     유: {
+        hanja: '酉',
         number: 9,
         startTime: '17:00',
         endTime: '19:00',
@@ -154,8 +176,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '닭',
         jijanggan: ['경', '신'],
+        samjae: ['해', '자', '축'],
     },
     술: {
+        hanja: '戌',
         number: 10,
         startTime: '17:00',
         endTime: '21:00',
@@ -164,8 +188,10 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '개',
         jijanggan: ['신', '정', '무'],
+        samjae: ['신', '유', '술'],
     },
     해: {
+        hanja: '亥',
         number: 11,
         startTime: '21:00',
         endTime: '23:00',
@@ -174,6 +200,7 @@ export const jiji: Record<
         isEumyangInverse: false,
         animal: '돼지',
         jijanggan: ['무', '갑', '임'],
+        samjae: ['사', '오', '미'],
     },
 };
 
@@ -584,5 +611,189 @@ export const division24: Record<
         type: '중기',
         jiji: '축',
         month: 1,
+    },
+};
+
+/**
+ * resource  나를 생함 (인성)
+ * power     나를 극함 (관성)
+ * output    내가 생함 (식상)
+ * wealth    내가 극함 (재성)
+ */
+export const ohaeng: Record<
+    ohaengType,
+    {
+        color: string;
+        resource: ohaengType;
+        power: ohaengType;
+        output: ohaengType;
+        wealth: ohaengType;
+    }
+> = {
+    목: { color: '푸른', resource: '수', power: '금', output: '화', wealth: '토' },
+    화: { color: '붉은', resource: '목', power: '수', output: '토', wealth: '금' },
+    토: { color: '노란', resource: '화', power: '목', output: '금', wealth: '수' },
+    금: { color: '하얀', resource: '토', power: '화', output: '수', wealth: '목' },
+    수: { color: '검은', resource: '금', power: '토', output: '목', wealth: '화' },
+};
+
+export const sipsin: Record<
+    sipsinType,
+    {
+        group: string;
+    }
+> = {
+    비견: { group: '비겁' },
+    겁재: { group: '비겁' },
+    식신: { group: '식상' },
+    상관: { group: '식상' },
+    정재: { group: '재성' },
+    편재: { group: '재성' },
+    정관: { group: '관성' },
+    편관: { group: '관성' },
+    정인: { group: '비겁' },
+    편인: { group: '비겁' },
+};
+
+export const woonsung: Record<cheonganType, Record<jijiType, string>> = {
+    갑: {
+        자: '목욕',
+        축: '관대',
+        인: '건록',
+        묘: '제왕',
+        진: '쇠',
+        사: '병',
+        오: '사',
+        미: '묘',
+        신: '절',
+        유: '태',
+        술: '양',
+        해: '장생',
+    },
+    을: {
+        자: '병',
+        축: '쇠',
+        인: '제왕',
+        묘: '건록',
+        진: '관대',
+        사: '목욕',
+        오: '장생',
+        미: '양',
+        신: '태',
+        유: '절',
+        술: '묘',
+        해: '사',
+    },
+    병: {
+        자: '태',
+        축: '양',
+        인: '장생',
+        묘: '목욕',
+        진: '관대',
+        사: '건록',
+        오: '제왕',
+        미: '쇠',
+        신: '병',
+        유: '사',
+        술: '묘',
+        해: '절',
+    },
+    정: {
+        자: '절',
+        축: '묘',
+        인: '사',
+        묘: '병',
+        진: '쇠',
+        사: '제왕',
+        오: '건록',
+        미: '관대',
+        신: '목욕',
+        유: '장생',
+        술: '양',
+        해: '태',
+    },
+    무: {
+        자: '태',
+        축: '양',
+        인: '장생',
+        묘: '목욕',
+        진: '관대',
+        사: '건록',
+        오: '제왕',
+        미: '쇠',
+        신: '병',
+        유: '사',
+        술: '묘',
+        해: '절',
+    },
+    기: {
+        자: '절',
+        축: '묘',
+        인: '사',
+        묘: '병',
+        진: '쇠',
+        사: '제왕',
+        오: '건록',
+        미: '관대',
+        신: '목욕',
+        유: '장생',
+        술: '양',
+        해: '태',
+    },
+    경: {
+        자: '사',
+        축: '묘',
+        인: '절',
+        묘: '태',
+        진: '양',
+        사: '장생',
+        오: '목욕',
+        미: '관대',
+        신: '건록',
+        유: '제왕',
+        술: '쇠',
+        해: '병',
+    },
+    신: {
+        자: '장생',
+        축: '양',
+        인: '태',
+        묘: '절',
+        진: '묘',
+        사: '사',
+        오: '병',
+        미: '쇠',
+        신: '제왕',
+        유: '건록',
+        술: '관대',
+        해: '목욕',
+    },
+    임: {
+        자: '제왕',
+        축: '쇠',
+        인: '병',
+        묘: '사',
+        진: '묘',
+        사: '절',
+        오: '태',
+        미: '양',
+        신: '장생',
+        유: '목욕',
+        술: '관대',
+        해: '건록',
+    },
+    계: {
+        자: '건록',
+        축: '관대',
+        인: '목욕',
+        묘: '장생',
+        진: '양',
+        사: '태',
+        오: '절',
+        미: '묘',
+        신: '사',
+        유: '병',
+        술: '쇠',
+        해: '제왕',
     },
 };

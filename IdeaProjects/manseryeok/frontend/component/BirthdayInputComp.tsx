@@ -8,13 +8,15 @@ import { Mars, Venus, Search } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useRegionStore } from '@/lib/store/useRegionStore';
+import { useDataStore } from '@/lib/store/useDataStore';
 
 /** Custom */
-import { createBirthGapjaData } from '@/server/service/birthDataServerService';
+import { createAllBirthData } from '@/server/service/birthDataServerService';
 
 /** Type & Interface */
-import { regionInterface } from '@/service/regionService';
+import { regionInterface } from '@/type/jsonDataInterface';
 import { birthDataInterface } from '@/service/birthDataService';
+import { birthAllDataInterface } from '@/type/birthDataInterface';
 
 const genderList = [
     { value: 'M', label: '남성', icon: <Mars size={15} className="mr-1" /> },
@@ -28,6 +30,7 @@ export default function BirthdayInputComp() {
 
     const regionData = useRegionStore((state) => state.regionData);
     const resetRegionData = useRegionStore((state) => state.resetRegionData);
+    const { setProfileData, setData } = useDataStore();
 
     const {
         register,
@@ -74,7 +77,12 @@ export default function BirthdayInputComp() {
         };
 
         if (type === 'chart') {
-            createBirthGapjaData(request);
+            const data: birthAllDataInterface | null = createAllBirthData(request);
+            if (data) {
+                setProfileData(request);
+                setData(data);
+                router.push('/manseryeok');
+            }
         } else {
         }
     });

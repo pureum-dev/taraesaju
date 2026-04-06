@@ -10,7 +10,8 @@ import { useRegionStore } from '@/lib/store/useRegionStore';
 import BasicModalComp from '../../_component/BasicModalComp';
 
 /** Type & Interface */
-import { regionService, regionInterface } from '@/service/regionService';
+import { regionInterface } from '@/type/jsonDataInterface';
+import { regionService } from '@/service/regionService';
 import { useRouter } from 'next/navigation';
 
 export default function InfoModal() {
@@ -35,7 +36,6 @@ export default function InfoModal() {
     const onClickEachRegion = (e: React.MouseEvent<HTMLAnchorElement>, data: regionInterface) => {
         e.preventDefault();
 
-        console.log(data);
         setRegionData(data);
         router.back();
     };

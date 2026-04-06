@@ -1,5 +1,5 @@
 import fetchConfig from '@/util/fetchConfig';
-import { regionInterface } from '@/service/regionService';
+import { regionInterface } from '@/type/jsonDataInterface';
 
 export interface birthDataInterface {
     nickName: string;

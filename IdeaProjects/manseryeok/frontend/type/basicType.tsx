@@ -1,3 +1,11 @@
+export type ColumnItem = Record<string, any> & { key: string; header?: string };
+export type RowItem = {
+    key: string;
+    className?: string;
+    cellRender?: (col: ColumnItem) => React.ReactNode;
+};
+
+export type ohaengType = '목' | '화' | '토' | '금' | '수';
 export type cheonganType = '갑' | '을' | '병' | '정' | '무' | '기' | '경' | '신' | '임' | '계';
 export type jijiType =
     | '자'
@@ -38,3 +46,15 @@ export type divisionType =
     | '동지'
     | '소한'
     | '대한';
+
+export type sipsinType =
+    | '비견'
+    | '겁재'
+    | '식신'
+    | '상관'
+    | '정재'
+    | '편재'
+    | '정관'
+    | '편관'
+    | '정인'
+    | '편인';

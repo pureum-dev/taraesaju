@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /** Type & Interface */
-import { regionInterface } from '@/service/regionService';
+import { regionInterface } from '@/type/jsonDataInterface';
 
 interface RegionlState {
     regionData: regionInterface | null;

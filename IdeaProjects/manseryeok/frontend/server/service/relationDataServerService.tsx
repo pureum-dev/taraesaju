@@ -1,37 +1,27 @@
 /** Lib */
 
 /** Type & Interface */
-import { cheonganType, jijiType, divisionType } from '@/type/basicType';
-import { regionInterface } from '@/service/regionService';
-import { birthDataInterface } from '@/service/birthDataService';
+import { cheonganType, jijiType } from '@/type/basicType';
+import {
+    birthColumnInterface,
+    relationDataInterface,
+    relationInterface,
+} from '@/type/birthDataInterface';
 
 /** Custom */
-import { cheonganRelation, jijiRelation, jiji, division24 } from '@/common/const';
-
-interface relationInterface {
-    name: string;
-    isClose: boolean;
-    columnName: string;
-}
+import { cheonganRelation, jijiRelation } from '@/common/const';
 
 export const columnRelation = (
-    year: { gan: cheonganType; jiji: jijiType },
-    month: { gan: cheonganType; jiji: jijiType },
-    day: { gan: cheonganType; jiji: jijiType },
-    time: { gan: cheonganType; jiji: jijiType } | null,
-) => {
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
-        year: [],
-        month: [],
-        day: [],
-        time: [],
-    };
-
+    year: birthColumnInterface,
+    month: birthColumnInterface,
+    day: birthColumnInterface,
+    time: birthColumnInterface | null,
+): {
+    year: relationDataInterface;
+    month: relationDataInterface;
+    day: relationDataInterface;
+    time: relationDataInterface | null;
+} => {
     const _checkCheonganRelation = checkCheonganRelation(
         year.gan,
         month.gan,
@@ -95,45 +85,57 @@ export const columnRelation = (
         time ? time.jiji : null,
     );
 
-    relationList.year = [
-        ..._checkCheonganRelation.year,
-        ..._checkJijiYukhapRelation.year,
-        ..._checkJijiBanghapRelation.year,
-        ..._checkJijiSamhapRelation.year,
-        ..._checkJijiYukChungRelation.year,
-        ..._checkJijiSamhyungRelation.year,
-        ..._checkJijiHyungRelation.year,
-        ..._checkJijiHaeRelation.year,
-        ..._checkJijiPaRelation.year,
-    ];
-
-    relationList.month = [
-        ..._checkCheonganRelation.month,
-        ..._checkJijiYukhapRelation.month,
-        ..._checkJijiBanghapRelation.month,
-        ..._checkJijiSamhapRelation.month,
-        ..._checkJijiYukChungRelation.month,
-        ..._checkJijiSamhyungRelation.month,
-        ..._checkJijiHyungRelation.month,
-        ..._checkJijiHaeRelation.month,
-        ..._checkJijiPaRelation.month,
-    ];
-
-    relationList.day = [
-        ..._checkCheonganRelation.day,
-        ..._checkJijiYukhapRelation.day,
-        ..._checkJijiBanghapRelation.day,
-        ..._checkJijiSamhapRelation.day,
-        ..._checkJijiYukChungRelation.day,
-        ..._checkJijiSamhyungRelation.day,
-        ..._checkJijiHyungRelation.day,
-        ..._checkJijiHaeRelation.day,
-        ..._checkJijiPaRelation.day,
-    ];
+    const relationList: {
+        year: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
+        month: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
+        day: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
+        time: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
+    } = {
+        year: {
+            ganRelation: [..._checkCheonganRelation.year],
+            jijiRelation: [
+                ..._checkJijiYukhapRelation.year,
+                ..._checkJijiBanghapRelation.year,
+                ..._checkJijiSamhapRelation.year,
+                ..._checkJijiYukChungRelation.year,
+                ..._checkJijiSamhyungRelation.year,
+                ..._checkJijiHyungRelation.year,
+                ..._checkJijiHaeRelation.year,
+                ..._checkJijiPaRelation.year,
+            ],
+        },
+        month: {
+            ganRelation: [..._checkCheonganRelation.month],
+            jijiRelation: [
+                ..._checkJijiYukhapRelation.month,
+                ..._checkJijiBanghapRelation.month,
+                ..._checkJijiSamhapRelation.month,
+                ..._checkJijiYukChungRelation.month,
+                ..._checkJijiSamhyungRelation.month,
+                ..._checkJijiHyungRelation.month,
+                ..._checkJijiHaeRelation.month,
+                ..._checkJijiPaRelation.month,
+            ],
+        },
+        day: {
+            ganRelation: [..._checkCheonganRelation.day],
+            jijiRelation: [
+                ..._checkJijiYukhapRelation.day,
+                ..._checkJijiBanghapRelation.day,
+                ..._checkJijiSamhapRelation.day,
+                ..._checkJijiYukChungRelation.day,
+                ..._checkJijiSamhyungRelation.day,
+                ..._checkJijiHyungRelation.day,
+                ..._checkJijiHaeRelation.day,
+                ..._checkJijiPaRelation.day,
+            ],
+        },
+        time: { ganRelation: [], jijiRelation: [] },
+    };
 
     if (time) {
-        relationList.time = [
-            ..._checkCheonganRelation.time,
+        relationList.time.ganRelation = [..._checkCheonganRelation.time];
+        relationList.time.jijiRelation = [
             ..._checkJijiYukhapRelation.time,
             ..._checkJijiBanghapRelation.time,
             ..._checkJijiSamhapRelation.time,
@@ -144,6 +146,8 @@ export const columnRelation = (
             ..._checkJijiPaRelation.time,
         ];
     }
+
+    return relationList;
 };
 
 const checkCheonganRelation = (
