@@ -44,6 +44,7 @@ export default function BirthdayInputComp() {
             nickName: '',
             gender: 'M',
             calendarType: 'solar',
+            birthday: '',
             birthtime: '',
             isNone: false,
             isDivideTime: false,

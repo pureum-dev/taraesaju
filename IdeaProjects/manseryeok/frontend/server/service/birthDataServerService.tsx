@@ -54,7 +54,7 @@ export const createBirthChartColData = (
     let correctBirth: correctBirthDayInterface;
 
     // 시간 있는 경우 시간 보정
-    if (!birthDate.birthtime || birthDate.birthtime === '') {
+    if (birthDate.birthtime && birthDate.birthtime !== '') {
         const birthDateTime = birthDate.birthday + 'T' + birthDate.birthtime;
         correctBirth = correctBirthDay(birthDateTime, birthDate.location, birthDate.isDivideTime);
     } else {

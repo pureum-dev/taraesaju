@@ -1,10 +1,13 @@
+/** type & interface*/
+import { ColumnItem, RowItem } from '@/type/basicType';
+
 interface SajuChartProps {
-    rowData: Record<string, any>[];
-    columnData: Record<string, any>[];
+    columnData: ColumnItem[];
+    rowData: RowItem[];
     hasSideHeader?: boolean;
 }
 
-const SajuChart = ({ rowData, columnData, hasSideHeader = true }: SajuChartProps) => {
+const SajuChartComp = ({ columnData, rowData, hasSideHeader = true }: SajuChartProps) => {
     return (
         <div className="flex flex-col w-full">
             {rowData.map((rowItem, rowIdx) => {
@@ -59,4 +62,4 @@ const SajuChart = ({ rowData, columnData, hasSideHeader = true }: SajuChartProps
     );
 };
 
-export default SajuChart;
+export default SajuChartComp;

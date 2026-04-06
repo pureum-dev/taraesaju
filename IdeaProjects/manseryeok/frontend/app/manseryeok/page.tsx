@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 /** lib */
 import dayjs from 'dayjs';
+import KoreanLunarCalendar from 'korean-lunar-calendar';
 import {
     UserRoundIcon,
     SunIcon,
@@ -24,7 +25,7 @@ import { useDataStore } from '@/lib/store/useDataStore';
 /** Custom */
 import { cheongan, ohaeng, jiji, division24, woonsung } from '@/common/const';
 import { makeBgColor, textColor } from '@/util/colorFunc';
-import SajuChart from '@/component/SajuChart';
+import SajuChartGroupComp from '@/component/SajuChartGroupComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 
 /** type & interface*/
@@ -89,19 +90,6 @@ export default function ManseryeokPage() {
 
         return [
             {
-                key: 'rowHeader',
-                header: '',
-                ganRealtion: '천간 합/충',
-                ganSipsin: '천간십성',
-                gan: '천간',
-                jiji: '지지',
-                jijiSipsin: '지지십성',
-                jijiRealtion: '지지 합/충',
-                jijanggan: '지장간',
-                woonsung: '십이운성',
-                sinsal: '십이신살',
-            },
-            {
                 key: 'time',
                 header: '시주',
                 ...data.chartCol.time,
@@ -124,112 +112,89 @@ export default function ManseryeokPage() {
         ];
     }, [data]);
 
-    const rowData = useMemo<RowItem[]>(() => {
-        if (!data) return []; // data 없을 때 안전하게 처리
+    const profileList = useMemo<Record<string, any>[]>(() => {
+        if (!profileData) return [];
+
+        const calendar = new KoreanLunarCalendar();
+        const splitBirthday = profileData.birthday.split('-').map((item) => Number(item));
+
+        if (profileData.calendarType === 'solar') {
+            calendar.setSolarDate(splitBirthday[0], splitBirthday[1], splitBirthday[2]);
+        } else {
+            calendar.setLunarDate(
+                splitBirthday[0],
+                splitBirthday[1],
+                splitBirthday[2],
+                profileData.calendarType === 'leap',
+            );
+        }
+
+        const solarDate = calendar.getSolarCalendar();
+        const lunarDate = calendar.getLunarCalendar();
 
         return [
             {
-                key: 'header',
-                className: 'text-sm',
+                title: '성별',
+                icon: <UserRoundIcon className="w-4" />,
+                value: <span>{`${profileData.gender === 'M' ? '남성' : '여성'}`}</span>,
+                prerequisite: true,
             },
             {
-                key: 'ganRealtion',
-                className: '',
-                cellRender: (col) => {
-                    const list: relationInterface[] = col.ganRelation ?? [];
-                    return (
-                        <div className="flex flex-col items-center">
-                            {list.length !== 0
-                                ? list.map((item, idx) => (
-                                      <div key={idx} className="flex items-center">
-                                          {item.name.includes('합') ? (
-                                              <HeartIcon className="w-3 h-3 mr-0.5" />
-                                          ) : (
-                                              <ZapIcon className="w-3 h-3 mr-0.5" />
-                                          )}
-                                          {item.name}
-                                      </div>
-                                  ))
-                                : '-'}
-                        </div>
-                    );
-                },
+                title: '양력',
+                icon: <SunIcon className="w-4" />,
+                value: (
+                    <span>
+                        <span>{`${solarDate.year}-${solarDate.month}-${solarDate.day}`}</span>
+                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
+                    </span>
+                ),
+                prerequisite: true,
             },
             {
-                key: 'ganSipsin',
-                className: '',
+                title: `음력${profileData.calendarType === 'leap' ? '(윤달)' : ''}`,
+                icon: <MoonIcon className="w-4" />,
+                value: (
+                    <span>
+                        <span>{`${lunarDate.year}-${lunarDate.month}-${lunarDate.day}`}</span>
+                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
+                    </span>
+                ),
+                prerequisite: true,
             },
+            /*{
+                title: '보정값',
+                icon: <SparkleIcon className="w-3.5" />,
+                value: (
+                    <div className="flex flex-col gap-0.5">
+                        <span className="flex items-center gap-2 border-b border-gray-900 font-bold dark:border-gray-50">
+                            <span>
+                                {`${data.birthData.solYear}-${data.birthData.solMonth}-${data.birthData.solDay}`}
+                            </span>
+                            <span>{`${data.birthData.time}`}</span>
+                        </span>
+                        <span className="text-mint-600 font-bold dark:text-mint-400">
+                            {`( 지역보정: ${Math.trunc(data.birthData.deltaMinutes)}분 ${
+                                data.birthData.summertimeMinutes
+                                    ? ', 서머타임: ' +
+                                      Math.trunc(data.birthData.summertimeMinutes) +
+                                      '분'
+                                    : ''
+                            } )`}
+                        </span>
+                    </div>
+                ),
+                prerequisite: !data.info.timeNone,
+            },*/
             {
-                key: 'gan',
-                className: '',
-                cellRender: (col) => {
-                    return <ElementBoxComp name={col.gan ?? ''} type="gan" />;
-                },
-            },
-            {
-                key: 'jiji',
-                className: '',
-                cellRender: (col) => {
-                    return <ElementBoxComp name={col.jiji ?? ''} type="jiji" />;
-                },
-            },
-
-            {
-                key: 'jijanggan',
-                className: '',
-                cellRender: (col) => {
-                    const jijanggan = col.jiji ? jiji[col.jiji as jijiType].jijanggan : [];
-                    return jijanggan ? (
-                        jijanggan.map((item, idx) => (
-                            <div
-                                key={idx}
-                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(col.jiji, 'jiji')} ${textColor(col.jiji, 'jiji')}`}
-                            >
-                                {item}
-                            </div>
-                        ))
-                    ) : (
-                        <div></div>
-                    );
-                },
-            },
-            {
-                key: 'jijiSipsin',
-                className: '',
-            },
-            {
-                key: 'jijiRealtion',
-                className: '',
-                cellRender: (col) => {
-                    const list: relationInterface[] = col.jijiRealtion ?? [];
-                    return (
-                        <div className="flex flex-col items-center">
-                            {list.length !== 0
-                                ? list.map((item, idx) => (
-                                      <div key={idx} className="flex items-center">
-                                          {item.name.includes('합') ? (
-                                              <HeartIcon className="w-3 h-3 mr-0.5" />
-                                          ) : (
-                                              <ZapIcon className="w-3 h-3 mr-0.5" />
-                                          )}
-                                          {item.name}
-                                      </div>
-                                  ))
-                                : '-'}
-                        </div>
-                    );
-                },
-            },
-            {
-                key: 'woonsung',
-                className: '',
-            },
-            {
-                key: 'sinsal',
-                className: '',
+                title: `도시`,
+                icon: <MapPinnedIcon className="w-4" />,
+                value: (
+                    <span>{`${profileData.location.geo_name}/${profileData.location.alternate_name}`}</span>
+                ),
+                prerequisite: true,
             },
         ];
-    }, [data]);
+    }, [profileData]);
 
     return data ? (
         <div className="flex flex-col w-full p-8 gap-8">
@@ -257,26 +222,26 @@ export default function ManseryeokPage() {
                         </div>
                         <div className="flex flex-row items-center gap-6 lg:flex-col lg:w-full lg:items-start">
                             <ul className="flex flex-col gap-1.5 w-1/2 lg:w-full">
-                                {/*infoList &&
-                                    infoList.map((infoItem, infoIdx) => {
+                                {profileList &&
+                                    profileList.map((profileItem, profileIdx) => {
                                         return (
-                                            infoItem.prerequisite && (
-                                                <Fragment key={infoIdx}>
+                                            profileItem.prerequisite && (
+                                                <Fragment key={profileIdx}>
                                                     <li className="flex flex-wrap text-nowrap text-sm">
                                                         <span className="flex items-center w-22 font-bold text-gray-700 dark:text-gray-300">
-                                                            {infoItem.icon && (
+                                                            {profileItem.icon && (
                                                                 <span className="flex justify-start items-center w-4 h-4 mr-1">
-                                                                    {infoItem.icon}
+                                                                    {profileItem.icon}
                                                                 </span>
                                                             )}
-                                                            {infoItem.title}
+                                                            {profileItem.title}
                                                         </span>
-                                                        <span>{infoItem.value}</span>
+                                                        <span>{profileItem.value}</span>
                                                     </li>
                                                 </Fragment>
                                             )
                                         );
-                                    })*/}
+                                    })}
                             </ul>
                             <ul className="hidden flex-col gap-1.5 w-1/2 p-4 border-2 border-background rounded-xl md:flex lg:w-full">
                                 {/*pointList &&
@@ -303,7 +268,7 @@ export default function ManseryeokPage() {
                 </article>
                 {/* 사주 차트 */}
                 <article className="w-full p-4 lg:w-2/3">
-                    <SajuChart columnData={columnData} rowData={rowData} />
+                    <SajuChartGroupComp columnData={columnData} />
                 </article>
             </section>
             {/** 내 사주 한 줄 요약 */}
