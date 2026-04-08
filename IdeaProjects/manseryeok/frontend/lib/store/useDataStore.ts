@@ -2,17 +2,17 @@ import { create } from 'zustand';
 
 /** Type & Interface */
 import { birthDataInterface } from '@/service/birthDataService';
-import { birthAllDataInterface } from '@/type/birthDataInterface';
+import { BirthAllData } from '@/type/birthDataInterface';
 
 interface DataState {
     profileData: birthDataInterface | null;
-    data: birthAllDataInterface | null;
+    data: BirthAllData | null;
 
     getProfileData: () => birthDataInterface | null;
     setProfileData: (value: birthDataInterface) => void;
     resetProfileData: () => void;
-    getData: () => birthAllDataInterface | null;
-    setData: (value: birthAllDataInterface) => void;
+    getData: () => BirthAllData | null;
+    setData: (value: BirthAllData) => void;
     resetData: () => void;
 }
 

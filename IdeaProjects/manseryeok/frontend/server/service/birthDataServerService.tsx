@@ -9,25 +9,31 @@ import objectSupport from 'dayjs/plugin/objectSupport';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Custom */
-import { cheongan, jiji, division24, woonsung } from '@/common/const';
+import { cheongan } from '@/common/const/cheonganConst';
+import { jiji } from '@/common/const/jijiConst';
+import { division24 } from '@/common/const/division24Const';
+import { woonsung } from '@/common/const/woonsungConst';
 import { columnRelation } from '@/server/service/relationDataServerService';
-import { check12Sinsal } from '@/server/service/sinsalDataServerService';
-import { checkSipsinData, columnSipsinData } from '@/server/service/sipsinDataServerService';
-import { checkDuplication } from '@/server/service/informationDataServerService';
+import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServerService';
+import { columnSipsinData } from '@/server/service/sipsinDataServerService';
+import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
+import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
 
 /** Data */
 import division24Json from '@/server/data/division24.json';
 
 /** Type & Interface */
-import { cheonganType, jijiType, divisionType } from '@/type/basicType';
-import { regionInterface, divisionInterface } from '@/type/jsonDataInterface';
+import { CheonganType, JijiType, DivisionType } from '@/type/basicType';
+import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
+import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 import {
-    correctBirthDayInterface,
-    correctTargetDivisionInterface,
-    birthColumnInterface,
-    birthAllDataInterface,
-    birthChartColInterface,
+    CorrectBirthDay,
+    CorrectTargetDivision,
+    BirthAllData,
+    BirthColumnData,
+    BirthPointData,
 } from '@/type/birthDataInterface';
+import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { birthDataInterface } from '@/service/birthDataService';
 
 dayjs.extend(isSameOrBefore);
@@ -36,12 +42,20 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(objectSupport);
 
-export const createAllBirthData = (birthDate: birthDataInterface): birthAllDataInterface | null => {
-    const chartCol: birthChartColInterface | null = createBirthChartColData(birthDate);
+export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData | null => {
+    const chartCol: BirthColumnGroup<BirthColumnData> = createBirthChartColData(birthDate);
 
     if (chartCol) {
+        const point: BirthPointData = createInfoData(chartCol);
+        const ohaengStrength: OhaengStrengthData[] = checkOhaengStrength(chartCol);
+        const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
+            checkSinsalData(chartCol);
+
         return {
             chartCol: chartCol ?? null,
+            point: point,
+            ohaengStrength: ohaengStrength,
+            sinsal: sinsalData,
         };
     } else {
         return null;
@@ -50,8 +64,8 @@ export const createAllBirthData = (birthDate: birthDataInterface): birthAllDataI
 
 export const createBirthChartColData = (
     birthDate: birthDataInterface,
-): birthChartColInterface | null => {
-    let correctBirth: correctBirthDayInterface;
+): BirthColumnGroup<BirthColumnData> => {
+    let correctBirth: CorrectBirthDay;
 
     // 시간 있는 경우 시간 보정
     if (birthDate.birthtime && birthDate.birthtime !== '') {
@@ -78,89 +92,95 @@ export const createBirthChartColData = (
     const targetYear = yearDivision?.targetYear;
     const targetDivision = yearDivision?.targetDivision;
 
-    if (targetYear && targetDivision) {
-        const _yearColumn = calculateYearColumn(targetYear);
-        const _monthColumn = calculateMonthColumn(solarBirth, _yearColumn.gan, targetDivision);
-        const _dayColumn = calculateDayColumn(solarBirth);
-        const _timeColumn = correctBirth.time
-            ? calculateTimeColumn(
-                  correctBirth.date,
-                  correctBirth.time,
-                  _dayColumn.gan,
-                  correctBirth.isCalculateDate,
-              )
-            : null;
+    //targetYear && targetDivision
+    const _yearColumn = calculateYearColumn(targetYear as number);
+    const _monthColumn = calculateMonthColumn(
+        solarBirth,
+        _yearColumn.gan,
+        targetDivision as DivisionJsonData[],
+    );
 
-        const _columnRelation = columnRelation(_yearColumn, _monthColumn, _dayColumn, _timeColumn);
-        const _columnSipsin = columnSipsinData(_yearColumn, _monthColumn, _dayColumn, _timeColumn);
-        const _columnCheonDuplication = checkDuplication(
-            _yearColumn.gan,
-            _monthColumn.gan,
-            _dayColumn.gan,
-            _timeColumn ? _timeColumn.gan : null,
-        );
-        const _columnJijiDuplication = checkDuplication(
-            _yearColumn.jiji,
-            _monthColumn.jiji,
-            _dayColumn.jiji,
-            _timeColumn ? _timeColumn.jiji : null,
-        );
+    const _dayColumn = calculateDayColumn(solarBirth);
+    const _timeColumn = correctBirth.time
+        ? calculateTimeColumn(
+              correctBirth.date,
+              correctBirth.time,
+              _dayColumn.gan,
+              correctBirth.isCalculateDate,
+          )
+        : null;
 
-        return {
-            year: {
-                ..._yearColumn,
-                ..._columnRelation.year,
-                woonsung: woonsung[_yearColumn.gan][_yearColumn.jiji],
-                sinsal: null,
-                ganSipsin: _columnSipsin.year.gan,
-                jijiSipsin: _columnSipsin.year.jiji,
-                ganDuplication: _columnCheonDuplication.year,
-                jijiDuplication: _columnJijiDuplication.year,
-            },
-            month: {
-                ..._monthColumn,
-                ..._columnRelation.month,
-                woonsung: woonsung[_monthColumn.gan][_monthColumn.jiji],
-                sinsal: check12Sinsal(_yearColumn.jiji, _monthColumn.jiji),
-                ganSipsin: _columnSipsin.month.gan,
-                jijiSipsin: _columnSipsin.month.jiji,
-                ganDuplication: _columnCheonDuplication.month,
-                jijiDuplication: _columnJijiDuplication.month,
-            },
-            day: {
-                ..._dayColumn,
-                ..._columnRelation.day,
-                woonsung: woonsung[_dayColumn.gan][_dayColumn.jiji],
-                sinsal: check12Sinsal(_yearColumn.jiji, _dayColumn.jiji),
-                ganSipsin: null,
-                jijiSipsin: _columnSipsin.day.jiji,
-                ganDuplication: _columnCheonDuplication.day,
-                jijiDuplication: _columnJijiDuplication.day,
-            },
-            time:
-                _timeColumn && _columnRelation.time
-                    ? {
-                          ..._timeColumn,
-                          ..._columnRelation.time,
-                          woonsung: woonsung[_timeColumn.gan][_timeColumn.jiji],
-                          sinsal: check12Sinsal(_yearColumn.jiji, _timeColumn.jiji),
-                          ganSipsin: _columnSipsin.time ? _columnSipsin.time.gan : null,
-                          jijiSipsin: _columnSipsin.time ? _columnSipsin.time.jiji : null,
-                          ganDuplication: _columnCheonDuplication.time,
-                          jijiDuplication: _columnJijiDuplication.time,
-                      }
-                    : null,
-        };
-    }
+    const _columnRelation = columnRelation(_yearColumn, _monthColumn, _dayColumn, _timeColumn);
+    const _columnSipsin = columnSipsinData(_yearColumn, _monthColumn, _dayColumn, _timeColumn);
+    const _columnCheonDuplication = checkDuplication(
+        _yearColumn.gan,
+        _monthColumn.gan,
+        _dayColumn.gan,
+        _timeColumn ? _timeColumn.gan : null,
+    );
+    const _columnJijiDuplication = checkDuplication(
+        _yearColumn.jiji,
+        _monthColumn.jiji,
+        _dayColumn.jiji,
+        _timeColumn ? _timeColumn.jiji : null,
+    );
 
-    return null;
+    return {
+        year: {
+            ..._yearColumn,
+            ganRelation: _columnRelation.year.gan,
+            jijiRelation: _columnRelation.year.jiji,
+            woonsung: woonsung[_yearColumn.gan][_yearColumn.jiji],
+            sinsal: null,
+            ganSipsin: _columnSipsin.year.gan,
+            jijiSipsin: _columnSipsin.year.jiji,
+            ganDuplication: _columnCheonDuplication.year,
+            jijiDuplication: _columnJijiDuplication.year,
+        },
+        month: {
+            ..._monthColumn,
+            ganRelation: _columnRelation.month.gan,
+            jijiRelation: _columnRelation.month.jiji,
+            woonsung: woonsung[_monthColumn.gan][_monthColumn.jiji],
+            sinsal: check12Sinsal(_yearColumn.jiji, _monthColumn.jiji),
+            ganSipsin: _columnSipsin.month.gan,
+            jijiSipsin: _columnSipsin.month.jiji,
+            ganDuplication: _columnCheonDuplication.month,
+            jijiDuplication: _columnJijiDuplication.month,
+        },
+        day: {
+            ..._dayColumn,
+            ganRelation: _columnRelation.day.gan,
+            jijiRelation: _columnRelation.day.jiji,
+            woonsung: woonsung[_dayColumn.gan][_dayColumn.jiji],
+            sinsal: check12Sinsal(_yearColumn.jiji, _dayColumn.jiji),
+            ganSipsin: null,
+            jijiSipsin: _columnSipsin.day.jiji,
+            ganDuplication: _columnCheonDuplication.day,
+            jijiDuplication: _columnJijiDuplication.day,
+        },
+        time:
+            _timeColumn && _columnRelation.time
+                ? {
+                      ..._timeColumn,
+                      ganRelation: _columnRelation.time.gan,
+                      jijiRelation: _columnRelation.time.jiji,
+                      woonsung: woonsung[_timeColumn.gan][_timeColumn.jiji],
+                      sinsal: check12Sinsal(_yearColumn.jiji, _timeColumn.jiji),
+                      ganSipsin: _columnSipsin.time ? _columnSipsin.time.gan : null,
+                      jijiSipsin: _columnSipsin.time ? _columnSipsin.time.jiji : null,
+                      ganDuplication: _columnCheonDuplication.time,
+                      jijiDuplication: _columnJijiDuplication.time,
+                  }
+                : null,
+    };
 };
 
 export const correctBirthDay = (
     birthDateTime: string,
-    region: regionInterface,
+    region: RegionJsonData,
     isDivideTime: boolean,
-): correctBirthDayInterface => {
+): CorrectBirthDay => {
     const zoned = dayjs.tz(birthDateTime, region.timezone);
 
     // DST 보정 - 기준점 (썸머타임이 보통 없는 1월 1일의 오프셋과 현재 오프셋 비교 해서 썸머타임 계산)
@@ -232,7 +252,7 @@ export const createSolarBirthData = (
 };
 
 /** 보정연도 및 절기데이터 */
-export const calculateYearDivision = (solarBirth: Dayjs): correctTargetDivisionInterface | null => {
+export const calculateYearDivision = (solarBirth: Dayjs): CorrectTargetDivision => {
     const targetSpringDate = division24Json.filter((item) => {
         return item.sol_year === String(solarBirth.year()) && item.date_name === '입춘';
     });
@@ -242,7 +262,7 @@ export const calculateYearDivision = (solarBirth: Dayjs): correctTargetDivisionI
     let targetYear = solarBirth.year();
     if (solarBirth.isBefore(targetSpringday)) targetYear -= 1;
 
-    const targetDivision: divisionInterface[] = division24Json.filter(
+    const targetDivision: DivisionJsonData[] = division24Json.filter(
         (item) => item.sol_year === String(targetYear) && item.is_beginning,
     );
 
@@ -255,7 +275,9 @@ export const calculateYearDivision = (solarBirth: Dayjs): correctTargetDivisionI
 /**
  * 년주계산
  */
-export const calculateYearColumn = (targetYear: number): birthColumnInterface => {
+export const calculateYearColumn = (
+    targetYear: number,
+): BirthColumnItem<CheonganType, JijiType> => {
     const standardDate = dayjs('1900-01-01', 'YYYY-mm-dd');
     const standardYear = standardDate.year();
     const standardGan = '경'; // number = 6
@@ -271,8 +293,8 @@ export const calculateYearColumn = (targetYear: number): birthColumnInterface =>
     )?.[0];
 
     return {
-        gan: yearCheongan as cheonganType,
-        jiji: yearJiji as jijiType,
+        gan: yearCheongan as CheonganType,
+        jiji: yearJiji as JijiType,
     };
 };
 
@@ -281,9 +303,9 @@ export const calculateYearColumn = (targetYear: number): birthColumnInterface =>
  */
 export const calculateMonthColumn = (
     solarBirth: Dayjs,
-    yearCheongan: cheonganType,
-    targetDivision: divisionInterface[],
-): birthColumnInterface => {
+    yearCheongan: CheonganType,
+    targetDivision: DivisionJsonData[],
+): BirthColumnItem<CheonganType, JijiType> => {
     let divisionName: string = '대설';
 
     for (let idx = 0; idx < targetDivision.length; idx++) {
@@ -302,14 +324,14 @@ export const calculateMonthColumn = (
     }
 
     const defaultMonthCheongan = findMonthCheongan(yearCheongan);
-    const monthJiji = division24[divisionName as divisionType].jiji;
+    const monthJiji = division24[divisionName as DivisionType].jiji;
     const distance = (12 + jiji[monthJiji].number) % 12;
     const monthGan = Object.entries(cheongan).find(
         ([key, value]) => value.number === (cheongan[defaultMonthCheongan].number + distance) % 10,
     )?.[0];
 
     return {
-        gan: monthGan as cheonganType,
+        gan: monthGan as CheonganType,
         jiji: monthJiji,
     };
 };
@@ -317,7 +339,7 @@ export const calculateMonthColumn = (
 /**
  * 일주계산
  */
-export const calculateDayColumn = (solarBirth: Dayjs): birthColumnInterface => {
+export const calculateDayColumn = (solarBirth: Dayjs): BirthColumnItem<CheonganType, JijiType> => {
     const standardDate = dayjs('1900-01-01', 'YYYY-mm-dd');
     const standardGan = '갑'; // number = 0
     const standardJi = '술'; // number = 10
@@ -332,8 +354,8 @@ export const calculateDayColumn = (solarBirth: Dayjs): birthColumnInterface => {
     )?.[0];
 
     return {
-        gan: dayGan as cheonganType,
-        jiji: dayJiji as jijiType,
+        gan: dayGan as CheonganType,
+        jiji: dayJiji as JijiType,
     };
 };
 
@@ -343,9 +365,9 @@ export const calculateDayColumn = (solarBirth: Dayjs): birthColumnInterface => {
 export const calculateTimeColumn = (
     date: string,
     time: string | null,
-    dayCheongan: cheonganType,
+    dayCheongan: CheonganType,
     isCalculateDate: boolean,
-): birthColumnInterface => {
+): BirthColumnItem<CheonganType, JijiType> => {
     const birthDateTime = dayjs(`${date}T${time}`, 'YYYY-MM-DDTHH:mm');
 
     const timeJiji = isCalculateDate
@@ -363,15 +385,15 @@ export const calculateTimeColumn = (
               );
           })?.[0];
 
-    const timeGan = findTimeCheongan(dayCheongan, timeJiji as jijiType);
+    const timeGan = findTimeCheongan(dayCheongan, timeJiji as JijiType);
 
     return {
-        gan: timeGan as cheonganType,
-        jiji: timeJiji as jijiType,
+        gan: timeGan as CheonganType,
+        jiji: timeJiji as JijiType,
     };
 };
 
-export const findMonthCheongan = (yearCheongan: cheonganType) => {
+export const findMonthCheongan = (yearCheongan: CheonganType) => {
     switch (yearCheongan) {
         case '갑':
         case '기':
@@ -394,7 +416,7 @@ export const findMonthCheongan = (yearCheongan: cheonganType) => {
     }
 };
 
-export const findTimeCheongan = (dayCheongan: cheonganType, timeJiji: jijiType) => {
+export const findTimeCheongan = (dayCheongan: CheonganType, timeJiji: JijiType) => {
     const cheonganArr: string[] = Object.keys(cheongan);
 
     switch (dayCheongan) {

@@ -23,67 +23,26 @@ import {
 import { useDataStore } from '@/lib/store/useDataStore';
 
 /** Custom */
-import { cheongan, ohaeng, jiji, division24, woonsung } from '@/common/const';
-import { makeBgColor, textColor } from '@/util/colorFunc';
+import { cheongan } from '@/common/const/cheonganConst';
+import { jiji } from '@/common/const/jijiConst';
+import { ohaeng } from '@/common/const/ohaengConst';
 import SajuChartGroupComp from '@/component/SajuChartGroupComp';
-import ElementBoxComp from '@/component/ElementBoxComp';
+import EchartComp from '@/lib/EchartComp';
+import SubTitleComp from '@/component/SubTitleComp';
+import SipsinChartComp from '@/component/SipsinChartComp';
 
 /** type & interface*/
-import { ColumnItem, jijiType, RowItem } from '@/type/basicType';
-import { birthAllDataInterface, relationInterface } from '@/type/birthDataInterface';
-
-/*const data: birthAllDataInterface = {
-    chartCol: {
-        year: {
-            gan: '갑',
-            jiji: '자',
-            ganRelation: [
-                {
-                    name: '천간합',
-                    isClose: true,
-                    columnName: '년_월',
-                },
-            ],
-            jijiRelation: [],
-            woonsung: '-',
-            sinsal: '',
-        },
-        month: {
-            gan: '갑',
-            jiji: '자',
-            ganRelation: [
-                {
-                    name: '천간합',
-                    isClose: true,
-                    columnName: '년_월',
-                },
-            ],
-            jijiRelation: [],
-            woonsung: '장성',
-            sinsal: '',
-        },
-        day: {
-            gan: '갑',
-            jiji: '자',
-            ganRelation: [],
-            jijiRelation: [],
-            woonsung: '장성',
-            sinsal: '',
-        },
-        time: {
-            gan: '갑',
-            jiji: '자',
-            ganRelation: [],
-            jijiRelation: [],
-            woonsung: '장성',
-            sinsal: '',
-        },
-    },
-};*/
+import { CheonganType, ColumnItem, JijiType, RowItem } from '@/type/basicType';
+import { BirthAllData, Relation } from '@/type/birthDataInterface';
 
 export default function ManseryeokPage() {
     const profileData = useDataStore((state) => state.profileData);
     const data = useDataStore((state) => state.data);
+
+    const [isAdjustElement, setIsAdjustment] = useState(false);
+    const [elementChartData, setElementChartData] = useState([]);
+
+    const onChangeAdjustScore = () => {};
 
     const columnData = useMemo<ColumnItem[]>(() => {
         if (!data) return []; // data 없을 때 안전하게 처리
@@ -196,6 +155,84 @@ export default function ManseryeokPage() {
         ];
     }, [profileData]);
 
+    const pointList = useMemo<Record<string, any>[]>(() => {
+        if (!data) return [];
+
+        return [
+            {
+                title: '공망',
+                icon: null,
+                value: (
+                    <span>{`${jiji[data.point.gongmang[0]].hanja} (${data.point.gongmang[0]}), ${jiji[data.point.gongmang[1]].hanja} (${data.point.gongmang[1]})`}</span>
+                ),
+                prerequisite: true,
+            },
+            {
+                title: '신강/신약',
+                icon: null,
+                value: <span>{`${data.point.strength.strengthType}사주`}</span>,
+                prerequisite: true,
+            },
+            {
+                title: '득령 | 득지',
+                icon: null,
+                value: (
+                    <span className="flex items-center gap-1">
+                        {data.point.deukryung ? (
+                            <CheckCircleIcon className="w-4 text-mint-500 stroke-mint-500" />
+                        ) : (
+                            <CircleXIcon className="w-4 text-gray-300 stroke-gray-300" />
+                        )}
+                        |
+                        {data.point.deukji ? (
+                            <CheckCircleIcon className="w-4 text-mint-500 stroke-mint-500" />
+                        ) : (
+                            <CircleXIcon className="w-4 text-gray-300 stroke-gray-300" />
+                        )}
+                    </span>
+                ),
+                prerequisite: true,
+            },
+            {
+                title: '삼재연도',
+                icon: null,
+                value: (
+                    <span className="flex items-center gap-1">
+                        {data.point.samjae ? data.point.samjae.join(', ') : '-'}
+                    </span>
+                ),
+                prerequisite: true,
+            },
+        ];
+    }, [data]);
+
+    const sinsalColumnData = useMemo<ColumnItem[]>(() => {
+        if (!data) return []; // data 없을 때 안전하게 처리
+
+        return [
+            {
+                key: 'time',
+                header: '시주',
+                ...data.sinsal.time,
+            },
+            {
+                key: 'day',
+                header: '일주',
+                ...data.sinsal.day,
+            },
+            {
+                key: 'month',
+                header: '월주',
+                ...data.sinsal.month,
+            },
+            {
+                key: 'year',
+                header: '연주',
+                ...data.sinsal.year,
+            },
+        ];
+    }, [data]);
+
     return data ? (
         <div className="flex flex-col w-full p-8 gap-8">
             {/**  상단 인적 정보 + 사주 차트 **/}
@@ -246,7 +283,7 @@ export default function ManseryeokPage() {
                                     })}
                             </ul>
                             <ul className="hidden flex-col gap-1.5 w-1/2 p-4 border-2 border-background rounded-xl md:flex lg:w-full">
-                                {/*pointList &&
+                                {pointList &&
                                     pointList.map((infoItem, infoIdx) => {
                                         return (
                                             infoItem.prerequisite && (
@@ -263,7 +300,7 @@ export default function ManseryeokPage() {
                                                 </li>
                                             )
                                         );
-                                    })*/}
+                                    })}
                             </ul>
                         </div>
                     </div>
@@ -320,9 +357,10 @@ export default function ManseryeokPage() {
             </SectionContents>*/}
 
             {/** 오행 / 십성 */}
-            {/*<section className="flex flex-col w-full gap-8 md:flex-row ">
+
+            <section className="flex flex-col w-full gap-8 lg:flex-row ">
                 <article className="flex flex-col w-full h-full lg:w-1/2">
-                    {subTitleDiv('오행 분석')}
+                    <SubTitleComp text={'오행 분석'} />
 
                     <div className="flex flex-col w-full h-90">
                         <div className="flex justify-end pb-3">
@@ -343,67 +381,48 @@ export default function ManseryeokPage() {
                             </div>
                             <div className="flex justify-center items-center w-1/2 h-full border rounded-2xl ">
                                 <div className="flex flex-col w-full h-full">
-                                    {elementTableData.map((item, idx) => {
+                                    {data.ohaengStrength.map((item, idx) => {
                                         return (
                                             <div
-                                                key={'row_' + idx}
-                                                className={`flex w-full h-1/5 font-extrabold ${
-                                                    idx !== elementTableData.length - 1 &&
+                                                key={idx}
+                                                className={`flex w-full h-1/5  ${
+                                                    idx !== data.ohaengStrength.length - 1 &&
                                                     'border-b'
-                                                } ${
-                                                    item.name === '목' &&
-                                                    'text-greenmint-500 dark:text-greenmint-400'
-                                                }
-                                                ${
-                                                    item.name === '화' &&
-                                                    'text-coral-500 dark:text-coral-400'
-                                                }
-                                                ${
-                                                    item.name === '토' &&
-                                                    'text-lemon-500 dark:text-lemon-400'
-                                                }
-                                                ${
-                                                    item.name === '금' &&
-                                                    'text-gray-500 dark:text-gray-100'
-                                                }
-                                                ${
-                                                    item.name === '수' &&
-                                                    'text-gray-900 dark:text-gray-400'
                                                 }`}
                                             >
-                                                <div className="flex justify-center items-center w-1/2 h-full border-r ">
+                                                <div className="flex flex-1 justify-center items-center h-full border-r ">
                                                     <span>
-                                                        {item.name}
-                                                        <span>{`(${
-                                                            ELEMENT_HANJA[item.name]
-                                                        })`}</span>
+                                                        {item.element}
+                                                        <span>{``}</span>
                                                     </span>
                                                 </div>
-                                                <div className="flex justify-center items-center w-1/2 h-full ">
+                                                <div className="flex flex-1 justify-center items-center h-full border-r text-sm">
                                                     {item.percent
                                                         ? item.percent.toFixed(1) + '%'
                                                         : '-'}
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                <div className="flex flex-col w-full h-full border-l  ">
-                                    {sipsinTableData.map((item, idx) => {
-                                        return (
-                                            <div
-                                                key={'row_' + idx}
-                                                className={`flex w-full h-1/10 ${
-                                                    idx !== sipsinTableData.length - 1 && 'border-b'
-                                                }  text-sm`}
-                                            >
-                                                <div className="flex justify-center items-center w-1/2 h-full border-r ">
-                                                    <span>{item.name}</span>
-                                                </div>
-                                                <div className="flex justify-center items-center w-1/2 h-full ">
-                                                    {item.percent
-                                                        ? item.percent.toFixed(1) + '%'
-                                                        : '-'}
+                                                <div className="flex flex-2 flex-col h-full">
+                                                    {item.sipsinDataList.map(
+                                                        (sipsinItem, sipsinIdx) => {
+                                                            return (
+                                                                <div
+                                                                    key={sipsinIdx}
+                                                                    className={`flex flex-row w-full h-1/2 ${sipsinIdx === 0 && 'border-b'}`}
+                                                                >
+                                                                    <div className="flex flex-1 justify-center items-center border-r">
+                                                                        {sipsinItem?.name}
+                                                                    </div>
+                                                                    <div className="flex flex-1 justify-center items-center text-sm">
+                                                                        {sipsinItem.percent
+                                                                            ? sipsinItem.percent.toFixed(
+                                                                                  1,
+                                                                              ) + '%'
+                                                                            : '-'}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        },
+                                                    )}
                                                 </div>
                                             </div>
                                         );
@@ -414,40 +433,40 @@ export default function ManseryeokPage() {
                     </div>
                 </article>
                 <article className="flex flex-col w-full h-full lg:w-1/2">
-                    {subTitleDiv('신살 분석')}
+                    <SubTitleComp text={'신살 분석'} />
                     <div className="flex w-full h-90">
-                        <DivChart columnData={sinsalColumnData} rowData={sinsalRowData} />
+                        {<SipsinChartComp columnData={sinsalColumnData} />}
                     </div>
                 </article>
-            </section>*/}
+            </section>
 
             {/** 대운 */}
-            {/*<section className="flex flex-col w-full">
-                {subTitleDiv(`대운 - 대운 수 : ${data.daeunNum}`)}
+            <section className="flex flex-col w-full">
+                <SubTitleComp text={`대운 - 대운 수 : ${''}`} />
                 <div className="flex w-full h-100 ">
-                    <ColumnButtonChart
+                    {/*<ColumnButtonChart
                         columnData={daeunColumnData}
                         rowData={daeunRowData}
                         defaultColumn={targetDaeun}
                         type="daeun"
                         addEvent={addColumnClickEvent}
-                    />
+                    />*/}
                 </div>
-            </section>*/}
+            </section>
 
             {/** 세운 */}
-            {/*<section className="flex flex-col w-full">
-                {subTitleDiv('세운')}
+            <section className="flex flex-col w-full">
+                <SubTitleComp text={`세운`} />
                 <div className="flex w-full h-100">
-                    <ColumnButtonChart
+                    {/*<ColumnButtonChart
                         columnData={seunColumnData}
                         rowData={seunRowData}
                         defaultColumn={targetSeun}
                         type="seun"
                         addEvent={addColumnClickEvent}
-                    />
+                    />*/}
                 </div>
-            </section>*/}
+            </section>
         </div>
     ) : (
         <div></div>

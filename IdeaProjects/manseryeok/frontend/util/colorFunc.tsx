@@ -1,13 +1,15 @@
-import { cheongan, jiji, ohaeng } from '@/common/const';
-import { cheonganType, jijiType } from '@/type/basicType';
+import { cheongan } from '@/common/const/cheonganConst';
+import { jiji } from '@/common/const/jijiConst';
+import { ohaeng } from '@/common/const/ohaengConst';
+import { CheonganType, JijiType } from '@/type/basicType';
 
 export const makeColorName = (name: string, type: 'gan' | 'jiji') => {
     let _colorName = '';
     if (name != '') {
         const _element =
             type === 'gan'
-                ? cheongan[name as cheonganType].element
-                : jiji[name as jijiType].element;
+                ? cheongan[name as CheonganType].element
+                : jiji[name as JijiType].element;
 
         _colorName = name != '' ? ohaeng[_element].color : '';
     }

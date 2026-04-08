@@ -1,4 +1,4 @@
-export interface divisionInterface {
+export interface DivisionJsonData {
     id: number;
     sol_year: string;
     sol_month: string;
@@ -10,7 +10,7 @@ export interface divisionInterface {
     is_beginning: boolean;
 }
 
-export interface regionInterface {
+export interface RegionJsonData {
     alternate_name: string;
     geo_name: string;
     geonameid: number;

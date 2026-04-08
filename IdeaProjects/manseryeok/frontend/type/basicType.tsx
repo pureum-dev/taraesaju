@@ -5,9 +5,10 @@ export type RowItem = {
     cellRender?: (col: ColumnItem) => React.ReactNode;
 };
 
-export type ohaengType = '목' | '화' | '토' | '금' | '수';
-export type cheonganType = '갑' | '을' | '병' | '정' | '무' | '기' | '경' | '신' | '임' | '계';
-export type jijiType =
+export type ColumnKeyType = 'year' | 'month' | 'day' | 'time';
+export type OhaengType = '목' | '화' | '토' | '금' | '수';
+export type CheonganType = '갑' | '을' | '병' | '정' | '무' | '기' | '경' | '신' | '임' | '계';
+export type JijiType =
     | '자'
     | '축'
     | '인'
@@ -21,7 +22,7 @@ export type jijiType =
     | '술'
     | '해';
 
-export type divisionType =
+export type DivisionType =
     | '입춘'
     | '우수'
     | '경칩'
@@ -47,7 +48,7 @@ export type divisionType =
     | '소한'
     | '대한';
 
-export type sipsinType =
+export type SipsinType =
     | '비견'
     | '겁재'
     | '식신'

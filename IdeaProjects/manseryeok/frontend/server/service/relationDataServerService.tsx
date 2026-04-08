@@ -1,27 +1,20 @@
 /** Lib */
 
-/** Type & Interface */
-import { cheonganType, jijiType } from '@/type/basicType';
-import {
-    birthColumnInterface,
-    relationDataInterface,
-    relationInterface,
-} from '@/type/birthDataInterface';
-
 /** Custom */
-import { cheonganRelation, jijiRelation } from '@/common/const';
+import { cheonganRelation } from '@/common/const/cheonganConst';
+import { jijiRelation } from '@/common/const/jijiConst';
+
+/** Type & Interface */
+import { CheonganType, JijiType } from '@/type/basicType';
+import { Relation } from '@/type/birthDataInterface';
+import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 
 export const columnRelation = (
-    year: birthColumnInterface,
-    month: birthColumnInterface,
-    day: birthColumnInterface,
-    time: birthColumnInterface | null,
-): {
-    year: relationDataInterface;
-    month: relationDataInterface;
-    day: relationDataInterface;
-    time: relationDataInterface | null;
-} => {
+    year: BirthColumnItem<CheonganType, JijiType>,
+    month: BirthColumnItem<CheonganType, JijiType>,
+    day: BirthColumnItem<CheonganType, JijiType>,
+    time: BirthColumnItem<CheonganType, JijiType> | null,
+): BirthColumnGroup<BirthColumnItem<Relation[], Relation[]>> => {
     const _checkCheonganRelation = checkCheonganRelation(
         year.gan,
         month.gan,
@@ -85,15 +78,10 @@ export const columnRelation = (
         time ? time.jiji : null,
     );
 
-    const relationList: {
-        year: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
-        month: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
-        day: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
-        time: { ganRelation: relationInterface[]; jijiRelation: relationInterface[] };
-    } = {
+    return {
         year: {
-            ganRelation: [..._checkCheonganRelation.year],
-            jijiRelation: [
+            gan: [..._checkCheonganRelation.year],
+            jiji: [
                 ..._checkJijiYukhapRelation.year,
                 ..._checkJijiBanghapRelation.year,
                 ..._checkJijiSamhapRelation.year,
@@ -105,8 +93,8 @@ export const columnRelation = (
             ],
         },
         month: {
-            ganRelation: [..._checkCheonganRelation.month],
-            jijiRelation: [
+            gan: [..._checkCheonganRelation.month],
+            jiji: [
                 ..._checkJijiYukhapRelation.month,
                 ..._checkJijiBanghapRelation.month,
                 ..._checkJijiSamhapRelation.month,
@@ -118,8 +106,8 @@ export const columnRelation = (
             ],
         },
         day: {
-            ganRelation: [..._checkCheonganRelation.day],
-            jijiRelation: [
+            gan: [..._checkCheonganRelation.day],
+            jiji: [
                 ..._checkJijiYukhapRelation.day,
                 ..._checkJijiBanghapRelation.day,
                 ..._checkJijiSamhapRelation.day,
@@ -130,42 +118,35 @@ export const columnRelation = (
                 ..._checkJijiPaRelation.day,
             ],
         },
-        time: { ganRelation: [], jijiRelation: [] },
+        time: time
+            ? {
+                  gan: [..._checkCheonganRelation.time],
+                  jiji: [
+                      ..._checkJijiYukhapRelation.time,
+                      ..._checkJijiBanghapRelation.time,
+                      ..._checkJijiSamhapRelation.time,
+                      ..._checkJijiYukChungRelation.time,
+                      ..._checkJijiSamhyungRelation.time,
+                      ..._checkJijiHyungRelation.time,
+                      ..._checkJijiHaeRelation.time,
+                      ..._checkJijiPaRelation.time,
+                  ],
+              }
+            : null,
     };
-
-    if (time) {
-        relationList.time.ganRelation = [..._checkCheonganRelation.time];
-        relationList.time.jijiRelation = [
-            ..._checkJijiYukhapRelation.time,
-            ..._checkJijiBanghapRelation.time,
-            ..._checkJijiSamhapRelation.time,
-            ..._checkJijiYukChungRelation.time,
-            ..._checkJijiSamhyungRelation.time,
-            ..._checkJijiHyungRelation.time,
-            ..._checkJijiHaeRelation.time,
-            ..._checkJijiPaRelation.time,
-        ];
-    }
-
-    return relationList;
 };
 
 const checkCheonganRelation = (
-    yearGan: cheonganType,
-    monthGan: cheonganType,
-    dayGan: cheonganType,
-    timeGan: cheonganType | null,
+    yearGan: CheonganType,
+    monthGan: CheonganType,
+    dayGan: CheonganType,
+    timeGan: CheonganType | null,
 ) => {
     const yearGanObj = cheonganRelation[yearGan];
     const monthGanObj = cheonganRelation[monthGan];
     const dayGanObj = cheonganRelation[dayGan];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -185,7 +166,7 @@ const checkCheonganRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearGanObj.hapName,
                 isClose: false,
                 columnName: '년_시',
@@ -196,7 +177,7 @@ const checkCheonganRelation = (
     //일간과 시간 합
     else if (timeGan && dayGanObj.hap === timeGan) {
         relationList.day.push({ name: dayGanObj.hapName, isClose: true, columnName: '일_시' });
-        relationList.time.push({
+        relationList.time?.push({
             name: dayGanObj.hapName,
             isClose: true,
             columnName: '일_시',
@@ -234,7 +215,7 @@ const checkCheonganRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthGanObj.hapName,
                 isClose: false,
                 columnName: '월_시',
@@ -263,7 +244,7 @@ const checkCheonganRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthGanObj.hapName,
                 isClose: false,
                 columnName: '월_시',
@@ -277,7 +258,7 @@ const checkCheonganRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearGanObj.hapName,
                 isClose: false,
                 columnName: '년_시',
@@ -298,7 +279,7 @@ const checkCheonganRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearGanObj.chungName,
                 isClose: false,
                 columnName: '년_시',
@@ -309,7 +290,7 @@ const checkCheonganRelation = (
     //일간과 시간 충
     else if (timeGan && dayGanObj.chung === timeGan) {
         relationList.day.push({ name: dayGanObj.chungName, isClose: true, columnName: '일_시' });
-        relationList.time.push({
+        relationList.time?.push({
             name: dayGanObj.chungName,
             isClose: true,
             columnName: '일_시',
@@ -347,7 +328,7 @@ const checkCheonganRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthGanObj.chungName,
                 isClose: false,
                 columnName: '월_시',
@@ -376,7 +357,7 @@ const checkCheonganRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthGanObj.chungName,
                 isClose: false,
                 columnName: '월_시',
@@ -390,7 +371,7 @@ const checkCheonganRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearGanObj.chungName,
                 isClose: false,
                 columnName: '년_시',
@@ -402,20 +383,15 @@ const checkCheonganRelation = (
 };
 
 const checkJijiYukhapRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const dayJiObj = jijiRelation[dayJi];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -432,7 +408,7 @@ const checkJijiYukhapRelation = (
     //일지와 시지 합
     else if (timeJi && dayJiObj.yukhap === timeJi) {
         relationList.day.push({ name: dayJiObj.yukhapName, isClose: true, columnName: '월_시' });
-        relationList.time.push({ name: dayJiObj.yukhapName, isClose: true, columnName: '월_시' });
+        relationList.time?.push({ name: dayJiObj.yukhapName, isClose: true, columnName: '월_시' });
 
         //연지와 월지 합
         if (yearJiObj.yukhap === monthJi) {
@@ -467,10 +443,10 @@ const checkJijiYukhapRelation = (
 };
 
 const checkJijiBanghapRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const dayJiObj = jijiRelation[dayJi];
@@ -478,12 +454,7 @@ const checkJijiBanghapRelation = (
     let columnNameList = ['년_월_일'];
     if (timeJi) columnNameList = [...columnNameList, '월_일_시', '년_월_시', '년_일_시'];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -510,7 +481,7 @@ const checkJijiBanghapRelation = (
                 ) {
                     relationList.month.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                 } else if (
                     item === '년_월_일' &&
                     dayJiObj.banghap.includes(yearJi) &&
@@ -529,7 +500,7 @@ const checkJijiBanghapRelation = (
                 ) {
                     relationList.year.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                 }
                 break;
 
@@ -548,7 +519,7 @@ const checkJijiBanghapRelation = (
                 ) {
                     relationList.year.push(_yeardata);
                     relationList.month.push(_yeardata);
-                    relationList.time.push(_yeardata);
+                    relationList.time?.push(_yeardata);
                 }
         }
     });
@@ -557,10 +528,10 @@ const checkJijiBanghapRelation = (
 };
 
 const checkJijiSamhapRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const monthJiObj = jijiRelation[monthJi];
@@ -569,12 +540,7 @@ const checkJijiSamhapRelation = (
     let columnNameList = ['년_월_일'];
     if (timeJi) columnNameList = [...columnNameList, '월_일_시', '년_월_시', '년_일_시'];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -602,7 +568,7 @@ const checkJijiSamhapRelation = (
                 ) {
                     relationList.month.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                     isSamhap = true;
                 } else if (
                     item === '년_월_일' &&
@@ -623,7 +589,7 @@ const checkJijiSamhapRelation = (
                 ) {
                     relationList.year.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                     isSamhap = true;
                 }
                 break;
@@ -643,7 +609,7 @@ const checkJijiSamhapRelation = (
                 ) {
                     relationList.year.push(_yeardata);
                     relationList.month.push(_yeardata);
-                    relationList.time.push(_yeardata);
+                    relationList.time?.push(_yeardata);
                     isSamhap = true;
                 }
         }
@@ -679,7 +645,7 @@ const checkJijiSamhapRelation = (
                 };
 
                 relationList.year.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         }
 
@@ -697,7 +663,7 @@ const checkJijiSamhapRelation = (
             };
 
             relationList.day.push(_data);
-            relationList.time.push(_data);
+            relationList.time?.push(_data);
 
             //연지과 월지 합
             if (
@@ -745,7 +711,7 @@ const checkJijiSamhapRelation = (
                 };
 
                 relationList.month.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         } else {
             //연지과 월지 합
@@ -778,7 +744,7 @@ const checkJijiSamhapRelation = (
                 };
 
                 relationList.month.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
 
             //연지와 시지 합
@@ -795,7 +761,7 @@ const checkJijiSamhapRelation = (
                 };
 
                 relationList.year.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         }
     }
@@ -804,20 +770,15 @@ const checkJijiSamhapRelation = (
 };
 
 const checkJijiYukChungRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const dayJiObj = jijiRelation[dayJi];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -834,7 +795,7 @@ const checkJijiYukChungRelation = (
     //일지와 시지 충
     else if (timeJi && dayJiObj.chung === timeJi) {
         relationList.day.push({ name: dayJiObj.chungName, isClose: true, columnName: '월_시' });
-        relationList.time.push({ name: dayJiObj.chungName, isClose: true, columnName: '월_시' });
+        relationList.time?.push({ name: dayJiObj.chungName, isClose: true, columnName: '월_시' });
 
         //연지와 월지 충
         if (yearJiObj.chung === monthJi) {
@@ -869,10 +830,10 @@ const checkJijiYukChungRelation = (
 };
 
 const checkJijiSamhyungRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const monthJiObj = jijiRelation[monthJi];
@@ -881,12 +842,7 @@ const checkJijiSamhyungRelation = (
     let columnNameList = ['년_월_일'];
     if (timeJi) columnNameList = [...columnNameList, '월_일_시', '년_월_시', '년_일_시'];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -914,7 +870,7 @@ const checkJijiSamhyungRelation = (
                 ) {
                     relationList.month.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                     isSamhyung = true;
                 } else if (
                     item === '년_월_일' &&
@@ -935,7 +891,7 @@ const checkJijiSamhyungRelation = (
                 ) {
                     relationList.year.push(_data);
                     relationList.day.push(_data);
-                    relationList.time.push(_data);
+                    relationList.time?.push(_data);
                     isSamhyung = true;
                 }
                 break;
@@ -955,7 +911,7 @@ const checkJijiSamhyungRelation = (
                 ) {
                     relationList.year.push(_yeardata);
                     relationList.month.push(_yeardata);
-                    relationList.time.push(_yeardata);
+                    relationList.time?.push(_yeardata);
                     isSamhyung = true;
                 }
         }
@@ -982,7 +938,7 @@ const checkJijiSamhyungRelation = (
                 };
 
                 relationList.year.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         }
 
@@ -995,7 +951,7 @@ const checkJijiSamhyungRelation = (
             };
 
             relationList.day.push(_data);
-            relationList.time.push(_data);
+            relationList.time?.push(_data);
 
             //연지과 월지 형
             if (yearJiObj.samhyung.includes(monthJi)) {
@@ -1030,7 +986,7 @@ const checkJijiSamhyungRelation = (
                 };
 
                 relationList.month.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         } else {
             //연지과 월지 형
@@ -1054,7 +1010,7 @@ const checkJijiSamhyungRelation = (
                 };
 
                 relationList.month.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
 
             //연지와 시지 형
@@ -1066,7 +1022,7 @@ const checkJijiSamhyungRelation = (
                 };
 
                 relationList.year.push(_data);
-                relationList.time.push(_data);
+                relationList.time?.push(_data);
             }
         }
     }
@@ -1075,21 +1031,16 @@ const checkJijiSamhyungRelation = (
 };
 
 const checkJijiHyungRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const monthJiObj = jijiRelation[monthJi];
     const dayJiObj = jijiRelation[dayJi];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -1109,7 +1060,7 @@ const checkJijiHyungRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.hyungName,
                 isClose: false,
                 columnName: '년_시',
@@ -1120,7 +1071,7 @@ const checkJijiHyungRelation = (
     //일간과 시간 형
     else if (timeJi && dayJiObj.hyung === timeJi) {
         relationList.day.push({ name: dayJiObj.hyungName, isClose: true, columnName: '일_시' });
-        relationList.time.push({
+        relationList.time?.push({
             name: dayJiObj.hyungName,
             isClose: true,
             columnName: '일_시',
@@ -1158,7 +1109,7 @@ const checkJijiHyungRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.hyungName,
                 isClose: false,
                 columnName: '월_시',
@@ -1187,7 +1138,7 @@ const checkJijiHyungRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.hyungName,
                 isClose: false,
                 columnName: '월_시',
@@ -1201,7 +1152,7 @@ const checkJijiHyungRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.hyungName,
                 isClose: false,
                 columnName: '년_시',
@@ -1213,21 +1164,16 @@ const checkJijiHyungRelation = (
 };
 
 const checkJijiHaeRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const monthJiObj = jijiRelation[monthJi];
     const dayJiObj = jijiRelation[dayJi];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -1247,7 +1193,7 @@ const checkJijiHaeRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.haeName,
                 isClose: false,
                 columnName: '년_시',
@@ -1258,7 +1204,7 @@ const checkJijiHaeRelation = (
     //일간과 시간 해
     else if (timeJi && dayJiObj.hae === timeJi) {
         relationList.day.push({ name: dayJiObj.haeName, isClose: true, columnName: '일_시' });
-        relationList.time.push({
+        relationList.time?.push({
             name: dayJiObj.haeName,
             isClose: true,
             columnName: '일_시',
@@ -1296,7 +1242,7 @@ const checkJijiHaeRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.haeName,
                 isClose: false,
                 columnName: '월_시',
@@ -1325,7 +1271,7 @@ const checkJijiHaeRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.haeName,
                 isClose: false,
                 columnName: '월_시',
@@ -1339,7 +1285,7 @@ const checkJijiHaeRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.haeName,
                 isClose: false,
                 columnName: '년_시',
@@ -1351,21 +1297,16 @@ const checkJijiHaeRelation = (
 };
 
 const checkJijiPaRelation = (
-    yearJi: jijiType,
-    monthJi: jijiType,
-    dayJi: jijiType,
-    timeJi: jijiType | null,
+    yearJi: JijiType,
+    monthJi: JijiType,
+    dayJi: JijiType,
+    timeJi: JijiType | null,
 ) => {
     const yearJiObj = jijiRelation[yearJi];
     const monthJiObj = jijiRelation[monthJi];
     const dayJiObj = jijiRelation[dayJi];
 
-    const relationList: {
-        year: relationInterface[];
-        month: relationInterface[];
-        day: relationInterface[];
-        time: relationInterface[];
-    } = {
+    const relationList: BirthColumnGroup<Relation[]> = {
         year: [],
         month: [],
         day: [],
@@ -1385,7 +1326,7 @@ const checkJijiPaRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.paName,
                 isClose: false,
                 columnName: '년_시',
@@ -1396,7 +1337,7 @@ const checkJijiPaRelation = (
     //일간과 시간 파
     else if (timeJi && dayJiObj.pa === timeJi) {
         relationList.day.push({ name: dayJiObj.paName, isClose: true, columnName: '일_시' });
-        relationList.time.push({
+        relationList.time?.push({
             name: dayJiObj.paName,
             isClose: true,
             columnName: '일_시',
@@ -1434,7 +1375,7 @@ const checkJijiPaRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.paName,
                 isClose: false,
                 columnName: '월_시',
@@ -1463,7 +1404,7 @@ const checkJijiPaRelation = (
                 columnName: '월_시',
             });
 
-            relationList.time.push({
+            relationList.time?.push({
                 name: monthJiObj.paName,
                 isClose: false,
                 columnName: '월_시',
@@ -1477,7 +1418,7 @@ const checkJijiPaRelation = (
                 isClose: false,
                 columnName: '년_시',
             });
-            relationList.time.push({
+            relationList.time?.push({
                 name: yearJiObj.paName,
                 isClose: false,
                 columnName: '년_시',

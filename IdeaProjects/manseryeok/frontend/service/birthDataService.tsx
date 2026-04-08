@@ -1,5 +1,5 @@
 import fetchConfig from '@/util/fetchConfig';
-import { regionInterface } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/type/jsonDataInterface';
 
 export interface birthDataInterface {
     nickName: string;
@@ -10,12 +10,12 @@ export interface birthDataInterface {
     isNone: boolean;
     isDivideTime: boolean;
     birthLocation: string;
-    location: regionInterface;
+    location: RegionJsonData;
 }
 
 export const regionService = {
     getUserAttendanceApplication: (keyword: string) =>
-        fetchConfig<regionInterface[]>({
+        fetchConfig<RegionJsonData[]>({
             url: '/api/region',
             method: 'POST',
             body: { keyword: keyword },

@@ -10,17 +10,17 @@ import { useRegionStore } from '@/lib/store/useRegionStore';
 import BasicModalComp from '../../_component/BasicModalComp';
 
 /** Type & Interface */
-import { regionInterface } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/type/jsonDataInterface';
 import { regionService } from '@/service/regionService';
 import { useRouter } from 'next/navigation';
 
 export default function InfoModal() {
     const router = useRouter();
-    const { setRegionData } = useRegionStore();
+    const { setRegionJsonData } = useRegionStore();
 
     const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const [regionList, setRegionList] = useState<regionInterface[]>([]);
+    const [regionList, setRegionList] = useState<RegionJsonData[]>([]);
 
     const onClickSearchEvent = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -28,15 +28,15 @@ export default function InfoModal() {
         if (!inputRef.current) return;
 
         const value = inputRef.current.value;
-        const res: regionInterface[] = await regionService.getUserAttendanceApplication(value);
+        const res: RegionJsonData[] = await regionService.getUserAttendanceApplication(value);
 
         setRegionList(res);
     };
 
-    const onClickEachRegion = (e: React.MouseEvent<HTMLAnchorElement>, data: regionInterface) => {
+    const onClickEachRegion = (e: React.MouseEvent<HTMLAnchorElement>, data: RegionJsonData) => {
         e.preventDefault();
 
-        setRegionData(data);
+        setRegionJsonData(data);
         router.back();
     };
 

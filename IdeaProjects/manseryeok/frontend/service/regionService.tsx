@@ -1,9 +1,9 @@
 import fetchConfig from '@/util/fetchConfig';
-import { regionInterface } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/type/jsonDataInterface';
 
 export const regionService = {
     getUserAttendanceApplication: (keyword: string) =>
-        fetchConfig<regionInterface[]>({
+        fetchConfig<RegionJsonData[]>({
             url: '/api/region',
             method: 'POST',
             body: { keyword: keyword },

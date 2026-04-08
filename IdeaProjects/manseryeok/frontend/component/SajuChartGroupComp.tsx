@@ -4,14 +4,14 @@ import { ReactNode, useMemo, useState } from 'react';
 import { ZapIcon, HeartIcon } from 'lucide-react';
 
 /** Custom */
-import { cheongan, ohaeng, jiji, division24, woonsung } from '@/common/const';
+import { jiji } from '@/common/const/jijiConst';
 import { makeBgColor, textColor, makeBgColorAlpha } from '@/util/colorFunc';
 import SajuChartComp from './SajuChartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 
 /** type & interface*/
-import { ColumnItem, jijiType, RowItem } from '@/type/basicType';
-import { birthAllDataInterface, relationInterface } from '@/type/birthDataInterface';
+import { ColumnItem, JijiType, RowItem } from '@/type/basicType';
+import { BirthAllData, Relation } from '@/type/birthDataInterface';
 
 interface SajuChartGroupProps {
     columnData: ColumnItem[];
@@ -94,7 +94,7 @@ const SajuChartGroupComp = ({
                 key: 'ganRealtion',
                 className: '',
                 cellRender: (col) => {
-                    const list: relationInterface[] = col.ganRelation ?? [];
+                    const list: Relation[] = col.ganRelation ?? [];
                     return (
                         <div className="flex flex-col items-center">
                             {list.length !== 0
@@ -151,7 +151,7 @@ const SajuChartGroupComp = ({
                 key: 'jijanggan',
                 className: '',
                 cellRender: (col) => {
-                    const jijanggan = col.jiji ? jiji[col.jiji as jijiType].jijanggan : [];
+                    const jijanggan = col.jiji ? jiji[col.jiji as JijiType].jijanggan : [];
                     return jijanggan ? (
                         jijanggan.map((item, idx) => (
                             <div
@@ -174,7 +174,7 @@ const SajuChartGroupComp = ({
                 key: 'jijiRealtion',
                 className: '',
                 cellRender: (col) => {
-                    const list: relationInterface[] = col.jijiRealtion ?? [];
+                    const list: Relation[] = col.jijiRealtion ?? [];
                     return (
                         <div className="flex flex-col items-center">
                             {list.length !== 0

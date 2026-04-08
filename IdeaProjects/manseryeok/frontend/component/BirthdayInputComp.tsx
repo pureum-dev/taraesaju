@@ -14,9 +14,9 @@ import { useDataStore } from '@/lib/store/useDataStore';
 import { createAllBirthData } from '@/server/service/birthDataServerService';
 
 /** Type & Interface */
-import { regionInterface } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/type/jsonDataInterface';
 import { birthDataInterface } from '@/service/birthDataService';
-import { birthAllDataInterface } from '@/type/birthDataInterface';
+import { BirthAllData } from '@/type/birthDataInterface';
 
 const genderList = [
     { value: 'M', label: '남성', icon: <Mars size={15} className="mr-1" /> },
@@ -28,8 +28,8 @@ export default function BirthdayInputComp() {
     const searchParam = useSearchParams();
     const type = searchParam.get('type');
 
-    const regionData = useRegionStore((state) => state.regionData);
-    const resetRegionData = useRegionStore((state) => state.resetRegionData);
+    const RegionJsonData = useRegionStore((state) => state.RegionJsonData);
+    const resetRegionJsonData = useRegionStore((state) => state.resetRegionJsonData);
     const { setProfileData, setData } = useDataStore();
 
     const {
@@ -55,14 +55,17 @@ export default function BirthdayInputComp() {
     const watchGender = watch('gender');
 
     useEffect(() => {
-        return () => resetRegionData();
+        return () => resetRegionJsonData();
     }, []);
 
     useEffect(() => {
-        if (regionData) {
-            setValue('birthLocation', `${regionData.geo_name} / ${regionData.alternate_name}`);
+        if (RegionJsonData) {
+            setValue(
+                'birthLocation',
+                `${RegionJsonData.geo_name} / ${RegionJsonData.alternate_name}`,
+            );
         }
-    }, [regionData, setValue]);
+    }, [RegionJsonData, setValue]);
 
     const onFocusBirthLocate = (e: React.FocusEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -70,15 +73,15 @@ export default function BirthdayInputComp() {
     };
 
     const onClickEvent = handleSubmit((data: Omit<birthDataInterface, 'location'>) => {
-        if (!regionData) return;
+        if (!RegionJsonData) return;
 
         const request: birthDataInterface = {
             ...data,
-            location: regionData as regionInterface,
+            location: RegionJsonData as RegionJsonData,
         };
 
         if (type === 'chart') {
-            const data: birthAllDataInterface | null = createAllBirthData(request);
+            const data: BirthAllData | null = createAllBirthData(request);
             if (data) {
                 setProfileData(request);
                 setData(data);

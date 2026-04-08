@@ -1,21 +1,21 @@
 import { create } from 'zustand';
 
 /** Type & Interface */
-import { regionInterface } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/type/jsonDataInterface';
 
 interface RegionlState {
-    regionData: regionInterface | null;
-    getRegionData: () => regionInterface | null;
-    setRegionData: (value: regionInterface) => void;
-    resetRegionData: () => void;
+    RegionJsonData: RegionJsonData | null;
+    getRegionJsonData: () => RegionJsonData | null;
+    setRegionJsonData: (value: RegionJsonData) => void;
+    resetRegionJsonData: () => void;
 }
 
 export const useRegionStore = create<RegionlState>((set, get) => ({
-    regionData: null,
+    RegionJsonData: null,
 
-    getRegionData: () => get().regionData,
+    getRegionJsonData: () => get().RegionJsonData,
 
-    setRegionData: (value) => set({ regionData: value }),
+    setRegionJsonData: (value) => set({ RegionJsonData: value }),
 
-    resetRegionData: () => set({ regionData: null }),
+    resetRegionJsonData: () => set({ RegionJsonData: null }),
 }));

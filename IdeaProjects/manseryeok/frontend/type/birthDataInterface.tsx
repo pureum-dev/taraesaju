@@ -1,7 +1,9 @@
-import { regionInterface, divisionInterface } from '@/type/jsonDataInterface';
-import { cheonganType, jijiType, sipsinType } from '@/type/basicType';
+import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
+import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
+import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
+import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 
-export interface correctBirthDayInterface {
+export interface CorrectBirthDay {
     date: string;
     time: string | null;
     deltaMinutes: number;
@@ -9,43 +11,41 @@ export interface correctBirthDayInterface {
     isCalculateDate: boolean;
 }
 
-export interface correctTargetDivisionInterface {
+export interface CorrectTargetDivision {
     targetYear: number;
-    targetDivision: divisionInterface[];
+    targetDivision: DivisionJsonData[];
 }
 
-export interface relationInterface {
+export interface Relation {
     name: string;
     isClose: boolean;
     columnName: string;
 }
 
-export interface relationDataInterface {
-    ganRelation: relationInterface[];
-    jijiRelation: relationInterface[];
-}
-
-export interface birthColumnInterface {
-    gan: cheonganType;
-    jiji: jijiType;
-}
-
-export interface birthColumnDataInterface extends birthColumnInterface, relationDataInterface {
-    ganSipsin: sipsinType | null;
-    jijiSipsin: sipsinType | null;
+export interface BirthColumnData {
+    gan: CheonganType;
+    jiji: JijiType;
+    ganRelation: Relation[];
+    jijiRelation: Relation[];
+    ganSipsin: SipsinType | null;
+    jijiSipsin: SipsinType | null;
     ganDuplication: string | null;
     jijiDuplication: string | null;
     woonsung: string | null;
     sinsal: string | null;
 }
 
-export interface birthChartColInterface {
-    year: birthColumnDataInterface;
-    month: birthColumnDataInterface;
-    day: birthColumnDataInterface;
-    time: birthColumnDataInterface | null;
+export interface BirthPointData {
+    gongmang: JijiType[];
+    strength: { score: number; strengthType: string };
+    samjae: number[];
+    deukryung: boolean;
+    deukji: boolean;
 }
 
-export interface birthAllDataInterface {
-    chartCol: birthChartColInterface;
+export interface BirthAllData {
+    chartCol: BirthColumnGroup<BirthColumnData>;
+    point: BirthPointData;
+    ohaengStrength: OhaengStrengthData[];
+    sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
 }
