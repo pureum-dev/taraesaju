@@ -2,6 +2,7 @@ import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
 import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import { DaeunData } from './luckyDataInterface';
 
 export interface CorrectBirthDay {
     date: string;
@@ -48,4 +49,5 @@ export interface BirthAllData {
     point: BirthPointData;
     ohaengStrength: OhaengStrengthData[];
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
+    daeun: DaeunData[];
 }

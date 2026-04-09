@@ -18,6 +18,7 @@ import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServe
 import { columnSipsinData } from '@/server/service/sipsinDataServerService';
 import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
 import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
+import { checkTargetDaeun } from '@/server/service/luckyDataServerService';
 
 /** Data */
 import division24Json from '@/server/data/division24.json';
@@ -43,28 +44,6 @@ dayjs.extend(timezone);
 dayjs.extend(objectSupport);
 
 export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData | null => {
-    const chartCol: BirthColumnGroup<BirthColumnData> = createBirthChartColData(birthDate);
-
-    if (chartCol) {
-        const point: BirthPointData = createInfoData(chartCol);
-        const ohaengStrength: OhaengStrengthData[] = checkOhaengStrength(chartCol);
-        const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
-            checkSinsalData(chartCol);
-
-        return {
-            chartCol: chartCol ?? null,
-            point: point,
-            ohaengStrength: ohaengStrength,
-            sinsal: sinsalData,
-        };
-    } else {
-        return null;
-    }
-};
-
-export const createBirthChartColData = (
-    birthDate: birthDataInterface,
-): BirthColumnGroup<BirthColumnData> => {
     let correctBirth: CorrectBirthDay;
 
     // 시간 있는 경우 시간 보정
@@ -92,13 +71,49 @@ export const createBirthChartColData = (
     const targetYear = yearDivision?.targetYear;
     const targetDivision = yearDivision?.targetDivision;
 
-    //targetYear && targetDivision
-    const _yearColumn = calculateYearColumn(targetYear as number);
-    const _monthColumn = calculateMonthColumn(
+    const chartCol: BirthColumnGroup<BirthColumnData> = createBirthChartColData(
+        correctBirth,
         solarBirth,
-        _yearColumn.gan,
-        targetDivision as DivisionJsonData[],
+        targetYear,
+        targetDivision,
     );
+
+    if (chartCol) {
+        const point: BirthPointData = createInfoData(chartCol);
+        const ohaengStrength: OhaengStrengthData[] = checkOhaengStrength(chartCol);
+        const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
+            checkSinsalData(chartCol);
+
+        const daeun = checkTargetDaeun(
+            birthDate.gender,
+            targetDivision,
+            solarBirth,
+            chartCol.year,
+            chartCol.month,
+            chartCol.day,
+        );
+
+        return {
+            chartCol: chartCol ?? null,
+            point: point,
+            ohaengStrength: ohaengStrength,
+            sinsal: sinsalData,
+            daeun: daeun,
+        };
+    } else {
+        return null;
+    }
+};
+
+export const createBirthChartColData = (
+    correctBirth: CorrectBirthDay,
+    solarBirth: Dayjs,
+    targetYear: number,
+    targetDivision: DivisionJsonData[],
+): BirthColumnGroup<BirthColumnData> => {
+    //targetYear && targetDivision
+    const _yearColumn = calculateYearColumn(targetYear);
+    const _monthColumn = calculateMonthColumn(solarBirth, _yearColumn.gan, targetDivision);
 
     const _dayColumn = calculateDayColumn(solarBirth);
     const _timeColumn = correctBirth.time
@@ -259,15 +274,30 @@ export const calculateYearDivision = (solarBirth: Dayjs): CorrectTargetDivision 
 
     const targetSpringday = dayjs(`${targetSpringDate[0].locdate}`, 'YYYYMMDD');
 
-    let targetYear = solarBirth.year();
-    if (solarBirth.isBefore(targetSpringday)) targetYear -= 1;
+    const solarYear = solarBirth.year();
+    const solarMonth = solarBirth.month() + 1;
+    const targetDivision = division24Json.filter((item) => {
+        const itemYear = Number(item.sol_year);
+        if (!item.is_beginning) return false;
 
-    const targetDivision: DivisionJsonData[] = division24Json.filter(
-        (item) => item.sol_year === String(targetYear) && item.is_beginning,
-    );
+        // 기본: 같은 연도
+        if (itemYear === solarYear) return true;
+
+        // 1월이면 전년도 12월 포함
+        if (solarMonth === 1 && itemYear === solarYear - 1) {
+            return item.sol_month === '12';
+        }
+
+        // 12월이면 다음년도 1월 포함
+        if (solarMonth === 12 && itemYear === solarYear + 1) {
+            return item.sol_month === '01';
+        }
+
+        return false;
+    });
 
     return {
-        targetYear: targetYear,
+        targetYear: solarBirth.isBefore(targetSpringday) ? solarYear - 1 : solarYear,
         targetDivision: targetDivision,
     };
 };

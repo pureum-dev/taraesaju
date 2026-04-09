@@ -33,7 +33,7 @@ import SipsinChartComp from '@/component/SipsinChartComp';
 
 /** type & interface*/
 import { CheonganType, ColumnItem, JijiType, RowItem } from '@/type/basicType';
-import { BirthAllData, Relation } from '@/type/birthDataInterface';
+import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
 
 export default function ManseryeokPage() {
     const profileData = useDataStore((state) => state.profileData);
@@ -41,6 +41,7 @@ export default function ManseryeokPage() {
 
     const [isAdjustElement, setIsAdjustment] = useState(false);
     const [elementChartData, setElementChartData] = useState([]);
+    const [targetDaeun, setTargetDaeun] = useState(0);
 
     const onChangeAdjustScore = () => {};
 
@@ -232,6 +233,24 @@ export default function ManseryeokPage() {
             },
         ];
     }, [data]);
+
+    const daeunColumnData = useMemo<ColumnItem[]>(() => {
+        if (!data) return []; // data 없을 때 안전하게 처리
+
+        const daeunList = [...data.daeun];
+        const columnList = daeunList.map((item, idx) => {
+            return {
+                key: idx,
+                ...item,
+            };
+        });
+
+        return columnList;
+    }, [data]);
+
+    const addColumnClickEvent = useCallback(() => {}, []);
+
+    console.log(data);
 
     return data ? (
         <div className="flex flex-col w-full p-8 gap-8">
@@ -443,14 +462,13 @@ export default function ManseryeokPage() {
             {/** 대운 */}
             <section className="flex flex-col w-full">
                 <SubTitleComp text={`대운 - 대운 수 : ${''}`} />
-                <div className="flex w-full h-100 ">
-                    {/*<ColumnButtonChart
+                <div className="flex w-full">
+                    <ColumnButtonChartComp
                         columnData={daeunColumnData}
-                        rowData={daeunRowData}
                         defaultColumn={targetDaeun}
                         type="daeun"
                         addEvent={addColumnClickEvent}
-                    />*/}
+                    />
                 </div>
             </section>
 
