@@ -9,3 +9,7 @@ export interface DaeunData {
     woonsung: string;
     sinsal: string;
 }
+
+export interface SeunData extends DaeunData {
+    yearNum: number;
+}

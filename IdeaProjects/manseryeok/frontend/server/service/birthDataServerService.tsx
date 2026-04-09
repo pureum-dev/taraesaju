@@ -18,7 +18,7 @@ import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServe
 import { columnSipsinData } from '@/server/service/sipsinDataServerService';
 import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
 import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
-import { checkTargetDaeun } from '@/server/service/luckyDataServerService';
+import { checkTargetDaeun, checkTargetSeun } from '@/server/service/luckyDataServerService';
 
 /** Data */
 import division24Json from '@/server/data/division24.json';
@@ -93,12 +93,15 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
             chartCol.day,
         );
 
+        const seun = checkTargetSeun(solarBirth, daeun[0].daeunNum, chartCol.year, chartCol.day);
+
         return {
             chartCol: chartCol ?? null,
             point: point,
             ohaengStrength: ohaengStrength,
             sinsal: sinsalData,
             daeun: daeun,
+            seun: seun,
         };
     } else {
         return null;
@@ -355,7 +358,7 @@ export const calculateMonthColumn = (
 
     const defaultMonthCheongan = findMonthCheongan(yearCheongan);
     const monthJiji = division24[divisionName as DivisionType].jiji;
-    const distance = (12 + jiji[monthJiji].number) % 12;
+    const distance = (12 + jiji[monthJiji].number - 2) % 12;
     const monthGan = Object.entries(cheongan).find(
         ([key, value]) => value.number === (cheongan[defaultMonthCheongan].number + distance) % 10,
     )?.[0];

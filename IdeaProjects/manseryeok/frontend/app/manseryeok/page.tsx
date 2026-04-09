@@ -42,6 +42,7 @@ export default function ManseryeokPage() {
     const [isAdjustElement, setIsAdjustment] = useState(false);
     const [elementChartData, setElementChartData] = useState([]);
     const [targetDaeun, setTargetDaeun] = useState(0);
+    const [targetSeun, setTargetSeun] = useState(0);
 
     const onChangeAdjustScore = () => {};
 
@@ -248,6 +249,20 @@ export default function ManseryeokPage() {
         return columnList;
     }, [data]);
 
+    const seunColumnData = useMemo<ColumnItem[]>(() => {
+        if (!data) return []; // data 없을 때 안전하게 처리
+
+        const seunList = [...data.seun[targetDaeun]];
+        const columnList = seunList.map((item, idx) => {
+            return {
+                key: idx,
+                ...item,
+            };
+        });
+
+        return columnList;
+    }, [data, targetDaeun]);
+
     const addColumnClickEvent = useCallback(() => {}, []);
 
     console.log(data);
@@ -376,7 +391,6 @@ export default function ManseryeokPage() {
             </SectionContents>*/}
 
             {/** 오행 / 십성 */}
-
             <section className="flex flex-col w-full gap-8 lg:flex-row ">
                 <article className="flex flex-col w-full h-full lg:w-1/2">
                     <SubTitleComp text={'오행 분석'} />
@@ -461,7 +475,7 @@ export default function ManseryeokPage() {
 
             {/** 대운 */}
             <section className="flex flex-col w-full">
-                <SubTitleComp text={`대운 - 대운 수 : ${''}`} />
+                <SubTitleComp text={`대운 - 대운 수 : ${data?.daeun[0].daeunNum}`} />
                 <div className="flex w-full">
                     <ColumnButtonChartComp
                         columnData={daeunColumnData}
@@ -475,14 +489,13 @@ export default function ManseryeokPage() {
             {/** 세운 */}
             <section className="flex flex-col w-full">
                 <SubTitleComp text={`세운`} />
-                <div className="flex w-full h-100">
-                    {/*<ColumnButtonChart
+                <div className="flex w-full">
+                    <ColumnButtonChartComp
                         columnData={seunColumnData}
-                        rowData={seunRowData}
                         defaultColumn={targetSeun}
                         type="seun"
                         addEvent={addColumnClickEvent}
-                    />*/}
+                    />
                 </div>
             </section>
         </div>

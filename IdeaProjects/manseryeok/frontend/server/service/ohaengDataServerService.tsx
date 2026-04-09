@@ -13,7 +13,6 @@ export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,
 ): OhaengStrengthData[] => {
     const allScore = 8; //adjustScore ? 32 : 8;
-    const sipsinAllScore = 16; //adjustScore ? 64 : 16;
     const ohaengList: OhaengType[] = ['목', '화', '토', '금', '수'];
 
     const birthElementList: (CheonganType | JijiType)[] = [
@@ -74,7 +73,7 @@ export const checkOhaengStrength = (
         const sipsinDataList = sipsinList?.map((sipsinItem) => {
             const sipsincount = sipsinCountMap.get(sipsinItem) ?? 0;
             const sipsinPercent =
-                sipsincount == 0 ? 0 : Math.round((sipsincount / sipsinAllScore) * 10000) / 100;
+                sipsincount == 0 ? 0 : Math.round((sipsincount / allScore) * 10000) / 100;
 
             return { name: sipsinItem, count: sipsincount, percent: sipsinPercent };
         });

@@ -12,12 +12,11 @@ import { check12Sinsal } from './sinsalDataServerService';
 import { CheonganType, JijiType } from '@/type/basicType';
 import { BirthColumnItem } from '@/type/baseInterface';
 import { DivisionJsonData } from '@/type/jsonDataInterface';
-import { DaeunData } from '@/type/luckyDataInterface';
+import { DaeunData, SeunData } from '@/type/luckyDataInterface';
 
 /**
- * 해당 대운 계산 - 태양력
+ * 대운 계산 - 태양력
  */
-
 export const checkTargetDaeun = (
     gender: 'M' | 'F',
     targetDivision: DivisionJsonData[],
@@ -60,7 +59,7 @@ export const checkTargetDaeun = (
         const defaultMonthGan = monthColumn.gan;
         const defaultMonthJiji = monthColumn.jiji;
 
-        for (let daeunIdx = 0; daeunIdx < 11; daeunIdx++) {
+        for (let daeunIdx = 0; daeunIdx < 10; daeunIdx++) {
             const multipleNum = flowStr === '순행' ? 1 : -1;
             const targetGanNum =
                 (10 + cheongan[defaultMonthGan].number + (daeunIdx + 1) * multipleNum) % 10;
@@ -92,7 +91,7 @@ export const checkTargetDaeun = (
                         targetJijiData[1].eumyang,
                     ),
                     woonsung: woonsung[targetGan][targetJiji],
-                    sinsal: check12Sinsal(yearColumn.jiji, defaultMonthJiji),
+                    sinsal: check12Sinsal(yearColumn.jiji, targetJiji),
                 };
 
                 daeunList.push(daeunData);
@@ -101,4 +100,76 @@ export const checkTargetDaeun = (
     }
 
     return daeunList;
+};
+
+/**
+ * 세운 계산 - 태양력
+ */
+export const checkTargetSeun = (
+    solarBirth: Dayjs,
+    daeunNum: number,
+    yearColumn: BirthColumnItem<CheonganType, JijiType>,
+    dayColumn: BirthColumnItem<CheonganType, JijiType>,
+): SeunData[][] => {
+    const standardYear = 1900;
+    const standardGan = '경';
+    const standardJiji = '자';
+
+    const solYear = solarBirth.year();
+    const distanceStandard = solYear - standardYear;
+    const daeNum = daeunNum - 1;
+
+    const seunList = [];
+    for (let daeunIdx = 0; daeunIdx < 10; daeunIdx++) {
+        const itemList = [];
+
+        for (let seunIdx = 0; seunIdx < 10; seunIdx++) {
+            const targetGanNum =
+                (cheongan[standardGan].number +
+                    distanceStandard +
+                    daeNum +
+                    seunIdx +
+                    10 * daeunIdx) %
+                10;
+            const targetJijiNum =
+                (jiji[standardJiji].number + distanceStandard + daeNum + seunIdx + 10 * daeunIdx) %
+                12;
+            const targetGanData = Object.entries(cheongan).find(
+                ([key, value]) => value.number === targetGanNum,
+            );
+            const targetJijiData = Object.entries(jiji).find(
+                ([key, value]) => value.number === targetJijiNum,
+            );
+
+            if (targetGanData && targetJijiData) {
+                const targetGan: CheonganType = targetGanData[0] as CheonganType;
+                const targetJiji: JijiType = targetJijiData[0] as JijiType;
+
+                const seunData: SeunData = {
+                    daeunNum: daeunNum + daeunIdx * 10,
+                    yearNum: standardYear + distanceStandard + daeNum + seunIdx + 10 * daeunIdx,
+                    gan: targetGan,
+                    jiji: targetJiji,
+                    ganSipsin: checkSipsinData(
+                        dayColumn.gan,
+                        targetGanData[1].element,
+                        targetGanData[1].eumyang,
+                    ),
+                    jijiSipsin: checkSipsinData(
+                        dayColumn.gan,
+                        targetJijiData[1].element,
+                        targetJijiData[1].eumyang,
+                    ),
+                    woonsung: woonsung[targetGan][targetJiji],
+                    sinsal: check12Sinsal(yearColumn.jiji, targetJiji),
+                };
+
+                itemList.push(seunData);
+            }
+        }
+
+        seunList.push(itemList);
+    }
+
+    return seunList;
 };

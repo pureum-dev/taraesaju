@@ -467,7 +467,7 @@ const checkJijiBanghapRelation = (
             case '년_월_일':
             case '년_일_시':
                 const _data = {
-                    name: dayJiObj.banghap.join() + '방합',
+                    name: dayJiObj.banghap.join() + ' 방합',
                     isClose: true,
                     columnName: item,
                 };
@@ -506,7 +506,7 @@ const checkJijiBanghapRelation = (
 
             default:
                 const _yeardata = {
-                    name: yearJiObj.banghap.join() + '방합',
+                    name: yearJiObj.banghap.join() + ' 방합',
                     isClose: true,
                     columnName: item,
                 };
@@ -554,7 +554,7 @@ const checkJijiSamhapRelation = (
             case '년_월_일':
             case '년_일_시':
                 const _data = {
-                    name: dayJiObj.samhap.join() + '삼합',
+                    name: dayJiObj.samhap.join() + ' 삼합',
                     isClose: true,
                     columnName: item,
                 };
@@ -596,7 +596,7 @@ const checkJijiSamhapRelation = (
 
             default:
                 const _yeardata = {
-                    name: yearJiObj.samhap.join() + '삼합',
+                    name: yearJiObj.samhap.join() + ' 삼합',
                     isClose: true,
                     columnName: item,
                 };
@@ -623,7 +623,7 @@ const checkJijiSamhapRelation = (
             dayJiObj.samhapWangji === monthJi
         ) {
             const _data = {
-                name: dayJiObj.samhap.join() + '반합',
+                name: dayJiObj.samhap.join() + ' 반합',
                 isClose: true,
                 columnName: '월_일',
             };
@@ -639,7 +639,7 @@ const checkJijiSamhapRelation = (
                 yearJiObj.samhapWangji === timeJi
             ) {
                 const _data = {
-                    name: yearJiObj.samhap.join() + '반합',
+                    name: yearJiObj.samhap.join() + ' 반합',
                     isClose: false,
                     columnName: '년_시',
                 };
@@ -657,7 +657,7 @@ const checkJijiSamhapRelation = (
             dayJiObj.samhapWangji === timeJi
         ) {
             const _data = {
-                name: dayJiObj.samhap.join() + '반합',
+                name: dayJiObj.samhap.join() + ' 반합',
                 isClose: true,
                 columnName: '일_시',
             };
@@ -672,7 +672,7 @@ const checkJijiSamhapRelation = (
                 yearJiObj.samhapWangji === monthJi
             ) {
                 const _data = {
-                    name: yearJiObj.samhap.join() + '반합',
+                    name: yearJiObj.samhap.join() + ' 반합',
                     isClose: true,
                     columnName: '년_월',
                 };
@@ -689,7 +689,7 @@ const checkJijiSamhapRelation = (
             dayJiObj.samhapWangji === yearJi
         ) {
             const _data = {
-                name: dayJiObj.samhap.join() + '반합',
+                name: dayJiObj.samhap.join() + ' 반합',
                 isClose: false,
                 columnName: '년_일',
             };
@@ -705,7 +705,7 @@ const checkJijiSamhapRelation = (
                 monthJiObj.samhapWangji === timeJi
             ) {
                 const _data = {
-                    name: monthJiObj.samhap.join() + '반합',
+                    name: monthJiObj.samhap.join() + ' 반합',
                     isClose: false,
                     columnName: '월_시',
                 };
@@ -721,7 +721,7 @@ const checkJijiSamhapRelation = (
                 yearJiObj.samhapWangji === monthJi
             ) {
                 const _data = {
-                    name: yearJiObj.samhap.join() + '반합',
+                    name: yearJiObj.samhap.join() + ' 반합',
                     isClose: true,
                     columnName: '년_월',
                 };
@@ -738,7 +738,7 @@ const checkJijiSamhapRelation = (
                 monthJiObj.samhapWangji === timeJi
             ) {
                 const _data = {
-                    name: monthJiObj.samhap.join() + '반합',
+                    name: monthJiObj.samhap.join() + ' 반합',
                     isClose: false,
                     columnName: '월_시',
                 };
@@ -755,7 +755,7 @@ const checkJijiSamhapRelation = (
                 yearJiObj.samhapWangji === timeJi
             ) {
                 const _data = {
-                    name: yearJiObj.samhap.join() + '반합',
+                    name: yearJiObj.samhap.join() + ' 반합',
                     isClose: false,
                     columnName: '년_시',
                 };
@@ -856,7 +856,7 @@ const checkJijiSamhyungRelation = (
             case '년_월_일':
             case '년_일_시':
                 const _data = {
-                    name: dayJiObj.samhyung.join() + '삼형',
+                    name: dayJiObj.samhyung.join() + ' 삼형',
                     isClose: true,
                     columnName: item,
                 };
@@ -898,7 +898,7 @@ const checkJijiSamhyungRelation = (
 
             default:
                 const _yeardata = {
-                    name: yearJiObj.samhap.join() + '삼형',
+                    name: yearJiObj.samhap.join() + ' 삼형',
                     isClose: true,
                     columnName: item,
                 };
@@ -921,7 +921,7 @@ const checkJijiSamhyungRelation = (
         //일지와 월지 형
         if (dayJiObj.samhyung.includes(monthJi)) {
             const _data = {
-                name: dayJiObj.samhyung.join() + '반형',
+                name: dayJiObj.samhyung.join() + ' 반형',
                 isClose: true,
                 columnName: '월_일',
             };
@@ -932,7 +932,7 @@ const checkJijiSamhyungRelation = (
             //연지와 시지 형
             if (timeJi && yearJiObj.samhyung.includes(timeJi)) {
                 const _data = {
-                    name: yearJiObj.samhyung.join() + '반형',
+                    name: yearJiObj.samhyung.join() + ' 반형',
                     isClose: false,
                     columnName: '년_시',
                 };
@@ -945,7 +945,7 @@ const checkJijiSamhyungRelation = (
         //일지와 시지 형
         else if (timeJi && dayJiObj.samhyung.includes(timeJi)) {
             const _data = {
-                name: dayJiObj.samhyung.join() + '반형',
+                name: dayJiObj.samhyung.join() + ' 반형',
                 isClose: true,
                 columnName: '일_시',
             };
@@ -956,7 +956,7 @@ const checkJijiSamhyungRelation = (
             //연지과 월지 형
             if (yearJiObj.samhyung.includes(monthJi)) {
                 const _data = {
-                    name: yearJiObj.samhyung.join() + '반형',
+                    name: yearJiObj.samhyung.join() + ' 반형',
                     isClose: true,
                     columnName: '년_월',
                 };
@@ -969,7 +969,7 @@ const checkJijiSamhyungRelation = (
         //일지와 연지 형
         else if (dayJiObj.samhyung.includes(yearJi)) {
             const _data = {
-                name: dayJiObj.samhyung.join() + '반형',
+                name: dayJiObj.samhyung.join() + ' 반형',
                 isClose: false,
                 columnName: '년_일',
             };
@@ -980,7 +980,7 @@ const checkJijiSamhyungRelation = (
             //월지와 시지 형
             if (timeJi && monthJiObj.samhyung.includes(timeJi)) {
                 const _data = {
-                    name: monthJiObj.samhyung.join() + '반형',
+                    name: monthJiObj.samhyung.join() + ' 반형',
                     isClose: false,
                     columnName: '월_시',
                 };
@@ -992,7 +992,7 @@ const checkJijiSamhyungRelation = (
             //연지과 월지 형
             if (yearJiObj.samhyung.includes(monthJi)) {
                 const _data = {
-                    name: yearJiObj.samhyung.join() + '반형',
+                    name: yearJiObj.samhyung.join() + ' 반형',
                     isClose: true,
                     columnName: '년_월',
                 };
@@ -1004,7 +1004,7 @@ const checkJijiSamhyungRelation = (
             //월지와 시지 형
             if (timeJi && monthJiObj.samhyung.includes(timeJi)) {
                 const _data = {
-                    name: monthJiObj.samhyung.join() + '반형',
+                    name: monthJiObj.samhyung.join() + ' 반형',
                     isClose: false,
                     columnName: '월_시',
                 };
@@ -1016,7 +1016,7 @@ const checkJijiSamhyungRelation = (
             //연지와 시지 형
             if (timeJi && yearJiObj.samhyung.includes(timeJi)) {
                 const _data = {
-                    name: yearJiObj.samhyung.join() + '반형',
+                    name: yearJiObj.samhyung.join() + ' 반형',
                     isClose: false,
                     columnName: '년_시',
                 };

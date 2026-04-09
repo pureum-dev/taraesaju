@@ -171,10 +171,10 @@ const SajuChartGroupComp = ({
                 className: '',
             },
             jijiRealtion: {
-                key: 'jijiRealtion',
+                key: 'jijiRelation',
                 className: '',
                 cellRender: (col) => {
-                    const list: Relation[] = col.jijiRealtion ?? [];
+                    const list: Relation[] = col.jijiRelation ?? [];
                     return (
                         <div className="flex flex-col items-center">
                             {list.length !== 0
