@@ -9,6 +9,7 @@ import { OhaengType, SipsinType } from '@/type/basicType';
 export const ohaeng: Record<
     OhaengType,
     {
+        hanja: string;
         color: string;
         resource: OhaengType;
         power: OhaengType;
@@ -16,11 +17,11 @@ export const ohaeng: Record<
         wealth: OhaengType;
     }
 > = {
-    목: { color: '푸른', resource: '수', power: '금', output: '화', wealth: '토' },
-    화: { color: '붉은', resource: '목', power: '수', output: '토', wealth: '금' },
-    토: { color: '노란', resource: '화', power: '목', output: '금', wealth: '수' },
-    금: { color: '하얀', resource: '토', power: '화', output: '수', wealth: '목' },
-    수: { color: '검은', resource: '금', power: '토', output: '목', wealth: '화' },
+    목: { hanja: '木', color: '푸른', resource: '수', power: '금', output: '화', wealth: '토' },
+    화: { hanja: '火', color: '붉은', resource: '목', power: '수', output: '토', wealth: '금' },
+    토: { hanja: '土', color: '노란', resource: '화', power: '목', output: '금', wealth: '수' },
+    금: { hanja: '金', color: '하얀', resource: '토', power: '화', output: '수', wealth: '목' },
+    수: { hanja: '水', color: '검은', resource: '금', power: '토', output: '목', wealth: '화' },
 };
 
 export const sipsin: Record<

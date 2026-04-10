@@ -1,24 +1,17 @@
 'use client';
 
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 /** lib */
-import dayjs from 'dayjs';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
 import {
     UserRoundIcon,
     SunIcon,
     MoonIcon,
-    SparkleIcon,
-    ZapIcon,
-    HeartIcon,
     CheckCircleIcon,
     CircleXIcon,
     MapPinnedIcon,
-    FileTextIcon,
-    MessageSquareTextIcon,
 } from 'lucide-react';
 import { useDataStore } from '@/lib/store/useDataStore';
 
@@ -26,25 +19,48 @@ import { useDataStore } from '@/lib/store/useDataStore';
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
+
+import { getCSSVariable, makeTextColor } from '@/util/colorFunc';
+import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
+
 import SajuChartGroupComp from '@/component/SajuChartGroupComp';
 import EchartComp from '@/lib/EchartComp';
 import SubTitleComp from '@/component/SubTitleComp';
 import SipsinChartComp from '@/component/SipsinChartComp';
 
 /** type & interface*/
-import { CheonganType, ColumnItem, JijiType, RowItem } from '@/type/basicType';
+import { CheonganType, ColumnItem, JijiType } from '@/type/basicType';
+import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
+
+/** interface */
+interface ChartData {
+    value: number;
+    name: string;
+    itemStyle?: Record<string, any>;
+    emphasis?: Record<string, any>;
+}
 
 export default function ManseryeokPage() {
     const profileData = useDataStore((state) => state.profileData);
     const data = useDataStore((state) => state.data);
 
-    const [isAdjustElement, setIsAdjustment] = useState(false);
-    const [elementChartData, setElementChartData] = useState([]);
+    const [isAdjustElement, setIsAdjustment] = useState(true);
+    const [elementListData, setElementListData] = useState<OhaengStrengthData[]>(
+        () => data?.ohaengStrength ?? [],
+    );
     const [targetDaeun, setTargetDaeun] = useState(0);
     const [targetSeun, setTargetSeun] = useState(0);
 
-    const onChangeAdjustScore = () => {};
+    const onChangeAdjustScore = useCallback(() => {
+        if (data) {
+            const ohaengStrength = checkOhaengStrength(data.chartCol, !isAdjustElement);
+            setElementListData(ohaengStrength);
+            setIsAdjustment((prev) => !prev);
+        }
+    }, [data, isAdjustElement]);
+
+    const onClickAddColumn = useCallback(() => {}, []);
 
     const columnData = useMemo<ColumnItem[]>(() => {
         if (!data) return []; // data 없을 때 안전하게 처리
@@ -263,9 +279,55 @@ export default function ManseryeokPage() {
         return columnList;
     }, [data, targetDaeun]);
 
-    const addColumnClickEvent = useCallback(() => {}, []);
+    const elementChartData = useMemo(() => {
+        const elementList: OhaengStrengthData[] = elementListData ?? [];
 
-    console.log(data);
+        //오행 배열 구하기
+        const ohaengChartArr: ChartData[] = elementList.map((item) => {
+            let colorVar = '';
+            let emphasisColorVar = '';
+
+            switch (ohaeng[item.element].color) {
+                case '검은':
+                    colorVar = `--color-gray-800`;
+                    emphasisColorVar = `--color-gray-600`;
+                    break;
+                case '하얀':
+                    colorVar = `--color-gray-200`;
+                    emphasisColorVar = `--color-gray-300`;
+                    break;
+                case '붉은':
+                    colorVar = `--color-coral-500`;
+                    emphasisColorVar = `--color-coral-400`;
+                    break;
+                case '푸른':
+                    colorVar = `--color-greenmint-500`;
+                    emphasisColorVar = `--color-greenmint-400`;
+                    break;
+                default:
+                    colorVar = `--color-lemon-500`;
+                    emphasisColorVar = `--color-lemon-400`;
+                    break;
+            }
+
+            return {
+                value: item.score,
+                name: item.element,
+                itemStyle: {
+                    color: getCSSVariable(`${colorVar}`),
+                },
+                emphasis: {
+                    itemStyle: {
+                        color: getCSSVariable(`${emphasisColorVar}`),
+                    },
+                },
+            };
+        });
+
+        console.log(ohaengChartArr);
+
+        return ohaengChartArr;
+    }, [elementListData]);
 
     return data ? (
         <div className="flex flex-col w-full p-8 gap-8">
@@ -394,7 +456,6 @@ export default function ManseryeokPage() {
             <section className="flex flex-col w-full gap-8 lg:flex-row ">
                 <article className="flex flex-col w-full h-full lg:w-1/2">
                     <SubTitleComp text={'오행 분석'} />
-
                     <div className="flex flex-col w-full h-90">
                         <div className="flex justify-end pb-3">
                             <div className="flex flex-nowrap items-center">
@@ -414,19 +475,20 @@ export default function ManseryeokPage() {
                             </div>
                             <div className="flex justify-center items-center w-1/2 h-full border rounded-2xl ">
                                 <div className="flex flex-col w-full h-full">
-                                    {data.ohaengStrength.map((item, idx) => {
+                                    {elementListData.map((item, idx) => {
                                         return (
                                             <div
                                                 key={idx}
                                                 className={`flex w-full h-1/5  ${
-                                                    idx !== data.ohaengStrength.length - 1 &&
-                                                    'border-b'
+                                                    idx !== elementListData.length - 1 && 'border-b'
                                                 }`}
                                             >
-                                                <div className="flex flex-1 justify-center items-center h-full border-r ">
+                                                <div
+                                                    className={`flex flex-1 justify-center items-center h-full border-r ${makeTextColor(ohaeng[item.element].color)}`}
+                                                >
                                                     <span>
                                                         {item.element}
-                                                        <span>{``}</span>
+                                                        <span>{`(${ohaeng[item.element].hanja})`}</span>
                                                     </span>
                                                 </div>
                                                 <div className="flex flex-1 justify-center items-center h-full border-r text-sm">
@@ -468,7 +530,7 @@ export default function ManseryeokPage() {
                 <article className="flex flex-col w-full h-full lg:w-1/2">
                     <SubTitleComp text={'신살 분석'} />
                     <div className="flex w-full h-90">
-                        {<SipsinChartComp columnData={sinsalColumnData} />}
+                        <SipsinChartComp columnData={sinsalColumnData} />
                     </div>
                 </article>
             </section>
@@ -481,7 +543,7 @@ export default function ManseryeokPage() {
                         columnData={daeunColumnData}
                         defaultColumn={targetDaeun}
                         type="daeun"
-                        addEvent={addColumnClickEvent}
+                        addEvent={onClickAddColumn}
                     />
                 </div>
             </section>
@@ -494,7 +556,7 @@ export default function ManseryeokPage() {
                         columnData={seunColumnData}
                         defaultColumn={targetSeun}
                         type="seun"
-                        addEvent={addColumnClickEvent}
+                        addEvent={onClickAddColumn}
                     />
                 </div>
             </section>

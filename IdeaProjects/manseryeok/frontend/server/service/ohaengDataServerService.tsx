@@ -11,47 +11,36 @@ import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 
 export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,
+    adjustScore: boolean,
 ): OhaengStrengthData[] => {
-    const allScore = 8; //adjustScore ? 32 : 8;
+    const allScore = adjustScore ? 32 : 8;
     const ohaengList: OhaengType[] = ['목', '화', '토', '금', '수'];
-
-    const birthElementList: (CheonganType | JijiType)[] = [
-        data.year.gan,
-        data.year.jiji,
-        data.month.gan,
-        data.month.jiji,
-        data.day.gan,
-        data.day.jiji,
-    ];
-
-    if (data.time) {
-        birthElementList.push(data.time.gan);
-        birthElementList.push(data.time.jiji);
-    }
 
     const ohaengCountMap = new Map<OhaengType, number>();
     const sipsinCountMap = new Map<SipsinType, number>();
 
-    birthElementList.forEach((item) => {
-        const element =
-            item in cheongan
-                ? cheongan[item as CheonganType].element
-                : jiji[item as JijiType].element;
+    Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+            const valueData = value as BirthColumnData;
+            const ganData = cheongan[valueData.gan].element;
+            const jijiData = jiji[valueData.jiji].element;
 
-        const eumyang =
-            item in cheongan
-                ? cheongan[item as CheonganType].eumyang
-                : jiji[item as JijiType].eumyang;
+            const ganSipsin = valueData.ganSipsin as SipsinType;
+            const jijiSipsin = valueData.jijiSipsin as SipsinType;
 
-        const sipsin = checkSipsinData(data.day.gan, element, eumyang);
+            const ganScore = adjustScore ? checkScore(key, 'gan') : 1;
+            const jijiScore = adjustScore ? checkScore(key, 'jiji') : 1;
 
-        ohaengCountMap.set(element, (ohaengCountMap.get(element) ?? 0) + 1);
-        sipsinCountMap.set(sipsin, (sipsinCountMap.get(sipsin) ?? 0) + 1);
+            ohaengCountMap.set(ganData, (ohaengCountMap.get(ganData) ?? 0) + ganScore);
+            ohaengCountMap.set(jijiData, (ohaengCountMap.get(jijiData) ?? 0) + jijiScore);
+            sipsinCountMap.set(ganSipsin, (sipsinCountMap.get(ganSipsin) ?? 0) + ganScore);
+            sipsinCountMap.set(jijiSipsin, (sipsinCountMap.get(jijiSipsin) ?? 0) + jijiScore);
+        }
     });
 
     const scoreList: OhaengStrengthData[] = ohaengList.map((item) => {
-        const count = ohaengCountMap.get(item) ?? 0;
-        const percent = count == 0 ? 0 : Math.round((count / allScore) * 10000) / 100;
+        const score = ohaengCountMap.get(item) ?? 0;
+        const percent = score == 0 ? 0 : Math.round((score / allScore) * 10000) / 100;
 
         let isBalanced = true;
         if (percent != 0 && (percent < 12.5 || percent > 25)) {
@@ -80,7 +69,7 @@ export const checkOhaengStrength = (
 
         return {
             element: item,
-            count: count,
+            score: score,
             percent: percent,
             standard: standard,
             isBalanced: isBalanced,
@@ -89,4 +78,19 @@ export const checkOhaengStrength = (
     });
 
     return scoreList;
+};
+
+export const checkScore = (key: string, type: 'gan' | 'jiji'): number => {
+    switch (key) {
+        case 'year':
+            return 3;
+        case 'month':
+            return type === 'gan' ? 4 : 8;
+        case 'day':
+            return 4;
+        case 'time':
+            return 3;
+        default:
+            return 0;
+    }
 };

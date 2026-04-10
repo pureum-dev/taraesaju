@@ -5,13 +5,13 @@ import { ZapIcon, HeartIcon } from 'lucide-react';
 
 /** Custom */
 import { jiji } from '@/common/const/jijiConst';
-import { makeBgColor, textColor, makeBgColorAlpha } from '@/util/colorFunc';
+import { makeBgColor, defaultTextColor, makeBgColorAlpha, makeColorName } from '@/util/colorFunc';
 import SajuChartComp from './SajuChartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 
 /** type & interface*/
 import { ColumnItem, JijiType, RowItem } from '@/type/basicType';
-import { BirthAllData, Relation } from '@/type/birthDataInterface';
+import { Relation } from '@/type/birthDataInterface';
 
 interface SajuChartGroupProps {
     columnData: ColumnItem[];
@@ -122,7 +122,9 @@ const SajuChartGroupComp = ({
                 className: '',
                 cellRender: (col) => {
                     const bgColor =
-                        col.ganDuplication !== '' ? makeBgColorAlpha(col.gan, 'gan') : '';
+                        col.ganDuplication !== ''
+                            ? makeBgColorAlpha(makeColorName(col.gan, 'gan'))
+                            : '';
                     return (
                         <div
                             className={`flex justify-center items-center w-full h-full p-2 ${bgColor}`}
@@ -137,7 +139,9 @@ const SajuChartGroupComp = ({
                 className: '',
                 cellRender: (col) => {
                     const bgColor =
-                        col.jijiDuplication !== '' ? makeBgColorAlpha(col.jiji, 'jiji') : '';
+                        col.jijiDuplication !== ''
+                            ? makeBgColorAlpha(makeColorName(col.jiji, 'jiji'))
+                            : '';
                     return (
                         <div
                             className={`flex justify-center items-center w-full h-full p-2 ${bgColor}`}
@@ -156,7 +160,7 @@ const SajuChartGroupComp = ({
                         jijanggan.map((item, idx) => (
                             <div
                                 key={idx}
-                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(item, 'gan')} ${textColor(item, 'gan')}`}
+                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(makeColorName(item, 'gan'))} ${defaultTextColor(makeColorName(item, 'gan'))}`}
                             >
                                 {item}
                             </div>

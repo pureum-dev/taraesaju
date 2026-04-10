@@ -80,7 +80,7 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
 
     if (chartCol) {
         const point: BirthPointData = createInfoData(chartCol);
-        const ohaengStrength: OhaengStrengthData[] = checkOhaengStrength(chartCol);
+        const ohaengStrength: OhaengStrengthData[] = checkOhaengStrength(chartCol, true);
         const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
             checkSinsalData(chartCol);
 

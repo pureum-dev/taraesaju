@@ -17,9 +17,7 @@ export const makeColorName = (name: string, type: 'gan' | 'jiji') => {
     return _colorName;
 };
 
-export const makeBgColor = (name: string, type: 'gan' | 'jiji') => {
-    const _colorName = makeColorName(name, type);
-
+export const makeBgColor = (_colorName: string) => {
     switch (_colorName) {
         case '검은':
             return 'bg-gray-700';
@@ -36,9 +34,7 @@ export const makeBgColor = (name: string, type: 'gan' | 'jiji') => {
     }
 };
 
-export const makeBgColorAlpha = (name: string, type: 'gan' | 'jiji') => {
-    const _colorName = makeColorName(name, type);
-
+export const makeBgColorAlpha = (_colorName: string) => {
     switch (_colorName) {
         case '검은':
             return 'bg-gray-700/20';
@@ -55,7 +51,27 @@ export const makeBgColorAlpha = (name: string, type: 'gan' | 'jiji') => {
     }
 };
 
-export const textColor = (name: string, type: 'gan' | 'jiji') => {
-    const _colorName = makeColorName(name, type);
+export const makeTextColor = (_colorName: string) => {
+    switch (_colorName) {
+        case '검은':
+            return 'color-gray-900';
+        case '하얀':
+            return 'color-gray-500';
+        case '푸른':
+            return 'color-greenmint-500 dark:color-greenmint-500';
+        case '붉은':
+            return 'color-coral-500 dark:color-coral-500';
+        case '노란':
+            return 'color-lemon-500 dark:color-lemon-500';
+        default:
+            return '';
+    }
+};
+
+export const defaultTextColor = (_colorName: string) => {
     return _colorName === '검은' ? 'text-gray-50' : 'text-gray-900';
+};
+
+export const getCSSVariable = (varName: string): string => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
 };

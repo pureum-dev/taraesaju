@@ -8,7 +8,7 @@ export interface SipsinStrengthData {
 
 export interface OhaengStrengthData {
     element: OhaengType;
-    count: number;
+    score: number;
     percent: number;
     standard: string;
     isBalanced: boolean;
