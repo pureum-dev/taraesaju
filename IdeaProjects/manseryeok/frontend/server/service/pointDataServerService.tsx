@@ -107,6 +107,7 @@ export const checkStrength = (
     };
 };
 
+/** 삼재 */
 export const checkSamJaeList = (yearJiji: JijiType): number[] => {
     const samjaeList: JijiType[] = jiji[yearJiji].samjae;
 
@@ -114,11 +115,11 @@ export const checkSamJaeList = (yearJiji: JijiType): number[] => {
     const standartJiji = '자'; // 0
     const limit = dayjs().subtract(2, 'years').year();
 
-    const targetNum = jiji[samjaeList[0] as JijiType].number;
+    const targetNum = jiji[samjaeList[0]].number;
     const duration = (12 - (jiji[standartJiji].number - targetNum)) % 12;
     let targetYear = 0;
 
-    for (let idx = (limit - standardYear) / 12; idx < idx * 10; idx++) {
+    for (let idx = Math.floor((limit - standardYear) / 12); idx < idx * 10; idx++) {
         const aa = standardYear + duration + 12 * idx;
         if (aa >= limit) {
             targetYear = aa;
