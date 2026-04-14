@@ -1,0 +1,1026 @@
+[
+    {
+        "geonameid": 105343,
+        "latitude": 21.49012,
+        "longitude": 39.18624,
+        "timezone": "Asia/Riyadh",
+        "geo_name": "사우디아라비아",
+        "alternate_name": "제다"
+    },
+    {
+        "geonameid": 162183,
+        "latitude": 37.95,
+        "longitude": 58.38333,
+        "timezone": "Asia/Ashgabat",
+        "geo_name": "투르크메니스탄",
+        "alternate_name": "아슈하바트"
+    },
+    {
+        "geonameid": 170794,
+        "latitude": 35.33588,
+        "longitude": 40.14084,
+        "timezone": "Asia/Damascus",
+        "geo_name": "시리아",
+        "alternate_name": "데이르에조르"
+    },
+    {
+        "geonameid": 264371,
+        "latitude": 37.98376,
+        "longitude": 23.72784,
+        "timezone": "Europe/Athens",
+        "geo_name": "그리스",
+        "alternate_name": "아테네"
+    },
+    {
+        "geonameid": 285787,
+        "latitude": 29.367,
+        "longitude": 47.97429,
+        "timezone": "Asia/Kuwait",
+        "geo_name": "쿠웨이트",
+        "alternate_name": "쿠웨이트"
+    },
+    {
+        "geonameid": 285787,
+        "latitude": 29.367,
+        "longitude": 47.97429,
+        "timezone": "Asia/Kuwait",
+        "geo_name": "쿠웨이트",
+        "alternate_name": "쿠웨이트시티"
+    },
+    {
+        "geonameid": 498817,
+        "latitude": 59.93863,
+        "longitude": 30.31413,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "상트페테르부르크"
+    },
+    {
+        "geonameid": 523750,
+        "latitude": 55.73718,
+        "longitude": 52.41961,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "나베레즈니예첼니"
+    },
+    {
+        "geonameid": 523812,
+        "latitude": 55.91099,
+        "longitude": 37.72964,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "미티시"
+    },
+    {
+        "geonameid": 539147,
+        "latitude": 57.41435,
+        "longitude": 56.97157,
+        "timezone": "Asia/Yekaterinburg",
+        "geo_name": "러시아",
+        "alternate_name": "쿤구르"
+    },
+    {
+        "geonameid": 548602,
+        "latitude": 59.37627,
+        "longitude": 28.61409,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "킨기세프"
+    },
+    {
+        "geonameid": 548605,
+        "latitude": 57.43665,
+        "longitude": 42.12766,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "키네시마"
+    },
+    {
+        "geonameid": 555624,
+        "latitude": 59.37155,
+        "longitude": 28.21625,
+        "timezone": "Europe/Moscow",
+        "geo_name": "러시아",
+        "alternate_name": "이반고로드"
+    },
+    {
+        "geonameid": 584471,
+        "latitude": 53.68581,
+        "longitude": 53.65547,
+        "timezone": "Asia/Yekaterinburg",
+        "geo_name": "러시아",
+        "alternate_name": "압둘리노"
+    },
+    {
+        "geonameid": 652305,
+        "latitude": 60.38244,
+        "longitude": 24.751,
+        "timezone": "Europe/Helsinki",
+        "geo_name": "핀란드",
+        "alternate_name": "쿠라우카라"
+    },
+    {
+        "geonameid": 702550,
+        "latitude": 49.83826,
+        "longitude": 24.02324,
+        "timezone": "Europe/Kyiv",
+        "geo_name": "우크라이나",
+        "alternate_name": "리비우"
+    },
+    {
+        "geonameid": 706483,
+        "latitude": 49.98177,
+        "longitude": 36.25475,
+        "timezone": "Europe/Kyiv",
+        "geo_name": "우크라이나",
+        "alternate_name": "하르키우"
+    },
+    {
+        "geonameid": 745044,
+        "latitude": 41.01384,
+        "longitude": 28.94966,
+        "timezone": "Europe/Istanbul",
+        "geo_name": "튀르키예공화국",
+        "alternate_name": "이스탄불"
+    },
+    {
+        "geonameid": 922704,
+        "latitude": -11.66089,
+        "longitude": 27.47938,
+        "timezone": "Africa/Lubumbashi",
+        "geo_name": "콩고민주공화국",
+        "alternate_name": "루붐바시"
+    },
+    {
+        "geonameid": 1040652,
+        "latitude": -25.96553,
+        "longitude": 32.58322,
+        "timezone": "Africa/Maputo",
+        "geo_name": "모잠비크",
+        "alternate_name": "마푸투"
+    },
+    {
+        "geonameid": 1151254,
+        "latitude": 7.89059,
+        "longitude": 98.3981,
+        "timezone": "Asia/Bangkok",
+        "geo_name": "태국",
+        "alternate_name": "푸켓"
+    },
+    {
+        "geonameid": 1277333,
+        "latitude": 12.97194,
+        "longitude": 77.59369,
+        "timezone": "Asia/Kolkata",
+        "geo_name": "인도",
+        "alternate_name": "벵갈루루"
+    },
+    {
+        "geonameid": 1280737,
+        "latitude": 29.65,
+        "longitude": 91.1,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "라사"
+    },
+    {
+        "geonameid": 1526273,
+        "latitude": 51.1801,
+        "longitude": 71.44598,
+        "timezone": "Asia/Almaty",
+        "geo_name": "카자흐스탄",
+        "alternate_name": "아스타나"
+    },
+    {
+        "geonameid": 1559446,
+        "latitude": 7.33978,
+        "longitude": 134.47326,
+        "timezone": "Pacific/Palau",
+        "geo_name": "팔라우",
+        "alternate_name": "코로르"
+    },
+    {
+        "geonameid": 1566083,
+        "latitude": 10.82302,
+        "longitude": 106.62965,
+        "timezone": "Asia/Ho_Chi_Minh",
+        "geo_name": "베트남",
+        "alternate_name": "호치민"
+    },
+    {
+        "geonameid": 1571968,
+        "latitude": 20.25809,
+        "longitude": 105.97965,
+        "timezone": "Asia/Bangkok",
+        "geo_name": "베트남",
+        "alternate_name": "닌빈"
+    },
+    {
+        "geonameid": 1572151,
+        "latitude": 12.24507,
+        "longitude": 109.19432,
+        "timezone": "Asia/Ho_Chi_Minh",
+        "geo_name": "베트남",
+        "alternate_name": "나트랑"
+    },
+    {
+        "geonameid": 1583992,
+        "latitude": 16.06778,
+        "longitude": 108.22083,
+        "timezone": "Asia/Ho_Chi_Minh",
+        "geo_name": "베트남",
+        "alternate_name": "다낭"
+    },
+    {
+        "geonameid": 1668341,
+        "latitude": 25.05306,
+        "longitude": 121.52639,
+        "timezone": "Asia/Taipei",
+        "geo_name": "대만",
+        "alternate_name": "타이베이"
+    },
+    {
+        "geonameid": 1709632,
+        "latitude": 11.70611,
+        "longitude": 122.36444,
+        "timezone": "Asia/Manila",
+        "geo_name": "필리핀",
+        "alternate_name": "칼리보"
+    },
+    {
+        "geonameid": 1717512,
+        "latitude": 10.31672,
+        "longitude": 123.89071,
+        "timezone": "Asia/Manila",
+        "geo_name": "필리핀",
+        "alternate_name": "세부"
+    },
+    {
+        "geonameid": 1717886,
+        "latitude": 11.93337,
+        "longitude": 121.95981,
+        "timezone": "Asia/Manila",
+        "geo_name": "필리핀",
+        "alternate_name": "카티클란"
+    },
+    {
+        "geonameid": 1733432,
+        "latitude": 5.9749,
+        "longitude": 116.0724,
+        "timezone": "Asia/Kuching",
+        "geo_name": "말레이시아",
+        "alternate_name": "코타키나발루"
+    },
+    {
+        "geonameid": 1787093,
+        "latitude": 37.47649,
+        "longitude": 121.44081,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "옌타이 시"
+    },
+    {
+        "geonameid": 1791673,
+        "latitude": 37.50914,
+        "longitude": 122.11356,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "웨이하이 시"
+    },
+    {
+        "geonameid": 1792947,
+        "latitude": 39.14222,
+        "longitude": 117.17667,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "톈진 시"
+    },
+    {
+        "geonameid": 1795565,
+        "latitude": 22.54554,
+        "longitude": 114.0683,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "선전 시"
+    },
+    {
+        "geonameid": 1796236,
+        "latitude": 31.22222,
+        "longitude": 121.45806,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "상하이"
+    },
+    {
+        "geonameid": 1799962,
+        "latitude": 32.06167,
+        "longitude": 118.77778,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "난징"
+    },
+    {
+        "geonameid": 1808926,
+        "latitude": 30.29365,
+        "longitude": 120.16142,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "항저우"
+    },
+    {
+        "geonameid": 1809858,
+        "latitude": 23.11667,
+        "longitude": 113.25,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "광저우"
+    },
+    {
+        "geonameid": 1814087,
+        "latitude": 38.91222,
+        "longitude": 121.60222,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "대련"
+    },
+    {
+        "geonameid": 1816670,
+        "latitude": 39.9075,
+        "longitude": 116.39723,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "베이징"
+    },
+    {
+        "geonameid": 1822214,
+        "latitude": 13.36179,
+        "longitude": 103.86056,
+        "timezone": "Asia/Phnom_Penh",
+        "geo_name": "캄보디아",
+        "alternate_name": "시엠레아프"
+    },
+    {
+        "geonameid": 1832384,
+        "latitude": 36.82167,
+        "longitude": 128.63083,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "영주시"
+    },
+    {
+        "geonameid": 1832847,
+        "latitude": 37.83311,
+        "longitude": 127.06169,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "양주"
+    },
+    {
+        "geonameid": 1833466,
+        "latitude": 35.84509,
+        "longitude": 127.14752,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "완주"
+    },
+    {
+        "geonameid": 1833747,
+        "latitude": 35.53722,
+        "longitude": 129.31667,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "울산광역시"
+    },
+    {
+        "geonameid": 1833788,
+        "latitude": 37.7415,
+        "longitude": 127.0474,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "의정부시"
+    },
+    {
+        "geonameid": 1835235,
+        "latitude": 36.34913,
+        "longitude": 127.38493,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "대전광역시"
+    },
+    {
+        "geonameid": 1835329,
+        "latitude": 35.87028,
+        "longitude": 128.59111,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "대구광역시"
+    },
+    {
+        "geonameid": 1835447,
+        "latitude": 36.34931,
+        "longitude": 126.59772,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "보령시"
+    },
+    {
+        "geonameid": 1835553,
+        "latitude": 37.29111,
+        "longitude": 127.00889,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "수원시"
+    },
+    {
+        "geonameid": 1835848,
+        "latitude": 37.566,
+        "longitude": 126.9784,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "서울특별시"
+    },
+    {
+        "geonameid": 1838343,
+        "latitude": 36.99472,
+        "longitude": 127.08889,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "평택시"
+    },
+    {
+        "geonameid": 1838524,
+        "latitude": 35.10168,
+        "longitude": 129.03004,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "부산광역시"
+    },
+    {
+        "geonameid": 1838716,
+        "latitude": 37.49889,
+        "longitude": 126.78306,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "부천시"
+    },
+    {
+        "geonameid": 1840886,
+        "latitude": 36.59458,
+        "longitude": 128.19946,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "문경"
+    },
+    {
+        "geonameid": 1841598,
+        "latitude": 35.82333,
+        "longitude": 128.73778,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "경산시"
+    },
+    {
+        "geonameid": 1841811,
+        "latitude": 35.15472,
+        "longitude": 126.91556,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "광주광역시"
+    },
+    {
+        "geonameid": 1841976,
+        "latitude": 35.20944,
+        "longitude": 127.46444,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "구례"
+    },
+    {
+        "geonameid": 1841988,
+        "latitude": 37.5986,
+        "longitude": 127.1394,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "구리시"
+    },
+    {
+        "geonameid": 1842016,
+        "latitude": 36.23472,
+        "longitude": 128.57278,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "군위"
+    },
+    {
+        "geonameid": 1842485,
+        "latitude": 37.65639,
+        "longitude": 126.835,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "고양시"
+    },
+    {
+        "geonameid": 1842859,
+        "latitude": 35.43333,
+        "longitude": 126.7,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "고창"
+    },
+    {
+        "geonameid": 1842944,
+        "latitude": 36.12176,
+        "longitude": 128.11981,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "김천"
+    },
+    {
+        "geonameid": 1843163,
+        "latitude": 37.74722,
+        "longitude": 126.48556,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "강화군"
+    },
+    {
+        "geonameid": 1843564,
+        "latitude": 37.45646,
+        "longitude": 126.70515,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "인천광역시"
+    },
+    {
+        "geonameid": 1843585,
+        "latitude": 35.61306,
+        "longitude": 127.27944,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "임실"
+    },
+    {
+        "geonameid": 1843702,
+        "latitude": 37.27917,
+        "longitude": 127.4425,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "이천시"
+    },
+    {
+        "geonameid": 1843847,
+        "latitude": 37.20682,
+        "longitude": 126.8169,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "화성시"
+    },
+    {
+        "geonameid": 1844045,
+        "latitude": 38.10705,
+        "longitude": 127.70632,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "화천군"
+    },
+    {
+        "geonameid": 1844191,
+        "latitude": 37.6918,
+        "longitude": 127.8857,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "홍천군"
+    },
+    {
+        "geonameid": 1845519,
+        "latitude": 36.43351,
+        "longitude": 129.057,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "청송"
+    },
+    {
+        "geonameid": 1845604,
+        "latitude": 36.63722,
+        "longitude": 127.48972,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "청주시"
+    },
+    {
+        "geonameid": 1846114,
+        "latitude": 35.79167,
+        "longitude": 127.42528,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "진안군"
+    },
+    {
+        "geonameid": 1846266,
+        "latitude": 33.50972,
+        "longitude": 126.52194,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "제주시"
+    },
+    {
+        "geonameid": 1846898,
+        "latitude": 37.3925,
+        "longitude": 126.92694,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "안양시"
+    },
+    {
+        "geonameid": 1846918,
+        "latitude": 37.32361,
+        "longitude": 126.82194,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "안산시"
+    },
+    {
+        "geonameid": 1850147,
+        "latitude": 35.6895,
+        "longitude": 139.69171,
+        "timezone": "Asia/Tokyo",
+        "geo_name": "일본",
+        "alternate_name": "도쿄"
+    },
+    {
+        "geonameid": 1871859,
+        "latitude": 39.03385,
+        "longitude": 125.75432,
+        "timezone": "Asia/Pyongyang",
+        "geo_name": "조선민주주의인민공화국",
+        "alternate_name": "평양직할시"
+    },
+    {
+        "geonameid": 1880252,
+        "latitude": 1.28967,
+        "longitude": 103.85007,
+        "timezone": "Asia/Singapore",
+        "geo_name": "싱가포르",
+        "alternate_name": "싱가포르"
+    },
+    {
+        "geonameid": 1897000,
+        "latitude": 37.43861,
+        "longitude": 127.13778,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "성남시"
+    },
+    {
+        "geonameid": 1897122,
+        "latitude": 37.63667,
+        "longitude": 127.21417,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "남양주시"
+    },
+    {
+        "geonameid": 1948005,
+        "latitude": 37.47722,
+        "longitude": 126.86639,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "광명시"
+    },
+    {
+        "geonameid": 2027276,
+        "latitude": 51.71222,
+        "longitude": 105.86472,
+        "timezone": "Asia/Irkutsk",
+        "geo_name": "러시아",
+        "alternate_name": "바부시킨"
+    },
+    {
+        "geonameid": 2028462,
+        "latitude": 47.90771,
+        "longitude": 106.88324,
+        "timezone": "Asia/Ulaanbaatar",
+        "geo_name": "몽골",
+        "alternate_name": "울란바토르"
+    },
+    {
+        "geonameid": 2033467,
+        "latitude": 42.88825,
+        "longitude": 129.50241,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "옌지 시"
+    },
+    {
+        "geonameid": 2034937,
+        "latitude": 41.79222,
+        "longitude": 123.43278,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "선양"
+    },
+    {
+        "geonameid": 2038180,
+        "latitude": 43.88,
+        "longitude": 125.32278,
+        "timezone": "Asia/Shanghai",
+        "geo_name": "중국",
+        "alternate_name": "창춘 시"
+    },
+    {
+        "geonameid": 2110257,
+        "latitude": 1.3278,
+        "longitude": 172.97696,
+        "timezone": "Pacific/Tarawa",
+        "geo_name": "키리바시",
+        "alternate_name": "타라와"
+    },
+    {
+        "geonameid": 2122104,
+        "latitude": 53.06393,
+        "longitude": 158.62751,
+        "timezone": "Asia/Kamchatka",
+        "geo_name": "러시아",
+        "alternate_name": "페트로파블로프스크 캄차스키"
+    },
+    {
+        "geonameid": 2158177,
+        "latitude": -37.814,
+        "longitude": 144.96332,
+        "timezone": "Australia/Melbourne",
+        "geo_name": "호주",
+        "alternate_name": "멜버른"
+    },
+    {
+        "geonameid": 2172797,
+        "latitude": -16.92366,
+        "longitude": 145.76613,
+        "timezone": "Australia/Brisbane",
+        "geo_name": "호주",
+        "alternate_name": "케언스"
+    },
+    {
+        "geonameid": 2202064,
+        "latitude": -17.80309,
+        "longitude": 177.41617,
+        "timezone": "Pacific/Fiji",
+        "geo_name": "피지",
+        "alternate_name": "나디"
+    },
+    {
+        "geonameid": 2332459,
+        "latitude": 6.45407,
+        "longitude": 3.39467,
+        "timezone": "Africa/Lagos",
+        "geo_name": "나이지리아",
+        "alternate_name": "라고스"
+    },
+    {
+        "geonameid": 2659510,
+        "latitude": 46.32536,
+        "longitude": 7.98912,
+        "timezone": "Europe/Zurich",
+        "geo_name": "스위스",
+        "alternate_name": "나테르스"
+    },
+    {
+        "geonameid": 2761369,
+        "latitude": 48.20849,
+        "longitude": 16.37208,
+        "timezone": "Europe/Vienna",
+        "geo_name": "오스트리아",
+        "alternate_name": "빈"
+    },
+    {
+        "geonameid": 2993458,
+        "latitude": 43.73718,
+        "longitude": 7.42145,
+        "timezone": "Europe/Monaco",
+        "geo_name": "모나코",
+        "alternate_name": "모나코"
+    },
+    {
+        "geonameid": 3164603,
+        "latitude": 45.43713,
+        "longitude": 12.33265,
+        "timezone": "Europe/Rome",
+        "geo_name": "이탈리아",
+        "alternate_name": "베니스"
+    },
+    {
+        "geonameid": 3165524,
+        "latitude": 45.07049,
+        "longitude": 7.68682,
+        "timezone": "Europe/Rome",
+        "geo_name": "이탈리아",
+        "alternate_name": "투린"
+    },
+    {
+        "geonameid": 3176959,
+        "latitude": 43.77925,
+        "longitude": 11.24626,
+        "timezone": "Europe/Rome",
+        "geo_name": "이탈리아",
+        "alternate_name": "피렌체"
+    },
+    {
+        "geonameid": 3448439,
+        "latitude": -23.5475,
+        "longitude": -46.63611,
+        "timezone": "America/Sao_Paulo",
+        "geo_name": "브라질",
+        "alternate_name": "상파울루"
+    },
+    {
+        "geonameid": 3530597,
+        "latitude": 19.42847,
+        "longitude": -99.12766,
+        "timezone": "America/Mexico_City",
+        "geo_name": "멕시코",
+        "alternate_name": "멕시코시티"
+    },
+    {
+        "geonameid": 3531673,
+        "latitude": 21.17429,
+        "longitude": -86.84656,
+        "timezone": "America/Cancun",
+        "geo_name": "멕시코",
+        "alternate_name": "칸쿤"
+    },
+    {
+        "geonameid": 3571824,
+        "latitude": 25.05823,
+        "longitude": -77.34306,
+        "timezone": "America/Nassau",
+        "geo_name": "바하마",
+        "alternate_name": "나사우"
+    },
+    {
+        "geonameid": 3578851,
+        "latitude": 18.06819,
+        "longitude": -63.08302,
+        "timezone": "America/Marigot",
+        "geo_name": "세인트마틴 섬",
+        "alternate_name": "마리고"
+    },
+    {
+        "geonameid": 3579132,
+        "latitude": 17.89618,
+        "longitude": -62.84978,
+        "timezone": "America/St_Barthelemy",
+        "geo_name": "생바르텔레미",
+        "alternate_name": "귀스타비아"
+    },
+    {
+        "geonameid": 3598132,
+        "latitude": 14.64072,
+        "longitude": -90.51327,
+        "timezone": "America/Guatemala",
+        "geo_name": "과테말라",
+        "alternate_name": "과테말라시티"
+    },
+    {
+        "geonameid": 3703443,
+        "latitude": 8.9936,
+        "longitude": -79.51973,
+        "timezone": "America/Panama",
+        "geo_name": "파나마",
+        "alternate_name": "파나마시티"
+    },
+    {
+        "geonameid": 4180439,
+        "latitude": 33.749,
+        "longitude": -84.38798,
+        "timezone": "America/New_York",
+        "geo_name": "미합중국",
+        "alternate_name": "애틀랜타"
+    },
+    {
+        "geonameid": 4299276,
+        "latitude": 38.25424,
+        "longitude": -85.75941,
+        "timezone": "America/Kentucky/Louisville",
+        "geo_name": "미합중국",
+        "alternate_name": "루이빌"
+    },
+    {
+        "geonameid": 4460243,
+        "latitude": 35.22709,
+        "longitude": -80.84313,
+        "timezone": "America/New_York",
+        "geo_name": "미합중국",
+        "alternate_name": "샬럿"
+    },
+    {
+        "geonameid": 4568127,
+        "latitude": 18.46633,
+        "longitude": -66.10572,
+        "timezone": "America/Puerto_Rico",
+        "geo_name": "푸에르토리코",
+        "alternate_name": "산후안"
+    },
+    {
+        "geonameid": 4684888,
+        "latitude": 32.78306,
+        "longitude": -96.80667,
+        "timezone": "America/Chicago",
+        "geo_name": "미합중국",
+        "alternate_name": "댈러스"
+    },
+    {
+        "geonameid": 5368361,
+        "latitude": 34.05223,
+        "longitude": -118.24368,
+        "timezone": "America/Los_Angeles",
+        "geo_name": "미합중국",
+        "alternate_name": "로스앤젤레스"
+    },
+    {
+        "geonameid": 5391811,
+        "latitude": 32.71571,
+        "longitude": -117.16472,
+        "timezone": "America/Los_Angeles",
+        "geo_name": "미합중국",
+        "alternate_name": "샌디에고"
+    },
+    {
+        "geonameid": 5391959,
+        "latitude": 37.77493,
+        "longitude": -122.41942,
+        "timezone": "America/Los_Angeles",
+        "geo_name": "미합중국",
+        "alternate_name": "샌프란시스코"
+    },
+    {
+        "geonameid": 5392171,
+        "latitude": 37.33939,
+        "longitude": -121.89496,
+        "timezone": "America/Los_Angeles",
+        "geo_name": "미합중국",
+        "alternate_name": "산호세"
+    },
+    {
+        "geonameid": 5506956,
+        "latitude": 36.17497,
+        "longitude": -115.13722,
+        "timezone": "America/Los_Angeles",
+        "geo_name": "미합중국",
+        "alternate_name": "라스베이거스"
+    },
+    {
+        "geonameid": 5850248,
+        "latitude": 21.98121,
+        "longitude": -159.3721,
+        "timezone": "Pacific/Honolulu",
+        "geo_name": "미합중국",
+        "alternate_name": "리후에"
+    },
+    {
+        "geonameid": 5881576,
+        "latitude": -14.27806,
+        "longitude": -170.7025,
+        "timezone": "Pacific/Pago_Pago",
+        "geo_name": null,
+        "alternate_name": "파고파고"
+    },
+    {
+        "geonameid": 6611854,
+        "latitude": 19.745,
+        "longitude": 96.12972,
+        "timezone": "Asia/Yangon",
+        "geo_name": "미얀마",
+        "alternate_name": "네피도"
+    },
+    {
+        "geonameid": 6641869,
+        "latitude": 51.76872,
+        "longitude": 128.12018,
+        "timezone": "Asia/Yakutsk",
+        "geo_name": "러시아",
+        "alternate_name": "치올콥스키"
+    },
+    {
+        "geonameid": 6903078,
+        "latitude": 35.54145,
+        "longitude": 128.49506,
+        "timezone": "Asia/Seoul",
+        "geo_name": "대한민국",
+        "alternate_name": "창녕"
+    },
+    {
+        "geonameid": 7828758,
+        "latitude": 15.21233,
+        "longitude": 145.7545,
+        "timezone": "Pacific/Saipan",
+        "geo_name": "북마리아나 군도",
+        "alternate_name": "사이판"
+    },
+    {
+        "geonameid": 11524872,
+        "latitude": 16.0675,
+        "longitude": 97.90694,
+        "timezone": "Asia/Yangon",
+        "geo_name": "미얀마",
+        "alternate_name": "타군다잉"
+    }
+]
