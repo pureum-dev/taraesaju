@@ -1,10 +1,10 @@
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
-import { checkSipsinData, findSipsinList } from '@/server/service/sipsinDataServerService';
+import { findSipsinList } from '@/server/service/sipsinDataServerService';
 
 /** Type & Interface */
-import { CheonganType, JijiType, OhaengType, SipsinType } from '@/type/basicType';
+import { OhaengType, SipsinType } from '@/type/basicType';
 import { BirthColumnData } from '@/type/birthDataInterface';
 import { BirthColumnGroup } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
@@ -12,7 +12,7 @@ import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,
     adjustScore: boolean,
-): OhaengStrengthData[] => {
+): { isBalanced: boolean; ohaeng: OhaengStrengthData[] } => {
     const allScore = adjustScore ? 32 : 8;
     const ohaengList: OhaengType[] = ['목', '화', '토', '금', '수'];
 
@@ -38,12 +38,12 @@ export const checkOhaengStrength = (
         }
     });
 
+    let isBalanced = true;
     const scoreList: OhaengStrengthData[] = ohaengList.map((item) => {
         const score = ohaengCountMap.get(item) ?? 0;
         const percent = score == 0 ? 0 : Math.round((score / allScore) * 10000) / 100;
 
-        let isBalanced = true;
-        if (percent != 0 && (percent < 12.5 || percent > 25)) {
+        if (isBalanced && percent != 0 && (percent < 12.5 || percent > 25)) {
             isBalanced = false;
         }
 
@@ -72,12 +72,14 @@ export const checkOhaengStrength = (
             score: score,
             percent: percent,
             standard: standard,
-            isBalanced: isBalanced,
             sipsinDataList: sipsinDataList,
         };
     });
 
-    return scoreList;
+    return {
+        isBalanced: isBalanced,
+        ohaeng: scoreList,
+    };
 };
 
 export const checkScore = (key: string, type: 'gan' | 'jiji'): number => {

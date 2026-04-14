@@ -21,7 +21,11 @@ const ElementBoxComp = ({ name, type }: { name: string; type: 'gan' | 'jiji' }) 
             </span>
 
             {name !== '' && (
-                <div className={`absolute right-2.5 bottom-2.5 text-sm ${colorName}`}>{name}</div>
+                <div
+                    className={`absolute right-2.5 bottom-2.5 text-sm ${defaultTextColor(colorName)}`}
+                >
+                    {name}
+                </div>
             )}
         </div>
     );

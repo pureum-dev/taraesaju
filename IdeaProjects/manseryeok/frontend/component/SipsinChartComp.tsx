@@ -68,7 +68,7 @@ const SipsinChartComp = ({ columnData }: DivChartProps) => {
                                     style={{ width: `calc(100% / ${columnData.length})` }}
                                     className={`flex justify-center items-center min-w-20 h-full p-2 ${
                                         colIdx !== columnData.length - 1 && 'border-r'
-                                    }  text-sm text-center ${rowItem.className}`}
+                                    }  text-center ${rowItem.className}`}
                                 >
                                     {rowItem.cellRender
                                         ? rowItem.cellRender(colItem)

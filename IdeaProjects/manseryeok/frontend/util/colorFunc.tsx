@@ -54,15 +54,15 @@ export const makeBgColorAlpha = (_colorName: string) => {
 export const makeTextColor = (_colorName: string) => {
     switch (_colorName) {
         case '검은':
-            return 'color-gray-900';
+            return 'text-gray-900';
         case '하얀':
-            return 'color-gray-500';
+            return 'text-gray-400';
         case '푸른':
-            return 'color-greenmint-500 dark:color-greenmint-500';
+            return 'text-greenmint-500 dark:text-greenmint-500';
         case '붉은':
-            return 'color-coral-500 dark:color-coral-500';
+            return 'text-coral-500 dark:text-coral-500';
         case '노란':
-            return 'color-lemon-500 dark:color-lemon-500';
+            return 'text-lemon-500 dark:text-lemon-500';
         default:
             return '';
     }

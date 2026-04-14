@@ -11,6 +11,5 @@ export interface OhaengStrengthData {
     score: number;
     percent: number;
     standard: string;
-    isBalanced: boolean;
     sipsinDataList: SipsinStrengthData[];
 }

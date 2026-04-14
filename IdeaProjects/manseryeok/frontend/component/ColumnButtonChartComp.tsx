@@ -35,7 +35,6 @@ export default function ColumnButtonChartComp({
         const daeunRow = [
             {
                 key: 'daeunNum',
-                className: 'text-sm',
             },
             {
                 key: 'ganSipsin',
@@ -88,7 +87,7 @@ export default function ColumnButtonChartComp({
             },
             {
                 key: 'ganSipsin',
-                className: '',
+                className: 'text-sm',
             },
             {
                 key: 'gan',
@@ -118,15 +117,15 @@ export default function ColumnButtonChartComp({
             },
             {
                 key: 'jijiSipsin',
-                className: '',
+                className: 'text-sm',
             },
             {
                 key: 'woonsung',
-                className: '',
+                className: 'text-sm',
             },
             {
                 key: 'sinsal',
-                className: '',
+                className: 'text-sm',
             },
         ];
 

@@ -2,7 +2,7 @@ import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
 import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
-import { DaeunData, SeunData } from './luckyDataInterface';
+import { DaeunData, SeunData } from '@/type/luckyDataInterface';
 
 export interface CorrectBirthDay {
     date: string;
@@ -47,7 +47,7 @@ export interface BirthPointData {
 export interface BirthAllData {
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
-    ohaengStrength: OhaengStrengthData[];
+    ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] };
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];
     seun: SeunData[][];

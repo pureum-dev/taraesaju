@@ -2,17 +2,21 @@ import { create } from 'zustand';
 
 interface ModalState {
     modalData: any;
-    getModalData: () => any;
     setModalData: (value: any) => void;
     resetModalData: () => void;
+
+    modalCloseEvent: () => void;
+    setModalCloseEvent: (value: any) => void;
 }
 
 export const useModalStore = create<ModalState>((set, get) => ({
     modalData: null,
 
-    getModalData: () => get().modalData,
-
     setModalData: (value) => set({ modalData: value }),
 
     resetModalData: () => set({ modalData: null }),
+
+    modalCloseEvent: () => {},
+
+    setModalCloseEvent: (modalCloseEvent) => set({ modalCloseEvent }),
 }));

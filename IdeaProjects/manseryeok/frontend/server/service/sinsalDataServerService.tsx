@@ -5,7 +5,6 @@ import { jiji } from '@/common/const/jijiConst';
 import { CheonganType, JijiType, ColumnKeyType } from '@/type/basicType';
 import { BirthColumnData } from '@/type/birthDataInterface';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { cheongan } from '@/common/const/cheonganConst';
 import { sinsal } from '@/common/const/sinsalConst';
 
@@ -115,17 +114,14 @@ export const checkSinsalData = (
 
             //전체 기둥
             if (checkGoigangsal(targetGan, targetJiji)) {
-                ganSinsalList.push('괴강살');
                 jijiSinsalList.push('괴강살');
             }
 
             if (checkHongyeomsal(targetGan, targetJiji)) {
-                ganSinsalList.push('홍염살');
                 jijiSinsalList.push('홍염살');
             }
 
             if (checkBaekhosal(dayGan, dayJiji) && checkBaekhosal(targetGan, targetJiji)) {
-                ganSinsalList.push('백호살');
                 jijiSinsalList.push('백호살');
             }
 
@@ -194,18 +190,18 @@ export const checkYuckmasal = (defaultJiji: JijiType, targetJiji: JijiType): boo
         case '자':
         case '진':
         case '신':
-            return targetJiji === '신';
+            return targetJiji === '인';
         case '축':
         case '사':
         case '유':
-            return targetJiji === '사';
+            return targetJiji === '해';
         case '인':
         case '오':
         case '술':
-            return targetJiji === '인';
+            return targetJiji === '신';
 
         default:
-            return targetJiji === '해';
+            return targetJiji === '사';
     }
 };
 
@@ -213,20 +209,29 @@ export const checkYuckmasal = (defaultJiji: JijiType, targetJiji: JijiType): boo
 export const checkGwimungwansal = (defaultJiji: JijiType, targetJiji: JijiType): boolean => {
     switch (defaultJiji) {
         case '자':
-        case '진':
-        case '신':
-            return targetJiji === '신';
+            return targetJiji === '유';
         case '축':
-        case '사':
-        case '유':
-            return targetJiji === '사';
+            return targetJiji === '오';
         case '인':
-        case '오':
-        case '술':
-            return targetJiji === '인';
-
-        default:
+            return targetJiji === '미';
+        case '묘':
+            return targetJiji === '신';
+        case '진':
             return targetJiji === '해';
+        case '사':
+            return targetJiji === '술';
+        case '오':
+            return targetJiji === '축';
+        case '미':
+            return targetJiji === '인';
+        case '신':
+            return targetJiji === '묘';
+        case '유':
+            return targetJiji === '자';
+        case '술':
+            return targetJiji === '사';
+        default:
+            return targetJiji === '진';
     }
 };
 
@@ -494,7 +499,7 @@ export const checkHyunchimsal = (targetHanja: string): boolean => {
         case '辛':
         case '卯':
         case '午':
-        case '未':
+        case '申':
             return true;
         default:
             return false;

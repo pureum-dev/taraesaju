@@ -2,9 +2,10 @@
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 /** lib */
-import KoreanLunarCalendar from 'korean-lunar-calendar';
+import dayjs from 'dayjs';
 import {
     UserRoundIcon,
     SunIcon,
@@ -12,8 +13,15 @@ import {
     CheckCircleIcon,
     CircleXIcon,
     MapPinnedIcon,
+    FileTextIcon,
+    MessageSquareTextIcon,
+    PentagonIcon,
+    CloverIcon,
+    GhostIcon,
+    ClubIcon,
 } from 'lucide-react';
 import { useDataStore } from '@/lib/store/useDataStore';
+import { useModalStore } from '@/lib/store/useModalDataStore';
 
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
@@ -22,18 +30,21 @@ import { ohaeng } from '@/common/const/ohaengConst';
 
 import { getCSSVariable, makeTextColor } from '@/util/colorFunc';
 import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
+import { calculateCalendar } from '@/util/commonFunc';
 
 import SajuChartGroupComp from '@/component/SajuChartGroupComp';
 import EchartComp from '@/lib/EchartComp';
 import SubTitleComp from '@/component/SubTitleComp';
 import SipsinChartComp from '@/component/SipsinChartComp';
-
-/** type & interface*/
-import { CheonganType, ColumnItem, JijiType } from '@/type/basicType';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import SectionContents from '@/component/SectionContents';
 import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
 
-/** interface */
+/** type & interface*/
+import { ColumnItem } from '@/type/basicType';
+import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import { birthDataInterface } from '@/service/birthDataService';
+import { DaeunData, SeunData } from '@/type/luckyDataInterface';
+
 interface ChartData {
     value: number;
     name: string;
@@ -41,27 +52,108 @@ interface ChartData {
     emphasis?: Record<string, any>;
 }
 
+const SajuKeyword = ({ children }: { children?: React.ReactNode }) => {
+    return (
+        <li className="py-1 px-4 rounded-2xl border-2 border-mint-400 text-mint-500 text-nowrap">
+            {'#'}
+            {children}
+        </li>
+    );
+};
+
+const calculateInitialIdx = (
+    profileData: birthDataInterface,
+    daeun: DaeunData[],
+    seun: SeunData[][],
+) => {
+    let daeunIdx = 0;
+    let seunIdx = 0;
+
+    const _calender = calculateCalendar(profileData);
+    if (_calender) {
+        const solarDate = _calender.getSolarCalendar();
+        const currentYear = dayjs().year();
+        const diff = currentYear - solarDate.year + 1;
+
+        for (let idx = 0; idx < daeun.length; idx++) {
+            if (idx === daeun.length - 1 && daeun[idx].daeunNum <= diff) {
+                daeunIdx = idx;
+                break;
+            } else if (daeun[idx].daeunNum <= diff && diff < daeun[idx + 1].daeunNum) {
+                daeunIdx = idx;
+                break;
+            }
+        }
+
+        const targetSeun = daeunIdx ? seun[daeunIdx] : [];
+        for (let idx = 0; idx < targetSeun.length; idx++) {
+            if (targetSeun[idx].yearNum && currentYear === targetSeun[idx].yearNum) {
+                seunIdx = idx;
+                break;
+            }
+        }
+    }
+
+    return {
+        daeunIdx: daeunIdx,
+        seunIdx: seunIdx,
+    };
+};
+
 export default function ManseryeokPage() {
+    const router = useRouter();
     const profileData = useDataStore((state) => state.profileData);
     const data = useDataStore((state) => state.data);
+    const setModalData = useModalStore((state) => state.setModalData);
 
     const [isAdjustElement, setIsAdjustment] = useState(true);
-    const [elementListData, setElementListData] = useState<OhaengStrengthData[]>(
-        () => data?.ohaengStrength ?? [],
+    const [isElementBalance, setIsElementBalance] = useState<boolean>(
+        () => data?.ohaengStrength.isBalanced ?? false,
     );
-    const [targetDaeun, setTargetDaeun] = useState(0);
-    const [targetSeun, setTargetSeun] = useState(0);
+    const [elementListData, setElementListData] = useState<OhaengStrengthData[]>(
+        () => data?.ohaengStrength.ohaeng ?? [],
+    );
+    const [targetDaeun, setTargetDaeun] = useState(() =>
+        data && profileData ? calculateInitialIdx(profileData, data.daeun, data.seun).daeunIdx : 0,
+    );
+    const [targetSeun, setTargetSeun] = useState(() =>
+        data && profileData ? calculateInitialIdx(profileData, data.daeun, data.seun).seunIdx : 0,
+    );
 
+    // useCallback
     const onChangeAdjustScore = useCallback(() => {
         if (data) {
             const ohaengStrength = checkOhaengStrength(data.chartCol, !isAdjustElement);
-            setElementListData(ohaengStrength);
+            setElementListData(ohaengStrength.ohaeng);
+            setIsElementBalance(ohaengStrength.isBalanced);
             setIsAdjustment((prev) => !prev);
         }
     }, [data, isAdjustElement]);
 
-    const onClickAddColumn = useCallback(() => {}, []);
+    const onClickAddColumn = useCallback((index: number, type: 'daeun' | 'seun') => {
+        if (type === 'daeun') {
+            setTargetDaeun(index);
+            setTargetSeun(0);
+        } else {
+            setTargetSeun(index);
+        }
+    }, []);
 
+    const onClickCopyPrompt = () => {
+        if (profileData && data) {
+            setModalData({
+                profileData: profileData,
+                data: data,
+                elementListData: elementListData,
+                isElementBalance: isElementBalance,
+                daeunIdx: calculateInitialIdx(profileData, data?.daeun, data?.seun).daeunIdx,
+            });
+
+            router.push('/manseryeok/modal');
+        }
+    };
+
+    // useMemo
     const columnData = useMemo<ColumnItem[]>(() => {
         if (!data) return []; // data 없을 때 안전하게 처리
 
@@ -92,22 +184,9 @@ export default function ManseryeokPage() {
     const profileList = useMemo<Record<string, any>[]>(() => {
         if (!profileData) return [];
 
-        const calendar = new KoreanLunarCalendar();
-        const splitBirthday = profileData.birthday.split('-').map((item) => Number(item));
-
-        if (profileData.calendarType === 'solar') {
-            calendar.setSolarDate(splitBirthday[0], splitBirthday[1], splitBirthday[2]);
-        } else {
-            calendar.setLunarDate(
-                splitBirthday[0],
-                splitBirthday[1],
-                splitBirthday[2],
-                profileData.calendarType === 'leap',
-            );
-        }
-
-        const solarDate = calendar.getSolarCalendar();
-        const lunarDate = calendar.getLunarCalendar();
+        const calendar = calculateCalendar(profileData);
+        const solarDate = calendar?.getSolarCalendar();
+        const lunarDate = calendar?.getLunarCalendar();
 
         return [
             {
@@ -121,7 +200,9 @@ export default function ManseryeokPage() {
                 icon: <SunIcon className="w-4" />,
                 value: (
                     <span>
-                        <span>{`${solarDate.year}-${solarDate.month}-${solarDate.day}`}</span>
+                        <span>
+                            {solarDate && `${solarDate.year}-${solarDate.month}-${solarDate.day}`}
+                        </span>
                         <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
                     </span>
                 ),
@@ -132,7 +213,9 @@ export default function ManseryeokPage() {
                 icon: <MoonIcon className="w-4" />,
                 value: (
                     <span>
-                        <span>{`${lunarDate.year}-${lunarDate.month}-${lunarDate.day}`}</span>
+                        <span>
+                            {lunarDate && `${lunarDate.year}-${lunarDate.month}-${lunarDate.day}`}
+                        </span>
                         <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
                     </span>
                 ),
@@ -257,7 +340,7 @@ export default function ManseryeokPage() {
         const daeunList = [...data.daeun];
         const columnList = daeunList.map((item, idx) => {
             return {
-                key: idx,
+                key: String(idx),
                 ...item,
             };
         });
@@ -271,7 +354,7 @@ export default function ManseryeokPage() {
         const seunList = [...data.seun[targetDaeun]];
         const columnList = seunList.map((item, idx) => {
             return {
-                key: idx,
+                key: String(idx),
                 ...item,
             };
         });
@@ -329,6 +412,46 @@ export default function ManseryeokPage() {
         return ohaengChartArr;
     }, [elementListData]);
 
+    const summaryData = useMemo(() => {
+        const dupArr = [
+            data?.chartCol.year.ganDuplication,
+            data?.chartCol.year.jijiDuplication,
+            data?.chartCol.month.ganDuplication,
+            data?.chartCol.month.jijiDuplication,
+            data?.chartCol.day.ganDuplication,
+            data?.chartCol.day.jijiDuplication,
+            data?.chartCol.time?.ganDuplication,
+            data?.chartCol.time?.jijiDuplication,
+        ];
+
+        const dupSet = new Set<string>();
+        dupArr.forEach((item) => item && dupSet.add(item));
+
+        const pointList = [...dupSet];
+        elementListData.forEach((item) => {
+            if (item.percent >= 37.5) pointList.push(`${item.element} 과다`);
+            else if (item.percent === 0) pointList.push(`${item.element} 부족`);
+        });
+
+        return (
+            data && (
+                <>
+                    {pointList.map(
+                        (item, idx) => item && <SajuKeyword key={`${idx}`}>{item}</SajuKeyword>,
+                    )}
+                </>
+            )
+        );
+    }, [data, elementListData]);
+
+    // useEffect
+    useEffect(() => {
+        if (data === null || profileData === null) {
+            router.back();
+        }
+    }, [data, profileData]);
+
+    // return
     return data ? (
         <div className="flex flex-col w-full p-8 gap-8">
             {/**  상단 인적 정보 + 사주 차트 **/}
@@ -407,12 +530,12 @@ export default function ManseryeokPage() {
                 </article>
             </section>
             {/** 내 사주 한 줄 요약 */}
-            {/*<SectionContents
+            <SectionContents
                 icon={<FileTextIcon />}
                 title={`사주 한 줄 요약`}
                 titleSide={
                     <button
-                        className="flex flex-nowrap gap-2 medium bg-primary"
+                        className="flex flex-nowrap gap-2 small button-bg-primary"
                         onClick={onClickCopyPrompt}
                     >
                         <MessageSquareTextIcon className="w-4" />
@@ -423,39 +546,20 @@ export default function ManseryeokPage() {
             >
                 <ul className="flex flex-wrap flex-row gap-2 w-full font-bold rounded-2xl">
                     <SajuKeyword>
-                        {data.chartCol.day.solartermData.name +
-                            data.chartCol.day.earthyBranchesData.name +
-                            '일주'}
+                        {data.chartCol.day.gan + data.chartCol.day.jiji + '일주'}
                     </SajuKeyword>
-                    <SajuKeyword>{data.strength.strengthType + '사주'}</SajuKeyword>
+                    <SajuKeyword>{data.point.strength.strengthType + '사주'}</SajuKeyword>
                     <SajuKeyword>
-                        {data.ohaeng.hasAllElements ? '오행 균형(오행구족)' : '오행 불균형'}
+                        {isElementBalance ? '오행 균형(오행구족)' : '오행 불균형'}
                     </SajuKeyword>
-                    {mainElementList.length > 0 &&
-                        mainElementList.map((item, idx) => (
-                            <SajuKeyword key={'main_element_' + idx}>
-                                {item.name + item.standard}
-                            </SajuKeyword>
-                        ))}
-                    {data.point.duplication.solarterm.length > 0 &&
-                        data.point.duplication.solarterm.map((item: string, idx: number) => (
-                            <SajuKeyword key={'sol_dup_' + idx}>{item}</SajuKeyword>
-                        ))}
-                    {data.point.duplication.earthyBranches.length > 0 &&
-                        data.point.duplication.earthyBranches.map((item: string, idx: number) => (
-                            <SajuKeyword key={'sol_dup_' + idx}>{item}</SajuKeyword>
-                        ))}
-                    {uniqueSinsalList.length > 0 &&
-                        uniqueSinsalList.map((item, idx) => (
-                            <SajuKeyword key={'sinsal_' + idx}>{item}</SajuKeyword>
-                        ))}
+                    {summaryData}
                 </ul>
-            </SectionContents>*/}
+            </SectionContents>
 
             {/** 오행 / 십성 */}
             <section className="flex flex-col w-full gap-8 lg:flex-row ">
                 <article className="flex flex-col w-full h-full lg:w-1/2">
-                    <SubTitleComp text={'오행 분석'} />
+                    <SubTitleComp title={'오행 분석'} icon={<PentagonIcon />} />
                     <div className="flex flex-col w-full h-90">
                         <div className="flex justify-end pb-3">
                             <div className="flex flex-nowrap items-center">
@@ -484,11 +588,15 @@ export default function ManseryeokPage() {
                                                 }`}
                                             >
                                                 <div
-                                                    className={`flex flex-1 justify-center items-center h-full border-r ${makeTextColor(ohaeng[item.element].color)}`}
+                                                    className={`flex flex-1 justify-center items-center h-full border-r`}
                                                 >
-                                                    <span>
+                                                    <span
+                                                        className={`font-bold ${makeTextColor(ohaeng[item.element].color)}`}
+                                                    >
                                                         {item.element}
-                                                        <span>{`(${ohaeng[item.element].hanja})`}</span>
+                                                        <span
+                                                            className={`${makeTextColor(ohaeng[item.element].color)}`}
+                                                        >{`(${ohaeng[item.element].hanja})`}</span>
                                                     </span>
                                                 </div>
                                                 <div className="flex flex-1 justify-center items-center h-full border-r text-sm">
@@ -504,7 +612,7 @@ export default function ManseryeokPage() {
                                                                     key={sipsinIdx}
                                                                     className={`flex flex-row w-full h-1/2 ${sipsinIdx === 0 && 'border-b'}`}
                                                                 >
-                                                                    <div className="flex flex-1 justify-center items-center border-r">
+                                                                    <div className="flex flex-1 justify-center items-center text-sm border-r">
                                                                         {sipsinItem?.name}
                                                                     </div>
                                                                     <div className="flex flex-1 justify-center items-center text-sm">
@@ -528,7 +636,7 @@ export default function ManseryeokPage() {
                     </div>
                 </article>
                 <article className="flex flex-col w-full h-full lg:w-1/2">
-                    <SubTitleComp text={'신살 분석'} />
+                    <SubTitleComp title={'신살 분석'} icon={<GhostIcon />} />
                     <div className="flex w-full h-90">
                         <SipsinChartComp columnData={sinsalColumnData} />
                     </div>
@@ -537,7 +645,10 @@ export default function ManseryeokPage() {
 
             {/** 대운 */}
             <section className="flex flex-col w-full">
-                <SubTitleComp text={`대운 - 대운 수 : ${data?.daeun[0].daeunNum}`} />
+                <SubTitleComp
+                    title={`대운 - 대운 수 : ${data?.daeun[0].daeunNum}`}
+                    icon={<CloverIcon />}
+                />
                 <div className="flex w-full">
                     <ColumnButtonChartComp
                         columnData={daeunColumnData}
@@ -550,7 +661,7 @@ export default function ManseryeokPage() {
 
             {/** 세운 */}
             <section className="flex flex-col w-full">
-                <SubTitleComp text={`세운`} />
+                <SubTitleComp title={`세운`} icon={<ClubIcon />} />
                 <div className="flex w-full">
                     <ColumnButtonChartComp
                         columnData={seunColumnData}
