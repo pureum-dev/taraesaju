@@ -276,7 +276,10 @@ export const calculateYearDivision = (solarBirth: Dayjs): CorrectTargetDivision 
         return item.sol_year === String(solarBirth.year()) && item.date_name === '입춘';
     });
 
-    const targetSpringday = dayjs(`${targetSpringDate[0].locdate}`, 'YYYYMMDD');
+    const targetSpringday = dayjs(
+        `${targetSpringDate[0].locdate}T${targetSpringDate[0].kst}`,
+        'YYYYMMDDTHHmm',
+    );
 
     const solarYear = solarBirth.year();
     const solarMonth = solarBirth.month() + 1;

@@ -44,8 +44,8 @@ export default function BirthdayInputComp() {
             nickName: '',
             gender: 'M',
             calendarType: 'solar',
-            birthday: '',
-            birthtime: '',
+            birthday: null,
+            birthtime: null,
             isNone: false,
             isDivideTime: false,
             birthLocation: '',
@@ -53,19 +53,7 @@ export default function BirthdayInputComp() {
     });
 
     const watchGender = watch('gender');
-
-    useEffect(() => {
-        return () => resetRegionJsonData();
-    }, []);
-
-    useEffect(() => {
-        if (RegionJsonData) {
-            setValue(
-                'birthLocation',
-                `${RegionJsonData.geo_name} / ${RegionJsonData.alternate_name}`,
-            );
-        }
-    }, [RegionJsonData, setValue]);
+    const watchIsNone = watch('isNone');
 
     const onFocusBirthLocate = (e: React.FocusEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -91,26 +79,40 @@ export default function BirthdayInputComp() {
         }
     });
 
+    useEffect(() => {
+        return () => resetRegionJsonData();
+    }, []);
+
+    useEffect(() => {
+        if (RegionJsonData) {
+            setValue(
+                'birthLocation',
+                `${RegionJsonData.geo_name} / ${RegionJsonData.alternate_name}`,
+            );
+        }
+    }, [RegionJsonData, setValue]);
+
     return (
         <div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160">
             <form className="flex flex-col items-start gap-5 w-full px-8 py-12 border border-gray-200 rounded-3xl">
                 <label htmlFor="nickName" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">닉네임</span>
                     <input
-                        {...register('nickName', { required: true, maxLength: 80 })}
+                        {...register('nickName', {
+                            required: '닉네임을 입력해주세요.',
+                            maxLength: {
+                                value: 80,
+                                message: '닉네임은 80자 이하로 입력해주세요.',
+                            },
+                        })}
                         id="nickName"
                         type="text"
                         placeholder="닉네임을 입력해주세요."
                         className={`${errors.nickName && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                     />
-                    {errors.nickName?.type === 'required' && (
-                        <p role="alert" className="text-alert">
-                            닉네임을 입력해주세요
-                        </p>
-                    )}
-                    {errors.nickName?.type === 'maxLength' && (
-                        <p role="alert" className="text-alert">
-                            닉네임은 80자 이하로 입력해주세요
+                    {errors.nickName?.message && (
+                        <p role="alert" className="text-alert ml-3">
+                            {errors.nickName.message}
                         </p>
                     )}
                 </label>
@@ -155,16 +157,16 @@ export default function BirthdayInputComp() {
                         </select>
                         <div className="flex flex-col gap-1 w-3/4 ">
                             <input
-                                {...register('birthday', { required: true })}
+                                {...register('birthday', { required: '생년월일을 입력해주세요' })}
                                 id="birthday"
                                 type="date"
                                 min="1900-01-01"
-                                max="2050-12-31"
+                                max="2050-11-30"
                                 className={`w-full ${errors.birthday && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                             />
-                            {errors.birthday?.type === 'required' && (
-                                <p role="alert" className="text-alert">
-                                    생년월일을 입력해주세요
+                            {errors.birthday?.message && (
+                                <p role="alert" className="text-alert ml-3">
+                                    {errors.birthday.message}
                                 </p>
                             )}
                         </div>
@@ -175,13 +177,22 @@ export default function BirthdayInputComp() {
                     <div className="flex flex-row flex-wrap items-center w-full gap-4">
                         <div className="flex flex-col gap-1 w-68">
                             <input
-                                {...register('birthtime', { required: true })}
+                                {...register('birthtime', {
+                                    validate: {
+                                        validTime: (value) => {
+                                            if (!watchIsNone && !value) {
+                                                return '태어난 시간을 입력해주세요';
+                                            }
+                                            return true;
+                                        },
+                                    },
+                                })}
                                 id="birthtime"
                                 type="time"
                                 className={`w-full ${errors.birthtime && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                             />
                             {errors.birthtime?.message && (
-                                <p role="alert" className="text-alert">
+                                <p role="alert" className="text-alert ml-3">
                                     {errors.birthtime.message}
                                 </p>
                             )}
@@ -207,7 +218,7 @@ export default function BirthdayInputComp() {
                                 </div>
                             </div>
                             {errors.birthtime?.message && (
-                                <p role="alert" className="text-transparent">
+                                <p role="alert" className="text-transparent ml-3">
                                     {errors.birthtime.message}
                                 </p>
                             )}
@@ -218,7 +229,10 @@ export default function BirthdayInputComp() {
                     <span className="text-sm">태어난 장소</span>
                     <div className="relative">
                         <input
-                            {...register('birthLocation', { required: true, maxLength: 80 })}
+                            {...register('birthLocation', {
+                                required: '태어난 장소를 입력해주세요',
+                                maxLength: 80,
+                            })}
                             id="birthLocation"
                             type="text"
                             placeholder="태어난 장소를 입력해주세요."
@@ -229,9 +243,9 @@ export default function BirthdayInputComp() {
                             <Search size={18} />
                         </div>
                     </div>
-                    {errors.birthLocation?.type === 'required' && (
-                        <p role="alert" className="text-alert">
-                            태어난 장소를 입력해주세요
+                    {errors.birthLocation?.message && (
+                        <p role="alert" className="text-alert ml-3">
+                            {errors.birthLocation.message}
                         </p>
                     )}
                 </label>

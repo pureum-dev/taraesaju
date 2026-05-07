@@ -5,8 +5,8 @@ export interface birthDataInterface {
     nickName: string;
     gender: 'M' | 'F';
     calendarType: 'solar' | 'lunar' | 'leap';
-    birthday: string;
-    birthtime: string;
+    birthday: string | null;
+    birthtime: string | null;
     isNone: boolean;
     isDivideTime: boolean;
     birthLocation: string;
