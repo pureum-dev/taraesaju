@@ -1,35 +1,25 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 /** lib */
 import dayjs from 'dayjs';
 import {
-    UserRoundIcon,
-    SunIcon,
-    MoonIcon,
     CheckCircleIcon,
     CircleXIcon,
-    MapPinnedIcon,
-    FileTextIcon,
-    MessageSquareTextIcon,
     PentagonIcon,
     CloverIcon,
     GhostIcon,
     ClubIcon,
 } from 'lucide-react';
 import { useDataStore } from '@/lib/store/useDataStore';
-import { useModalStore } from '@/lib/store/useModalDataStore';
 
 /** Custom */
-import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
 
-import { getCSSVariable, makeTextColor } from '@/util/colorFunc';
-import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
+import { getCSSVariable } from '@/util/colorFunc';
 import { calculateCalendar } from '@/util/commonFunc';
 
 import SajuChartGroupComp from '@/component/SajuChartGroupComp';
@@ -38,7 +28,7 @@ import SubTitleComp from '@/component/SubTitleComp';
 import SipsinChartComp from '@/component/SipsinChartComp';
 import SectionContents from '@/component/SectionContents';
 import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
-import IljuCharacterComp from '@/component/IljuCharacterComp';
+import AsideContents from '@/component/AsideContents';
 
 /** type & interface*/
 import { ColumnItem } from '@/type/basicType';
@@ -105,9 +95,7 @@ export default function ManseryeokPage() {
     const router = useRouter();
     const profileData = useDataStore((state) => state.profileData);
     const data = useDataStore((state) => state.data);
-    const setModalData = useModalStore((state) => state.setModalData);
 
-    const [isAdjustElement, setIsAdjustment] = useState(true);
     const [isElementBalance, setIsElementBalance] = useState<boolean>(
         () => data?.ohaengStrength.isBalanced ?? false,
     );
@@ -121,15 +109,13 @@ export default function ManseryeokPage() {
         data && profileData ? calculateInitialIdx(profileData, data.daeun, data.seun).seunIdx : 0,
     );
 
-    // useCallback
-    const onChangeAdjustScore = useCallback(() => {
-        if (data) {
-            const ohaengStrength = checkOhaengStrength(data.chartCol, !isAdjustElement);
-            setElementListData(ohaengStrength.ohaeng);
-            setIsElementBalance(ohaengStrength.isBalanced);
-            setIsAdjustment((prev) => !prev);
-        }
-    }, [data, isAdjustElement]);
+    const onChangeAdjustScore = useCallback(
+        (adjustData: { isBalanced: boolean; ohaeng: OhaengStrengthData[] }) => {
+            setElementListData(adjustData.ohaeng);
+            setIsElementBalance(adjustData.isBalanced);
+        },
+        [],
+    );
 
     const onClickAddColumn = useCallback((index: number, type: 'daeun' | 'seun') => {
         if (type === 'daeun') {
@@ -139,20 +125,6 @@ export default function ManseryeokPage() {
             setTargetSeun(index);
         }
     }, []);
-
-    const onClickCopyPrompt = () => {
-        if (profileData && data) {
-            setModalData({
-                profileData: profileData,
-                data: data,
-                elementListData: elementListData,
-                isElementBalance: isElementBalance,
-                daeunIdx: calculateInitialIdx(profileData, data?.daeun, data?.seun).daeunIdx,
-            });
-
-            router.push('/manseryeok/modal');
-        }
-    };
 
     // useMemo
     const columnData = useMemo<ColumnItem[]>(() => {
@@ -181,83 +153,6 @@ export default function ManseryeokPage() {
             },
         ];
     }, [data]);
-
-    const profileList = useMemo<Record<string, any>[]>(() => {
-        if (!profileData) return [];
-
-        const calendar = calculateCalendar(profileData);
-        const solarDate = calendar?.getSolarCalendar();
-        const lunarDate = calendar?.getLunarCalendar();
-
-        return [
-            {
-                title: '성별',
-                icon: <UserRoundIcon className="w-4" />,
-                value: <span>{`${profileData.gender === 'M' ? '남성' : '여성'}`}</span>,
-                prerequisite: true,
-            },
-            {
-                title: '양력',
-                icon: <SunIcon className="w-4" />,
-                value: (
-                    <span>
-                        <span>
-                            {solarDate &&
-                                `${solarDate.year}-${String(solarDate.month).padStart(2, '0')}-${String(solarDate.day).padStart(2, '0')}`}
-                        </span>
-                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime ?? ''}`}</span>
-                    </span>
-                ),
-                prerequisite: true,
-            },
-            {
-                title: `음력${profileData.calendarType === 'leap' ? '(윤달)' : ''}`,
-                icon: <MoonIcon className="w-4" />,
-                value: (
-                    <span>
-                        <span>
-                            {lunarDate &&
-                                `${lunarDate.year}-${String(lunarDate.month).padStart(2, '0')}-${String(lunarDate.day).padStart(2, '0')}`}
-                        </span>
-                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime ?? ''}`}</span>
-                    </span>
-                ),
-                prerequisite: true,
-            },
-            /*{
-                    title: '보정값',
-                    icon: <SparkleIcon className="w-3.5" />,
-                    value: (
-                        <div className="flex flex-col gap-0.5">
-                            <span className="flex items-center gap-2 border-b border-gray-900 font-bold dark:border-gray-50">
-                                <span>
-                                    {`${data.birthData.solYear}-${data.birthData.solMonth}-${data.birthData.solDay}`}
-                                </span>
-                                <span>{`${data.birthData.time}`}</span>
-                            </span>
-                            <span className="text-mint-600 font-bold dark:text-mint-400">
-                                {`( 지역보정: ${Math.trunc(data.birthData.deltaMinutes)}분 ${
-                                    data.birthData.summertimeMinutes
-                                        ? ', 서머타임: ' +
-                                          Math.trunc(data.birthData.summertimeMinutes) +
-                                          '분'
-                                        : ''
-                                } )`}
-                            </span>
-                        </div>
-                    ),
-                    prerequisite: !data.info.timeNone,
-                },*/
-            {
-                title: `도시`,
-                icon: <MapPinnedIcon className="w-4" />,
-                value: (
-                    <span>{`${profileData.location.geo_name}/${profileData.location.alternate_name}`}</span>
-                ),
-                prerequisite: true,
-            },
-        ];
-    }, [profileData]);
 
     const pointList = useMemo<Record<string, any>[]>(() => {
         if (!data) return [];
@@ -448,7 +343,7 @@ export default function ManseryeokPage() {
     // useEffect
     useEffect(() => {
         if (data === null || profileData === null) {
-            router.back();
+            router.push('/');
         }
     }, [data, profileData]);
 
@@ -456,70 +351,33 @@ export default function ManseryeokPage() {
         data && (
             <div className="flex flex-1 flex-col justify-start items-start w-full gap-8 p-8  md:items-stretch">
                 <section className="flex flex-col gap-4 md:flex-row">
-                    <aside className="flex flex-col w-full gap-4 rounded-2xl md:w-1/3">
-                        <article className="flex flex-2 flex-col justify-center items-center w-full min-h-88  p-6 gap-4 border rounded-2xl">
-                            <div className="flex flex-col items-center">
-                                <IljuCharacterComp
-                                    gan={'신'} //{data.chartCol.day.gan}
-                                    jiji={'유'} //{data.chartCol.day.jiji}
-                                />
-                                <span className="truncate w-full text-center text-xl font-extrabold mt-2">
-                                    {profileData?.nickName}
-                                </span>
-                            </div>
-                            <div className="flex justify-center items-center w-full">
-                                <ul className="flex flex-row w-full gap-1.5 md:flex-col">
-                                    {profileList &&
-                                        profileList.map((profileItem, profileIdx) => {
-                                            return (
-                                                profileItem.prerequisite && (
-                                                    <Fragment key={profileIdx}>
-                                                        <li className="flex flex-col w-1/4 text-nowrap text-sm md:flex-row md:w-full">
-                                                            <span className="flex items-center w-22 font-bold text-gray-700 dark:text-gray-300">
-                                                                {profileItem.icon && (
-                                                                    <span className="flex justify-start items-center w-4 h-4 mr-1">
-                                                                        {profileItem.icon}
-                                                                    </span>
-                                                                )}
-                                                                {profileItem.title}
-                                                            </span>
-                                                            <span>{profileItem.value}</span>
-                                                        </li>
-                                                    </Fragment>
-                                                )
-                                            );
-                                        })}
-                                </ul>
-                            </div>
-                            <div className="w-full">
-                                <button className="w-full medium button-bg-primary">
-                                    프로필 수정
-                                </button>
-                            </div>
-                        </article>
-                        <article className="flex-1 w-full min-h-40 rounded-2xl border">
-                            <ul className="flex flex-col gap-1.5 w-full p-6  ">
-                                {pointList &&
-                                    pointList.map((infoItem, infoIdx) => {
-                                        return (
-                                            infoItem.prerequisite && (
-                                                <li key={infoIdx} className="flex text-sm">
-                                                    <span className="flex items-center w-22 font-bold text-gray-700 dark:text-gray-300">
-                                                        {infoItem.icon && (
-                                                            <span className="flex justify-start items-center w-4 h-4 mr-1">
-                                                                {infoItem.icon}
-                                                            </span>
-                                                        )}
-                                                        {infoItem.title}
-                                                    </span>
-                                                    <span>{infoItem.value}</span>
-                                                </li>
-                                            )
-                                        );
-                                    })}
-                            </ul>
-                        </article>
-                    </aside>
+                    <AsideContents
+                        profileData={profileData}
+                        className="md:w-1/3"
+                        data={data}
+                        onChangeScore={onChangeAdjustScore}
+                    >
+                        <ul className="flex flex-col gap-1.5 w-full p-6  ">
+                            {pointList &&
+                                pointList.map((infoItem, infoIdx) => {
+                                    return (
+                                        infoItem.prerequisite && (
+                                            <li key={infoIdx} className="flex text-sm">
+                                                <span className="flex items-center w-22 font-bold text-gray-700 dark:text-gray-300">
+                                                    {infoItem.icon && (
+                                                        <span className="flex justify-start items-center w-4 h-4 mr-1">
+                                                            {infoItem.icon}
+                                                        </span>
+                                                    )}
+                                                    {infoItem.title}
+                                                </span>
+                                                <span>{infoItem.value}</span>
+                                            </li>
+                                        )
+                                    );
+                                })}
+                        </ul>
+                    </AsideContents>
                     <article className="flex flex-col w-full gap-8 md:gap-4 md:w-2/3">
                         {/* 사주 차트 */}
                         <div className="w-full">
@@ -546,22 +404,7 @@ export default function ManseryeokPage() {
                     {/** 오행 / 십성 */}
                     <article className="flex flex-col w-full gap-8 lg:flex-row ">
                         <div className="flex flex-col w-full h-full lg:w-1/2">
-                            <SectionContents
-                                title={'오행 분석'}
-                                icon={<PentagonIcon />}
-                                titleSide={
-                                    <div className="flex items-center text-sm">
-                                        <input
-                                            type="checkbox"
-                                            id="adjustScore"
-                                            name="adjustScore"
-                                            checked={isAdjustElement}
-                                            onChange={onChangeAdjustScore}
-                                        />
-                                        <label htmlFor="adjustScore">궁성 보정</label>
-                                    </div>
-                                }
-                            >
+                            <SectionContents title={'오행 분석'} icon={<PentagonIcon />}>
                                 <div className="flex flex-col w-full h-90">
                                     <div className="flex grow">
                                         <div className="w-1/2 h-full">

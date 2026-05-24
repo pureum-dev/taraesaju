@@ -28,7 +28,6 @@ const genderList = [
 export default function BirthdayInputComp() {
     const router = useRouter();
     const searchParam = useSearchParams();
-    const type = searchParam.get('type');
 
     const RegionJsonData = useRegionStore((state) => state.RegionJsonData);
     const resetRegionJsonData = useRegionStore((state) => state.resetRegionJsonData);
@@ -76,22 +75,6 @@ export default function BirthdayInputComp() {
             setData(birthData);
             router.push('/dashboard');
         }
-
-        /*if (type === 'chart') {
-            const data: BirthAllData | null = createAllBirthData(request);
-            if (data) {
-                setProfileData(request);
-                setData(data);
-                router.push('/manseryeok');
-            }
-        } else {
-            const data: BirthAllData | null = createAllBirthData(request);
-            if (data) {
-                setProfileData(request);
-                setData(data);
-                router.push(`/${type}`);
-            }
-        }*/
     });
 
     useEffect(() => {

@@ -266,7 +266,7 @@ const SajuChartGroupComp = ({
         <div className="flex flex-col">
             <ul className="flex flex-row justify-end items-center gap-6 mb-4">
                 {checkList.map((item: Record<string, string>, idx: number) => (
-                    <li key={idx} className="flex flex-row items-center">
+                    <li key={idx} className="flex flex-row items-center text-sm">
                         <input
                             type="checkbox"
                             id={item.key}

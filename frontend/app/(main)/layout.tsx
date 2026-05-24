@@ -15,7 +15,7 @@ export default function MainLayout({
         <>
             <div className="flex flex-col justify-start items-start w-full min-h-dvh p-4 bg-gray-100">
                 <Header />
-                <div className="flex flex-col flex-1 w-full justify-start items-start rounded-tr-0 rounded-tl-3xl rounded-b-3xl bg-background">
+                <div className="flex flex-col flex-1 w-full justify-start items-start rounded-3xl bg-background">
                     {children}
                 </div>
             </div>

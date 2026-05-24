@@ -1,3 +1,3 @@
 export default function ManseryeokModalPage() {
-    return null;
+    return <div></div>;
 }

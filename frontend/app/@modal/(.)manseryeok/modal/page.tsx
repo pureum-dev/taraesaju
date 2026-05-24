@@ -182,10 +182,10 @@ export default function ManseryeokModal() {
                                     ),
                             )}
                         </li>
-                        <li>
+                        {/*<li>
                             <span>현재 대운 (대운 수: {modalData.data.daeun[0].daeunNum}): </span>
                             <span>{`${currentDaeun.gan}${currentDaeun.jiji}대운`}</span>
-                        </li>
+                        </li>*/}
                     </ul>
                 )
             );
