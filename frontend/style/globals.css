@@ -7,8 +7,8 @@
     --font-jalnan-sans: 'YeogiOttaeJalnan', san-serif;
 
     /* Color */
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #fefefe;
+    --foreground: #292929;
 }
 
 @theme inline {
@@ -129,13 +129,6 @@
     --color-yellow-900: #2b2214;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
-}
-
 @layer base {
     *,
     ::after,
@@ -150,18 +143,15 @@
         box-sizing: border-box;
         font-family: 'SUIT', sans-serif;
         font-feature-settings: 'tnum' 1;
-        color: var(--color-gray-900);
+        color: var(--foreground);
 
-        border-color: var(--color-gray-300, currentColor);
+        border-color: var(--color-gray-200, currentColor);
         accent-color: var(--color-mint-500);
-
-        :where(.dark) & {
-            border-color: var(--color-gray-800, currentColor);
-        }
     }
 
     *:focus-visible {
         outline-color: var(--color-mint-500);
+        border-color: transparent;
     }
 
     p,
@@ -198,10 +188,6 @@
 
         &:hover {
             background-color: color-mix(in srgb, var(--color-gray-900) 2%, transparent);
-        }
-
-        :where(.dark) &:disabled {
-            background-color: var(--color-gray-800);
         }
 
         &.small {
@@ -251,10 +237,6 @@
                 background-repeat: no-repeat;
             }
         }
-
-        :where(.dark) & {
-            border: 1px solid var(--color-gray-700);
-        }
     }
 
     form {
@@ -278,10 +260,6 @@
             &:disabled {
                 color: var(--color-gray-400);
             }
-
-            :where(.dark) & {
-                border: 1px solid var(--color-gray-700);
-            }
         }
 
         & select {
@@ -297,14 +275,6 @@
 
             & > option {
                 background-color: var(--color-gray-50);
-            }
-
-            :where(.dark) & {
-                border: 1px solid var(--color-gray-700);
-
-                & > option {
-                    background-color: var(--color-gray-950);
-                }
             }
         }
     }
@@ -371,12 +341,6 @@
         font-size: 0.813rem;
     }
 
-    .text-full-ellipsis {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
     .loader-area {
         position: relative;
         width: 7rem;
@@ -405,6 +369,58 @@
             background-repeat: no-repeat;
             background-size: contain;
             animation: l13 3s infinite linear;
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #fdfdfd;
+    }
+
+    @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+            border-color: var(--color-gray-800, currentColor);
+        }
+
+        button,
+        a {
+            &:disabled {
+                background-color: var(--color-gray-800);
+            }
+        }
+
+        input[type='checkbox'] {
+            border: 1px solid var(--color-gray-700);
+        }
+
+        form {
+            &
+                input:is(
+                    [type='text'],
+                    [type='date'],
+                    [type='time'],
+                    [type='url'],
+                    [type='search'],
+                    [type='password'],
+                    [type='number'],
+                    [type='email']
+                ) {
+                border: 1px solid var(--color-gray-700);
+            }
+
+            & select {
+                border: 1px solid var(--color-gray-700);
+
+                & > option {
+                    background-color: var(--color-gray-950);
+                }
+            }
         }
     }
 }

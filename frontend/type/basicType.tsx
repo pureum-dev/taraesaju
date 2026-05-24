@@ -48,6 +48,8 @@ export type DivisionType =
     | '소한'
     | '대한';
 
+export type SipsinGroupType = '비겁' | '식상' | '재성' | '관성' | '인성';
+
 export type SipsinType =
     | '비견'
     | '겁재'

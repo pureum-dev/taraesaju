@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 /** Lib */
 import { Mars, Venus, Search } from 'lucide-react';
@@ -12,6 +13,7 @@ import { useDataStore } from '@/lib/store/useDataStore';
 
 /** Custom */
 import { createAllBirthData } from '@/server/service/birthDataServerService';
+import LogoSvg from '@/public/svg/logo.svg';
 
 /** Type & Interface */
 import { RegionJsonData } from '@/type/jsonDataInterface';
@@ -44,8 +46,8 @@ export default function BirthdayInputComp() {
             nickName: '',
             gender: 'M',
             calendarType: 'solar',
-            birthday: null,
-            birthtime: null,
+            birthday: '',
+            birthtime: '',
             isNone: false,
             isDivideTime: false,
             birthLocation: '',
@@ -68,7 +70,14 @@ export default function BirthdayInputComp() {
             location: RegionJsonData as RegionJsonData,
         };
 
-        if (type === 'chart') {
+        const birthData: BirthAllData | null = createAllBirthData(request);
+        if (birthData) {
+            setProfileData(request);
+            setData(birthData);
+            router.push('/dashboard');
+        }
+
+        /*if (type === 'chart') {
             const data: BirthAllData | null = createAllBirthData(request);
             if (data) {
                 setProfileData(request);
@@ -76,7 +85,13 @@ export default function BirthdayInputComp() {
                 router.push('/manseryeok');
             }
         } else {
-        }
+            const data: BirthAllData | null = createAllBirthData(request);
+            if (data) {
+                setProfileData(request);
+                setData(data);
+                router.push(`/${type}`);
+            }
+        }*/
     });
 
     useEffect(() => {
@@ -94,7 +109,10 @@ export default function BirthdayInputComp() {
 
     return (
         <div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160">
-            <form className="flex flex-col items-start gap-5 w-full px-8 py-12 border border-gray-200 rounded-3xl">
+            <form className="flex flex-col items-start gap-5 w-full px-8 py-12 border rounded-3xl">
+                <div className="flex flex-row justify-center items-center w-full">
+                    <Image src={LogoSvg} alt="logo" className="w-40 mr-4" />
+                </div>
                 <label htmlFor="nickName" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">닉네임</span>
                     <input
@@ -131,7 +149,7 @@ export default function BirthdayInputComp() {
                                         className={`flex flex-row justify-center items-center w-1/2 ${
                                             watchGender === item.value
                                                 ? 'button-bg-primary stroke-background'
-                                                : 'bg-gray-100'
+                                                : 'bg-gray-100 dark:bg-gray-800'
                                         }`}
                                     >
                                         {item.icon}
@@ -201,8 +219,8 @@ export default function BirthdayInputComp() {
                         <div className="flex flex-col gap-1">
                             <div className="flex flex-row items-center gap-4">
                                 <div className="flex flex-row items-center">
-                                    <input {...register('isNone')} type="checkbox" name="isNone" />
-                                    <label htmlFor="isNone" className="text-full-ellipsis">
+                                    <input {...register('isNone')} type="checkbox" id="isNone" />
+                                    <label htmlFor="isNone" className="truncate">
                                         시간 모름
                                     </label>
                                 </div>
@@ -210,9 +228,9 @@ export default function BirthdayInputComp() {
                                     <input
                                         {...register('isDivideTime')}
                                         type="checkbox"
-                                        name="isDivideTime"
+                                        id="isDivideTime"
                                     />
-                                    <label htmlFor="isDivideTime" className="text-full-ellipsis">
+                                    <label htmlFor="isDivideTime" className="truncate">
                                         야/조자시 적용
                                     </label>
                                 </div>
@@ -250,7 +268,6 @@ export default function BirthdayInputComp() {
                     )}
                 </label>
 
-                <div className="w-full h-[1px] my-4 bg-gray-100"></div>
                 <div className="flex flex-row w-full gap-4">
                     <button
                         type="submit"

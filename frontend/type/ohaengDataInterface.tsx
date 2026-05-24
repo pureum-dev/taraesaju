@@ -1,4 +1,4 @@
-import { OhaengType, SipsinType } from '@/type/basicType';
+import { OhaengType, SipsinGroupType, SipsinType } from '@/type/basicType';
 
 export interface SipsinStrengthData {
     name: SipsinType;
@@ -11,5 +11,6 @@ export interface OhaengStrengthData {
     score: number;
     percent: number;
     standard: string;
+    sipsinGroup?: SipsinGroupType;
     sipsinDataList: SipsinStrengthData[];
 }

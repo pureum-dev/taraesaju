@@ -4,7 +4,7 @@ import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 
 /** Type & Interface */
-import { CheonganType, OhaengType, SipsinType, JijiType } from '@/type/basicType';
+import { CheonganType, OhaengType, SipsinGroupType, SipsinType, JijiType } from '@/type/basicType';
 import { BirthColumnItem } from '@/type/baseInterface';
 
 export const columnSipsinData = (
@@ -70,21 +70,24 @@ export const checkSipsinData = (
 export const findSipsinList = (
     defaultElement: OhaengType,
     targetElement: OhaengType,
-): SipsinType[] => {
+): {
+    group?: SipsinGroupType;
+    list: SipsinType[];
+} => {
     if (defaultElement === targetElement) {
-        return ['비견', '겁재'];
+        return { group: '비겁', list: ['비견', '겁재'] };
     } else {
         const oheangData = ohaeng[defaultElement];
         const found = Object.entries(oheangData).find(([, value]) => value === targetElement);
 
         if (found) {
             const [key] = found;
-            if (key === 'output') return ['식신', '상관'];
-            if (key === 'wealth') return ['정재', '편재'];
-            if (key === 'power') return ['정관', '편관'];
-            if (key === 'resource') return ['정인', '편인'];
+            if (key === 'output') return { group: '식상', list: ['식신', '상관'] };
+            if (key === 'wealth') return { group: '재성', list: ['정재', '편재'] };
+            if (key === 'power') return { group: '관성', list: ['정관', '편관'] };
+            if (key === 'resource') return { group: '인성', list: ['정인', '편인'] };
         }
 
-        return [];
+        return { group: undefined, list: [] };
     }
 };

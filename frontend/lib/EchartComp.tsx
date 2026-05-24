@@ -186,6 +186,8 @@ const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
 
                 case 'rank_bar':
                     const rankBarChartOption = _.merge(_.cloneDeep(RANK_BAR_OPTION), option);
+                    console.log(option);
+                    console.log(rankBarChartOption);
                     return rankBarChartOption;
 
                 case 'stack_bar':

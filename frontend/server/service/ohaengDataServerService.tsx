@@ -58,7 +58,8 @@ export const checkOhaengStrength = (
             standard = '결핍';
         }
 
-        const sipsinList: SipsinType[] = findSipsinList(cheongan[data.day.gan].element, item);
+        const sipsinData = findSipsinList(cheongan[data.day.gan].element, item);
+        const sipsinList: SipsinType[] = sipsinData.list;
         const sipsinDataList = sipsinList?.map((sipsinItem) => {
             const sipsincount = sipsinCountMap.get(sipsinItem) ?? 0;
             const sipsinPercent =
@@ -72,6 +73,7 @@ export const checkOhaengStrength = (
             score: score,
             percent: percent,
             standard: standard,
+            sipsinGroup: sipsinData.group,
             sipsinDataList: sipsinDataList,
         };
     });

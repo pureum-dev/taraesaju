@@ -38,6 +38,7 @@ import SubTitleComp from '@/component/SubTitleComp';
 import SipsinChartComp from '@/component/SipsinChartComp';
 import SectionContents from '@/component/SectionContents';
 import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
+import IljuCharacterComp from '@/component/IljuCharacterComp';
 
 /** type & interface*/
 import { ColumnItem } from '@/type/basicType';
@@ -201,9 +202,10 @@ export default function ManseryeokPage() {
                 value: (
                     <span>
                         <span>
-                            {solarDate && `${solarDate.year}-${solarDate.month}-${solarDate.day}`}
+                            {solarDate &&
+                                `${solarDate.year}-${String(solarDate.month).padStart(2, '0')}-${String(solarDate.day).padStart(2, '0')}`}
                         </span>
-                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
+                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime ?? ''}`}</span>
                     </span>
                 ),
                 prerequisite: true,
@@ -214,9 +216,10 @@ export default function ManseryeokPage() {
                 value: (
                     <span>
                         <span>
-                            {lunarDate && `${lunarDate.year}-${lunarDate.month}-${lunarDate.day}`}
+                            {lunarDate &&
+                                `${lunarDate.year}-${String(lunarDate.month).padStart(2, '0')}-${String(lunarDate.day).padStart(2, '0')}`}
                         </span>
-                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime}`}</span>
+                        <span className="hidden ml-2 lg:inline">{`${profileData.birthtime ?? ''}`}</span>
                     </span>
                 ),
                 prerequisite: true,
@@ -407,8 +410,6 @@ export default function ManseryeokPage() {
             };
         });
 
-        console.log(ohaengChartArr);
-
         return ohaengChartArr;
     }, [elementListData]);
 
@@ -458,21 +459,9 @@ export default function ManseryeokPage() {
             <section className="flex flex-col gap-8 lg:flex-row lg:justify-between">
                 {/* 기본 정보 */}
                 <article className="flex flex-wrap flex-row items-start gap-8 py-6 px-4 bg-gray-100 rounded-2xl lg:flex-col lg:w-1/3 lg:items-center dark:bg-gray-900">
-                    <div
-                        className={`flex justify-center items-center w-32 h-32 p-2 rounded-full bg-white md:w-36 md:h-36 md:p-3 `}
-                    >
-                        <Image
-                            src={`/svg/character/${
-                                data.chartCol.day.gan + data.chartCol.day.jiji
-                            }.svg`}
-                            width={140}
-                            height={140}
-                            alt="일주 동물 이미지"
-                            unoptimized
-                        />
-                    </div>
+                    <IljuCharacterComp gan={data.chartCol.day.gan} jiji={data.chartCol.day.jiji} />
                     <div className="flex grow flex-col lg:w-full">
-                        <div className="flex flex-row items-baseline mb-4 lg:flex-col lg:items-center lg:mb-6">
+                        <div className="flex flex-row items-baseline mb-3 lg:flex-col lg:items-center lg:mb-6">
                             <span className="mr-2 text-xl font-extrabold lg:mr-0">
                                 {profileData?.nickName}
                             </span>
