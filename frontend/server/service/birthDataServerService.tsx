@@ -17,7 +17,7 @@ import { columnRelation } from '@/server/service/relationDataServerService';
 import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServerService';
 import { columnSipsinData } from '@/server/service/sipsinDataServerService';
 import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
-import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
+import { checkOhaengStrength, checkOhaengTemp } from '@/server/service/ohaengDataServerService';
 import { checkTargetDaeun, checkTargetSeun } from '@/server/service/luckyDataServerService';
 
 /** Data */
@@ -100,6 +100,7 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
             chartCol: chartCol ?? null,
             point: point,
             ohaengStrength: ohaengStrength,
+            ohaengTemp: checkOhaengTemp(chartCol),
             sinsal: sinsalData,
             daeun: daeun,
             seun: seun,

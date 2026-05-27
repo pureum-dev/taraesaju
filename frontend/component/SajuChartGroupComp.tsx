@@ -160,9 +160,9 @@ const SajuChartGroupComp = ({
                         jijanggan.map((item, idx) => (
                             <div
                                 key={idx}
-                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(makeColorName(item, 'gan'))} ${defaultTextColor(makeColorName(item, 'gan'))}`}
+                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(makeColorName(item.name, 'gan'))} ${defaultTextColor(makeColorName(item.name, 'gan'))}`}
                             >
-                                {item}
+                                {item.name}
                             </div>
                         ))
                     ) : (

@@ -18,9 +18,6 @@ import IljuCharacterComp from '@/component/IljuCharacterComp';
 import { birthDataInterface } from '@/service/birthDataService';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { BirthAllData } from '@/type/birthDataInterface';
-import { ohaeng } from '@/common/const/ohaengConst';
-import { cheongan } from '@/common/const/cheonganConst';
-import { makeBgColor } from '@/util/colorFunc';
 
 /** type */
 interface AsideProps {
@@ -40,6 +37,7 @@ export default function AsideContents({
 }: AsideProps) {
     const router = useRouter();
     const setModalData = useModalStore((state) => state.setModalData);
+    const resetModalData = useModalStore((state) => state.resetModalData);
 
     const [isAdjustElement, setIsAdjustment] = useState(true);
     const [ohaengStrength, setOhaengStrength] = useState(() => data?.ohaengStrength);
@@ -66,6 +64,13 @@ export default function AsideContents({
             });
 
             router.push('/manseryeok/modal');
+        }
+    };
+
+    const onClickChangeProfile = () => {
+        if (confirm('프로필을 변경하시겠습니까?')) {
+            resetModalData();
+            router.push('/');
         }
     };
 
@@ -157,7 +162,7 @@ export default function AsideContents({
                         checked={isAdjustElement}
                         onChange={onChangeAdjustScore}
                     />
-                    <label htmlFor="adjustScore">궁성 보정</label>
+                    <label htmlFor="adjustScore">계절 및 위치 보정</label>
                 </div>
                 <div className="flex flex-col items-center">
                     <IljuCharacterComp gan={data.chartCol.day.gan} jiji={data.chartCol.day.jiji} />
@@ -219,7 +224,12 @@ export default function AsideContents({
                     >
                         AI프롬프트
                     </button>
-                    <button className="w-full medium button-bg-primary">프로필 수정</button>
+                    <button
+                        className="w-full medium button-bg-primary"
+                        onClick={onClickChangeProfile}
+                    >
+                        프로필 수정
+                    </button>
                 </div>
             </article>
             <article className="flex-1 w-full min-h-30 rounded-2xl border">{children}</article>

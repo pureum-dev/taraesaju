@@ -88,7 +88,11 @@ export const checkTargetDaeun = (
                     jijiSipsin: checkSipsinData(
                         dayColumn.gan,
                         targetJijiData[1].element,
-                        targetJijiData[1].eumyang,
+                        targetJijiData[1].isInvert
+                            ? targetJijiData[1].eumyang === '양'
+                                ? '음'
+                                : '양'
+                            : targetJijiData[1].eumyang,
                     ),
                     woonsung: woonsung[targetGan][targetJiji],
                     sinsal: check12Sinsal(yearColumn.jiji, targetJiji),
@@ -158,7 +162,11 @@ export const checkTargetSeun = (
                     jijiSipsin: checkSipsinData(
                         dayColumn.gan,
                         targetJijiData[1].element,
-                        targetJijiData[1].eumyang,
+                        targetJijiData[1].isInvert
+                            ? targetJijiData[1].eumyang === '양'
+                                ? '음'
+                                : '양'
+                            : targetJijiData[1].eumyang,
                     ),
                     woonsung: woonsung[targetGan][targetJiji],
                     sinsal: check12Sinsal(yearColumn.jiji, targetJiji),

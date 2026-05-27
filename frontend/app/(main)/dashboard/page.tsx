@@ -9,6 +9,8 @@ import { useDataStore } from '@/lib/store/useDataStore';
 /** Custom */
 import { ohaeng } from '@/common/const/ohaengConst';
 
+import { calculateInitialIdx } from '@/util/commonFunc';
+
 import EchartComp from '@/lib/EchartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 import AsideContents from '@/component/AsideContents';
@@ -129,12 +131,32 @@ export default function DashboardPage() {
     }, [elementListData]);
 
     const smallContList = useMemo(() => {
+        const targetDaeunIdx =
+            profileData && data
+                ? calculateInitialIdx(profileData, data.daeun, data.seun).daeunIdx
+                : 0;
+        const targetDaeun = data ? data.daeun[targetDaeunIdx] : null;
+
+        let overElement = elementListData.filter((item) => item.standard === '과다');
+        console.log(elementListData);
+        if (overElement.length === 0) {
+            overElement =
+                elementListData.length > 0
+                    ? [
+                          elementListData.reduce((prev, current) =>
+                              prev.score > current.score ? prev : current,
+                          ),
+                      ]
+                    : [];
+        }
         return [
             {
                 title: '사주 온도(조후)',
                 children: (
                     <div>
-                        <div className="text-xl text-center font-extrabold">차고 습함</div>
+                        <div className="text-lg text-center font-extrabold">
+                            {data?.ohaengTemp.name}
+                        </div>
                         <div className="text-sm text-center">온기가 필요</div>
                     </div>
                 ),
@@ -143,31 +165,40 @@ export default function DashboardPage() {
                 title: '발달 오행',
                 children: (
                     <div className="flex flex-row justify-center items-center gap-2">
-                        <div className={`flex flex-row justify-center items-center w-16 h-16`}>
-                            {ohaeng.금.icon}
-                        </div>
-                        <div className={`flex flex-row justify-center items-center w-16 h-16`}>
-                            {ohaeng.수.icon}
-                        </div>
+                        {overElement.map((item) => (
+                            <div
+                                key={item.element}
+                                className={`flex flex-row justify-center items-center w-18 h-18`}
+                            >
+                                {ohaeng[item.element].icon}
+                            </div>
+                        ))}
                     </div>
                 ),
             },
             {
                 title: '현재 대운',
-                children: (
+                children: targetDaeun && (
                     <div className="flex flex-row justify-center items-center gap-2">
                         <div className={`flex flex-row justify-center items-center`}>
-                            <ElementBoxComp name={'무'} type="gan" size="small" />
+                            <ElementBoxComp name={targetDaeun.gan} type="gan" size="small" />
                         </div>
                         <div className={`flex flex-row justify-center items-center`}>
-                            <ElementBoxComp name={'신'} type="jiji" size="small" />
+                            <ElementBoxComp name={targetDaeun.jiji} type="jiji" size="small" />
                         </div>
                     </div>
                 ),
             },
-            { title: '신강/신약', children: <div></div> },
+            {
+                title: '신강/신약',
+                children: (
+                    <div className="text-lg text-center font-extrabold">
+                        {data?.point.strength.strengthType}
+                    </div>
+                ),
+            },
         ];
-    }, []);
+    }, [data, elementListData, profileData]);
 
     // useEffect
     useEffect(() => {

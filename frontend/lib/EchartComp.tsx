@@ -119,47 +119,6 @@ const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
             return echartRef.current;
         });
 
-        /*useEffect(() => {
-            switch (chartType) {
-                case 'pie':
-                    const pieChartOption = _.merge(_.cloneDeep(PIE_OPTION), option);
-                    setChartOption(pieChartOption);
-                    if (data) {
-                        pieChartOption.series[0].data = data;
-                    }
-                    break;
-
-                case 'line_area':
-                    const lineAreaChartOption = _.merge(_.cloneDeep(LINE_AREA_OPTION), option);
-                    setChartOption(lineAreaChartOption);
-                    break;
-
-                case 'radar':
-                    const radarChartOption = _.merge(_.cloneDeep(RADAR_OPTION), option);
-                    setChartOption(radarChartOption);
-                    break;
-
-                case 'gauge':
-                    const gaugeChartOption = _.merge(_.cloneDeep(GAUGE_OPTION), option);
-                    setChartOption(gaugeChartOption);
-                    if (data) {
-                        gaugeChartOption.series[0].data = data;
-                    }
-                    break;
-
-                case 'rank_bar':
-                    const rankBarChartOption = _.merge(_.cloneDeep(RANK_BAR_OPTION), option);
-                    setChartOption(rankBarChartOption);
-                    break;
-
-                case 'stack_bar':
-                    const stackBarChartOption = _.merge(_.cloneDeep(STACK_BAR_OPTION), option);
-                    setChartOption(stackBarChartOption);
-                    break;
-                default:
-            }
-        }, [chartType, option, data]);*/
-
         const chartOption = useMemo(() => {
             switch (chartType) {
                 case 'pie':
@@ -186,8 +145,6 @@ const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
 
                 case 'rank_bar':
                     const rankBarChartOption = _.merge(_.cloneDeep(RANK_BAR_OPTION), option);
-                    console.log(option);
-                    console.log(rankBarChartOption);
                     return rankBarChartOption;
 
                 case 'stack_bar':

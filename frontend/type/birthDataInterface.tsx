@@ -48,6 +48,7 @@ export interface BirthAllData {
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
     ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] };
+    ohaengTemp: { name: string; temp: number; humidity: number };
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];
     seun: SeunData[][];

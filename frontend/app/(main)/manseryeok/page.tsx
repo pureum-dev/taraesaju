@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 /** lib */
-import dayjs from 'dayjs';
 import {
     CheckCircleIcon,
     CircleXIcon,
@@ -20,7 +19,7 @@ import { jiji } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
 
 import { getCSSVariable } from '@/util/colorFunc';
-import { calculateCalendar } from '@/util/commonFunc';
+import { calculateInitialIdx } from '@/util/commonFunc';
 
 import SajuChartGroupComp from '@/component/SajuChartGroupComp';
 import EchartComp from '@/lib/EchartComp';
@@ -33,8 +32,6 @@ import AsideContents from '@/component/AsideContents';
 /** type & interface*/
 import { ColumnItem } from '@/type/basicType';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
-import { birthDataInterface } from '@/service/birthDataService';
-import { DaeunData, SeunData } from '@/type/luckyDataInterface';
 
 interface ChartData {
     value: number;
@@ -50,45 +47,6 @@ const SajuKeyword = ({ children }: { children?: React.ReactNode }) => {
             {children}
         </li>
     );
-};
-
-const calculateInitialIdx = (
-    profileData: birthDataInterface,
-    daeun: DaeunData[],
-    seun: SeunData[][],
-) => {
-    let daeunIdx = 0;
-    let seunIdx = 0;
-
-    const _calender = calculateCalendar(profileData);
-    if (_calender) {
-        const solarDate = _calender.getSolarCalendar();
-        const currentYear = dayjs().year();
-        const diff = currentYear - solarDate.year + 1;
-
-        for (let idx = 0; idx < daeun.length; idx++) {
-            if (idx === daeun.length - 1 && daeun[idx].daeunNum <= diff) {
-                daeunIdx = idx;
-                break;
-            } else if (daeun[idx].daeunNum <= diff && diff < daeun[idx + 1].daeunNum) {
-                daeunIdx = idx;
-                break;
-            }
-        }
-
-        const targetSeun = daeunIdx ? seun[daeunIdx] : [];
-        for (let idx = 0; idx < targetSeun.length; idx++) {
-            if (targetSeun[idx].yearNum && currentYear === targetSeun[idx].yearNum) {
-                seunIdx = idx;
-                break;
-            }
-        }
-    }
-
-    return {
-        daeunIdx: daeunIdx,
-        seunIdx: seunIdx,
-    };
 };
 
 export default function ManseryeokPage() {

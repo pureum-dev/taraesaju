@@ -16,15 +16,39 @@ export const columnSipsinData = (
     return {
         year: {
             gan: checkSipsinData(day.gan, cheongan[year.gan].element, cheongan[year.gan].eumyang),
-            jiji: checkSipsinData(day.gan, jiji[year.jiji].element, jiji[year.jiji].eumyang),
+            jiji: checkSipsinData(
+                day.gan,
+                jiji[year.jiji].element,
+                jiji[year.jiji].isInvert
+                    ? jiji[year.jiji].eumyang === '양'
+                        ? '음'
+                        : '양'
+                    : jiji[year.jiji].eumyang,
+            ),
         },
         month: {
             gan: checkSipsinData(day.gan, cheongan[month.gan].element, cheongan[month.gan].eumyang),
-            jiji: checkSipsinData(day.gan, jiji[month.jiji].element, jiji[month.jiji].eumyang),
+            jiji: checkSipsinData(
+                day.gan,
+                jiji[month.jiji].element,
+                jiji[month.jiji].isInvert
+                    ? jiji[month.jiji].eumyang === '양'
+                        ? '음'
+                        : '양'
+                    : jiji[month.jiji].eumyang,
+            ),
         },
         day: {
             gan: '-',
-            jiji: checkSipsinData(day.gan, jiji[day.jiji].element, jiji[day.jiji].eumyang),
+            jiji: checkSipsinData(
+                day.gan,
+                jiji[day.jiji].element,
+                jiji[day.jiji].isInvert
+                    ? jiji[day.jiji].eumyang === '양'
+                        ? '음'
+                        : '양'
+                    : jiji[day.jiji].eumyang,
+            ),
         },
         time: time
             ? {
@@ -33,7 +57,15 @@ export const columnSipsinData = (
                       cheongan[time.gan].element,
                       cheongan[time.gan].eumyang,
                   ),
-                  jiji: checkSipsinData(day.gan, jiji[time.jiji].element, jiji[time.jiji].eumyang),
+                  jiji: checkSipsinData(
+                      day.gan,
+                      jiji[time.jiji].element,
+                      jiji[time.jiji].isInvert
+                          ? jiji[time.jiji].eumyang === '양'
+                              ? '음'
+                              : '양'
+                          : jiji[time.jiji].eumyang,
+                  ),
               }
             : null,
     };
@@ -54,13 +86,13 @@ export const checkSipsinData = (
         const targetOhaengObj = ohaeng[defaultElement];
 
         if (targetOhaengObj.resource === targetElement) {
-            sipsin = defaultYinYang === targetEumyang ? '정인' : '편인';
+            sipsin = defaultYinYang === targetEumyang ? '편인' : '정인';
         } else if (targetOhaengObj.power === targetElement) {
-            sipsin = defaultYinYang === targetEumyang ? '정관' : '편관';
+            sipsin = defaultYinYang === targetEumyang ? '편관' : '정관';
         } else if (targetOhaengObj.output === targetElement) {
             sipsin = defaultYinYang === targetEumyang ? '식신' : '상관';
         } else {
-            sipsin = defaultYinYang === targetEumyang ? '정재' : '편재';
+            sipsin = defaultYinYang === targetEumyang ? '편재' : '정재';
         }
     }
 
