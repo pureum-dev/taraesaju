@@ -4,7 +4,14 @@ import { jiji } from '@/common/const/jijiConst';
 import { findSipsinList, checkSipsinData } from '@/server/service/sipsinDataServerService';
 
 /** Type & Interface */
-import { OhaengType, SipsinType } from '@/type/basicType';
+import {
+    CheonganType,
+    JijiType,
+    OhaengType,
+    SipsinType,
+    ColumnKeyType,
+    SeasonType,
+} from '@/type/basicType';
 import { BirthColumnData } from '@/type/birthDataInterface';
 import { BirthColumnGroup } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
@@ -106,34 +113,6 @@ export const checkOhaengStrength = (
     };
 };
 
-export const checkOhaengTemp = (
-    data: BirthColumnGroup<BirthColumnData>,
-): { name: string; temp: number; humidity: number } => {
-    let temp = 0;
-    let humidity = 0;
-
-    Object.entries(data).forEach(([key, value]) => {
-        if (value) {
-            const ganScore = checkTempScore(value.gan, 'gan');
-            const jijiScore = checkTempScore(value.jiji, 'jiji');
-
-            if (key === 'month') {
-                temp += ganScore.temp + jijiScore.temp * 1.5;
-                humidity += ganScore.humidity + jijiScore.humidity * 1.5;
-            } else {
-                temp += ganScore.temp + jijiScore.temp;
-                humidity += ganScore.humidity + jijiScore.humidity;
-            }
-        }
-    });
-
-    return {
-        name: checkTempName(temp) + ' ' + checkHumidityName(humidity),
-        temp,
-        humidity,
-    };
-};
-
 export const checkScore = (key: string, type: 'gan' | 'jiji'): number => {
     switch (key) {
         case 'year':
@@ -149,93 +128,277 @@ export const checkScore = (key: string, type: 'gan' | 'jiji'): number => {
     }
 };
 
-export const checkTempScore = (
-    key: string,
-    type: 'gan' | 'jiji',
-): { temp: number; humidity: number } => {
-    /**
-     * 목: 온도 +3 습도: +3
-     * 화: 온도 +8 습도: -8
-     * 토: 온도 +0 (+-5)
-     * 금: 온도 -3 습도 -3
-     * 수: 온도 -8 습도 +8
-     *
-     * 조: -10
-     * 습: +10
-     * 한: -8
-     * 난: +8
-     *
-     * 겨울: 온도 -8
-     * 봄: 온도 +4
-     * 여름: 온도 +8
-     * 가을: 온도 -4
-     */
+export const checkOhaengTemp = (
+    data: BirthColumnGroup<BirthColumnData>,
+): { name: string; temp: number; humidity: number; season: SeasonType; timeName: string } => {
+    let temp: number = 0;
+    let humidity: number = 0;
+    let seasonTemp: number = 0;
+    let seasonhumidity: number = 0;
+    let timeTemp: number = 0;
 
-    if (type === 'gan') {
-        switch (key) {
-            case '갑': //목(온: +3 / 습: +3),조(습: -8)
-                return { temp: 3, humidity: -5 };
-            case '을': //목(온: +3 / 습: +3),습(습: +8)
-                return { temp: 3, humidity: 11 };
-            case '병': //화(온: +8 / 습: -8),조(습: -8)
-                return { temp: 8, humidity: -16 };
-            case '정': //화(온: +8 / 습: -8),습(습: +8)
-                return { temp: 8, humidity: 0 };
-            case '무': //토(0),조(습: -8)
-                return { temp: 0, humidity: -8 };
-            case '기': //토(0),습(습: +8)
-                return { temp: 0, humidity: 8 };
-            case '경': //금(온: -3 / 습: -3),습(습: +8)
-                return { temp: -3, humidity: 5 };
-            case '신': //금(온: -3 / 습: -3),조(습: -8)
-                return { temp: -3, humidity: -11 };
-            case '임': //수(온: -8 / 습: 8),조(습: -8)
-                return { temp: -8, humidity: 0 };
-            case '계': //수(온: -8 / 습: 8),습(습: +8)
-                return { temp: -8, humidity: 16 };
-            default:
-                return { temp: 0, humidity: 0 };
+    let season: SeasonType = '봄';
+    let timeName: string = '';
+
+    Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+            const ganScore = adjustCheonganTempScore(value.gan);
+            const jijiScore = adjustJijiTempScore(value.jiji, key as ColumnKeyType);
+
+            if (key === 'month') {
+                temp += ganScore.temp;
+                seasonTemp = jijiScore.temp;
+                seasonhumidity = jijiScore.humidity;
+                humidity += ganScore.humidity;
+                season = jijiScore.season;
+            } else if (key === 'time') {
+                temp += ganScore.temp;
+                timeTemp = jijiScore.temp;
+                humidity += ganScore.humidity + jijiScore.humidity;
+                timeName = jijiScore.timeName;
+            } else {
+                temp += ganScore.temp + jijiScore.temp;
+                humidity += ganScore.humidity + jijiScore.humidity;
+            }
         }
-    } else {
-        switch (key) {
-            case '자': //겨울(온:-8),수(온: -8 / 습: +8),한(온: -8),조(습: -8)
-                return { temp: -24, humidity: 0 };
-            case '축': //겨울(온:-8),토(0),한(온: -8),습(습: +8)
-                return { temp: -16, humidity: 8 };
-            case '인': //겨울(온:-8),목(온: +3 / 습: +3),한(온: -8),조(습: -8)
-                return { temp: -13, humidity: -5 };
-            case '묘': //봄(온: +4),목(온: +3 / 습: +3),난(온: +8),습(습: +8)
-                return { temp: 15, humidity: 11 };
-            case '진': //봄(온: +4),토(0),중립,습(습: +8)
-                return { temp: 4, humidity: 8 };
-            case '사': //봄(온: +4),화(온: +8 / 습: -8),난(온: +8),조(습: -8)
-                return { temp: 20, humidity: -16 };
-            case '오': //여름(온: +8),화(온: +8 / 습: -8),난(온: +8),습(습: +8)
-                return { temp: 24, humidity: 0 };
-            case '미': //여름(온: +8),토(0),중립,조(습: -8)
-                return { temp: 8, humidity: -8 };
-            case '신': //여름(온: +8),금(온: -3 / 습: -3),난(온: +8),습(습: +8)
-                return { temp: 13, humidity: 5 };
-            case '유': //가을(온: -4),금(온: -3 / 습: -3),한(온: -8),조(습: -8)
-                return { temp: -15, humidity: -11 };
-            case '술': //가을(온: -4),토(0),중립,조(습: -8)
-                return { temp: -4, humidity: -8 };
-            case '해': //가을(온: -4),수(온: -8 / 습: 8),한(온: -8),습(습: +8)
-                return { temp: -20, humidity: 16 };
-            default:
-                return { temp: 0, humidity: 0 };
-        }
+    });
+
+    const finalTemp = seasonTemp * 0.7 + timeTemp * 0.2 + temp * 0.1;
+    const finalHumidity = seasonhumidity * 0.7 + humidity * 0.3;
+
+    return {
+        name: checkTempName(finalTemp) + ' ' + checkHumidityName(finalHumidity),
+        temp: finalTemp,
+        humidity: finalHumidity,
+        season,
+        timeName,
+    };
+};
+
+const elementTempScore = {
+    목: { temp: 2, humidity: 2 },
+    화: { temp: 4, humidity: -4 },
+    토: { temp: 0, humidity: 0 },
+    금: { temp: -2, humidity: -2 },
+    수: { temp: -4, humidity: 4 },
+};
+
+const tempScore = {
+    조: { temp: 0, humidity: -4 },
+    습: { temp: 0, humidity: 4 },
+    한: { temp: -4, humidity: 0 },
+    난: { temp: 4, humidity: 0 },
+};
+
+const seasonScore = (monthNum: number): { season: SeasonType; temp: number } => {
+    switch (monthNum) {
+        case 0:
+        case 1:
+        case 2:
+            return { season: '겨울', temp: -4 };
+        case 3:
+        case 4:
+        case 5:
+            return { season: '봄', temp: 2 };
+        case 6:
+        case 7:
+        case 8:
+            return { season: '여름', temp: 4 };
+        default:
+            return { season: '가을', temp: -2 };
+    }
+};
+
+const timeScore = (jiji: JijiType): { timeName: string; temp: number } => {
+    switch (jiji) {
+        case '축':
+        case '인':
+            return { timeName: '새벽', temp: -1 };
+        case '묘':
+        case '진':
+            return { timeName: '아침', temp: 0 };
+        case '사':
+            return { timeName: '오전', temp: 1 };
+        case '오':
+            return { timeName: '낮', temp: 2 };
+        case '미':
+        case '신':
+            return { timeName: '오후', temp: 1 };
+        case '유':
+        case '술':
+            return { timeName: '저녁', temp: -1 };
+        default:
+            return { timeName: '밤', temp: 2 };
+    }
+};
+
+export const adjustCheonganTempScore = (cheongan: CheonganType) => {
+    switch (cheongan) {
+        case '갑': //목,조
+            return {
+                temp: elementTempScore['목'].temp,
+                humidity: elementTempScore['목'].humidity + tempScore['조'].humidity,
+            };
+        case '을': //목,습
+            return {
+                temp: elementTempScore['목'].temp,
+                humidity: elementTempScore['목'].humidity + tempScore['습'].humidity,
+            };
+        case '병': //화,조
+            return {
+                temp: elementTempScore['화'].temp,
+                humidity: elementTempScore['화'].humidity + tempScore['조'].humidity,
+            };
+        case '정': //화,습
+            return {
+                temp: elementTempScore['화'].temp,
+                humidity: elementTempScore['화'].humidity + tempScore['습'].humidity,
+            };
+        case '무': //토,조
+            return {
+                temp: elementTempScore['토'].temp,
+                humidity: elementTempScore['토'].humidity + tempScore['조'].humidity,
+            };
+        case '기': //토,습
+            return {
+                temp: elementTempScore['토'].temp,
+                humidity: elementTempScore['토'].humidity + tempScore['습'].humidity,
+            };
+        case '경': //금,습
+            return {
+                temp: elementTempScore['금'].temp,
+                humidity: elementTempScore['금'].humidity + tempScore['습'].humidity,
+            };
+        case '신': //금,조
+            return {
+                temp: elementTempScore['금'].temp,
+                humidity: elementTempScore['금'].humidity + tempScore['조'].humidity,
+            };
+        case '임': //수,조
+            return {
+                temp: elementTempScore['수'].temp,
+                humidity: elementTempScore['수'].humidity + tempScore['조'].humidity,
+            };
+        default: //'계' - 수,습
+            return {
+                temp: elementTempScore['수'].temp,
+                humidity: elementTempScore['수'].humidity + tempScore['습'].humidity,
+            };
+    }
+};
+
+export const adjustJijiTempScore = (
+    ji: JijiType,
+    column: ColumnKeyType,
+): {
+    temp: number;
+    humidity: number;
+    season: SeasonType;
+    timeName: string;
+} => {
+    const season = seasonScore(jiji[ji].number);
+    const timeName = timeScore(ji);
+    const addScore: number =
+        column === 'month' ? season.temp : column === 'time' ? timeName.temp : 0;
+
+    switch (ji) {
+        case '자': //겨울,수,한,조
+            return {
+                temp: elementTempScore['수'].temp + tempScore['한'].temp + addScore,
+                humidity: elementTempScore['수'].humidity + tempScore['조'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '축': //겨울,토,한,습
+            return {
+                temp: elementTempScore['토'].temp + tempScore['한'].temp + addScore,
+                humidity: elementTempScore['토'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '인': //겨울,목,한,조
+            return {
+                temp: elementTempScore['목'].temp + tempScore['한'].temp + addScore,
+                humidity: elementTempScore['목'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '묘': //봄,목,난,습
+            return {
+                temp: elementTempScore['목'].temp + tempScore['난'].temp + addScore,
+                humidity: elementTempScore['목'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '진': //봄,토,습
+            return {
+                temp: elementTempScore['토'].temp + addScore,
+                humidity: elementTempScore['토'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '사': //봄,화,난,조
+            return {
+                temp: elementTempScore['화'].temp + tempScore['난'].temp + addScore,
+                humidity: elementTempScore['화'].humidity + tempScore['조'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '오': //여름,화,난,습
+            return {
+                temp: elementTempScore['화'].temp + tempScore['난'].temp + addScore,
+                humidity: elementTempScore['화'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '미': //여름,토,조
+            return {
+                temp: elementTempScore['토'].temp + addScore,
+                humidity: elementTempScore['토'].humidity + tempScore['조'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '신': //여름,금,난,습
+            return {
+                temp: elementTempScore['금'].temp + tempScore['난'].temp + addScore,
+                humidity: elementTempScore['금'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '유': //가을,금,한,조
+            return {
+                temp: elementTempScore['금'].temp + tempScore['한'].temp + addScore,
+                humidity: elementTempScore['금'].humidity + tempScore['조'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '술': //가을,토,조
+            return {
+                temp: elementTempScore['토'].temp + addScore,
+                humidity: elementTempScore['토'].humidity + tempScore['조'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        case '해': //가을,수,한,습
+            return {
+                temp: elementTempScore['수'].temp + tempScore['한'].temp + addScore,
+                humidity: elementTempScore['수'].humidity + tempScore['습'].humidity,
+                season: season.season,
+                timeName: timeName.timeName,
+            };
+        default:
+            return { temp: 0, humidity: 0, season: season.season, timeName: timeName.timeName };
     }
 };
 
 export const checkTempName = (score: number): string => {
-    if (score <= -60) {
+    if (score <= -12) {
         return '춥고';
-    } else if (score <= -20) {
+    } else if (score <= -4) {
         return '서늘하고';
-    } else if (score <= 19) {
+    } else if (score <= 4) {
         return '온화하고';
-    } else if (score <= 59) {
+    } else if (score <= 12) {
         return '따뜻하고';
     } else {
         return '뜨겁고';
@@ -243,13 +406,13 @@ export const checkTempName = (score: number): string => {
 };
 
 export const checkHumidityName = (score: number): string => {
-    if (score <= -60) {
+    if (score <= -18) {
         return '메마른';
-    } else if (score <= -20) {
+    } else if (score <= -6) {
         return '건조한';
-    } else if (score <= 19) {
+    } else if (score <= 6) {
         return '쾌적한';
-    } else if (score <= 59) {
+    } else if (score <= 18) {
         return '촉촉한';
     } else {
         return '습한';

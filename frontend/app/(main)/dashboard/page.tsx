@@ -157,7 +157,16 @@ export default function DashboardPage() {
                         <div className="text-lg text-center font-extrabold">
                             {data?.ohaengTemp.name}
                         </div>
-                        <div className="text-sm text-center">온기가 필요</div>
+                        <ul className="flex flex-wrap flex-row text-sm gap-2 text-gray-500">
+                            <li>
+                                <span>계절: </span>
+                                <span>{data?.ohaengTemp.season}</span>
+                            </li>
+                            <li>
+                                <span>시간: </span>
+                                <span>{data?.ohaengTemp.timeName}</span>
+                            </li>
+                        </ul>
                     </div>
                 ),
             },

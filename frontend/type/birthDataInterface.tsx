@@ -1,5 +1,5 @@
 import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
-import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
+import { CheonganType, JijiType, SeasonType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { DaeunData, SeunData } from '@/type/luckyDataInterface';
@@ -48,7 +48,13 @@ export interface BirthAllData {
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
     ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] };
-    ohaengTemp: { name: string; temp: number; humidity: number };
+    ohaengTemp: {
+        name: string;
+        temp: number;
+        humidity: number;
+        season: SeasonType;
+        timeName: string;
+    };
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];
     seun: SeunData[][];
