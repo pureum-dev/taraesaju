@@ -21,6 +21,7 @@ import AsideContents from '@/component/AsideContents';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { YearListData } from '@/type/luckyDataInterface';
 import { jiji } from '@/common/const/jijiConst';
+import TooltipComp from '@/component/TooltipComp';
 
 const SmallContents = ({ title, children }: { title: string; children: ReactNode }) => {
     return (
@@ -214,8 +215,20 @@ export default function DashboardPage() {
                 title: '사주 온도(조후)',
                 children: (
                     <div>
-                        <div className="text-lg text-center font-extrabold">
-                            {data?.ohaengTemp.name}
+                        <div className="relative group">
+                            <span className="text-lg text-center font-extrabold">
+                                {data?.ohaengTemp.name}
+                            </span>
+                            <TooltipComp>
+                                <div className="flex flex-col justify-start">
+                                    <div className="flex flex-row gap-2">
+                                        <span>계절:</span> <span>{data?.ohaengTemp.season}</span>
+                                    </div>
+                                    <div className="flex flex-row gap-2">
+                                        <span>시간: </span> <span>{data?.ohaengTemp.timeName}</span>
+                                    </div>
+                                </div>
+                            </TooltipComp>
                         </div>
                     </div>
                 ),
