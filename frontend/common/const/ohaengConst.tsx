@@ -39,8 +39,20 @@ export const ohaeng: Record<
         power: '금',
         output: '화',
         wealth: '토',
-        icon: <Image src={elementTreeSvg} alt="목 아이콘 활성" />,
-        iconDisable: <Image src={elementTreeDisableSvg} alt="목 아이콘 비활성" />,
+        icon: (
+            <Image
+                src={elementTreeSvg}
+                alt="목 아이콘 활성"
+                className="w-full h-full object-contain"
+            />
+        ),
+        iconDisable: (
+            <Image
+                src={elementTreeDisableSvg}
+                alt="목 아이콘 비활성"
+                className="w-full h-full object-contain"
+            />
+        ),
     },
 
     화: {
@@ -50,8 +62,20 @@ export const ohaeng: Record<
         power: '수',
         output: '토',
         wealth: '금',
-        icon: <Image src={elementFireSvg} alt="화 아이콘 활성" />,
-        iconDisable: <Image src={elementFireDisableSvg} alt="화 아이콘 비활성" />,
+        icon: (
+            <Image
+                src={elementFireSvg}
+                alt="화 아이콘 활성"
+                className="w-full h-full object-contain"
+            />
+        ),
+        iconDisable: (
+            <Image
+                src={elementFireDisableSvg}
+                alt="화 아이콘 비활성"
+                className="w-full h-full object-contain"
+            />
+        ),
     },
     토: {
         hanja: '土',
@@ -60,8 +84,20 @@ export const ohaeng: Record<
         power: '목',
         output: '금',
         wealth: '수',
-        icon: <Image src={elementEarthSvg} alt="토 아이콘 활성" />,
-        iconDisable: <Image src={elementEarthDisableSvg} alt="토 아이콘 비활성" />,
+        icon: (
+            <Image
+                src={elementEarthSvg}
+                alt="토 아이콘 활성"
+                className="w-full h-full object-contain"
+            />
+        ),
+        iconDisable: (
+            <Image
+                src={elementEarthDisableSvg}
+                alt="토 아이콘 비활성"
+                className="w-full h-full object-contain"
+            />
+        ),
     },
     금: {
         hanja: '金',
@@ -70,8 +106,20 @@ export const ohaeng: Record<
         power: '화',
         output: '수',
         wealth: '목',
-        icon: <Image src={elemenGoldSvg} alt="금 아이콘 활성" />,
-        iconDisable: <Image src={elemenGoldDisableSvg} alt="금 아이콘 비활성" />,
+        icon: (
+            <Image
+                src={elemenGoldSvg}
+                alt="금 아이콘 활성"
+                className="w-full h-full object-contain"
+            />
+        ),
+        iconDisable: (
+            <Image
+                src={elemenGoldDisableSvg}
+                alt="금 아이콘 비활성"
+                className="w-full h-full object-contain"
+            />
+        ),
     },
     수: {
         hanja: '水',
@@ -80,8 +128,20 @@ export const ohaeng: Record<
         power: '토',
         output: '목',
         wealth: '화',
-        icon: <Image src={elementWaterSvg} alt="수 아이콘 활성" />,
-        iconDisable: <Image src={elementWaterDisableSvg} alt="목 아이콘 비활성" />,
+        icon: (
+            <Image
+                src={elementWaterSvg}
+                alt="수 아이콘 활성"
+                className="w-full h-full object-contain"
+            />
+        ),
+        iconDisable: (
+            <Image
+                src={elementWaterDisableSvg}
+                alt="목 아이콘 비활성"
+                className="w-full h-full object-contain"
+            />
+        ),
     },
 };
 

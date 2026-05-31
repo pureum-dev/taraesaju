@@ -1,6 +1,29 @@
 const primaryColor = '#76c7b0';
 const secondaryColor = '#d8bfa9';
 
+export const BAR_OPTION = {
+    tooltip: {
+        trigger: 'item',
+    },
+    xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+        type: 'value',
+    },
+    series: [
+        {
+            data: [120, 200, 150, 80, 70, 110, 130],
+            type: 'bar',
+            showBackground: false,
+            backgroundStyle: {
+                color: 'rgba(115, 115, 115, 0.1)',
+            },
+        },
+    ],
+};
+
 export const PIE_OPTION = {
     tooltip: {
         trigger: 'item',

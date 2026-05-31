@@ -1,8 +1,8 @@
-import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
+import { DivisionJsonData } from '@/type/jsonDataInterface';
 import { CheonganType, JijiType, SeasonType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
 import { OhaengStrengthData } from '@/type/ohaengDataInterface';
-import { DaeunData, SeunData } from '@/type/luckyDataInterface';
+import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
 
 export interface CorrectBirthDay {
     date: string;
@@ -55,6 +55,7 @@ export interface BirthAllData {
         season: SeasonType;
         timeName: string;
     };
+    yearOhaeng: YearListData[];
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];
     seun: SeunData[][];

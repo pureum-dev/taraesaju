@@ -9,7 +9,6 @@ const list = [
 
 export default function Header() {
     const pathName = usePathname();
-    console.log(pathName);
 
     return (
         <div className="flex flex-row justify-end items-center w-full">

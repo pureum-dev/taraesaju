@@ -9,10 +9,19 @@ import { checkSipsinData } from './sipsinDataServerService';
 import { check12Sinsal } from './sinsalDataServerService';
 
 /** Type & Interface */
-import { CheonganType, JijiType } from '@/type/basicType';
-import { BirthColumnItem } from '@/type/baseInterface';
+import {
+    CheonganType,
+    JijiType,
+    OhaengType,
+    SipsinType,
+    ColumnKeyType,
+    SeasonType,
+} from '@/type/basicType';
+import { BirthColumnItem, BirthColumnGroup } from '@/type/baseInterface';
 import { DivisionJsonData } from '@/type/jsonDataInterface';
-import { DaeunData, SeunData } from '@/type/luckyDataInterface';
+import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
+import { BirthColumnData } from '@/type/birthDataInterface';
+import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 
 /**
  * 대운 계산 - 태양력
@@ -78,6 +87,7 @@ export const checkTargetDaeun = (
 
                 const daeunData = {
                     daeunNum: daeunNum + daeunIdx * 10,
+                    flowStr,
                     gan: targetGan,
                     jiji: targetJiji,
                     ganSipsin: checkSipsinData(
@@ -180,4 +190,41 @@ export const checkTargetSeun = (
     }
 
     return seunList;
+};
+
+export const checkYearOheang = (
+    targetYear: number,
+    birthYear: number,
+    firstDaeun: DaeunData,
+): YearListData[] => {
+    const standardYear = 1900;
+    const standardGan = '경';
+    const standardJiji = '자';
+
+    const resultList = [];
+
+    const cheonganList = Object.keys(cheongan);
+    const jijiList = Object.keys(jiji);
+
+    for (let i = 0; i < 10; i++) {
+        const year = targetYear + i;
+        const daeunIdx = Math.floor((year - birthYear + 1 - firstDaeun.daeunNum) / 10);
+        const flowNum = firstDaeun.flowStr === '순행' ? 1 : -1;
+
+        const daeunGanNum = (cheongan[firstDaeun.gan].number + daeunIdx * flowNum) % 10;
+        const daeunJijiNum = (jiji[firstDaeun.jiji].number + daeunIdx * flowNum) % 10;
+        const seunGanNum = (cheongan[standardGan].number + year - standardYear) % 10;
+        const seunJiNum = (jiji[standardJiji].number + year - standardYear) % 12;
+
+        resultList.push({
+            year,
+            daeunIdx,
+            daeunGan: cheonganList[daeunGanNum] as CheonganType,
+            daeunJiji: jijiList[daeunJijiNum] as JijiType,
+            seunGan: cheonganList[seunGanNum] as CheonganType,
+            seunJiji: jijiList[seunJiNum] as JijiType,
+        });
+    }
+
+    return resultList;
 };

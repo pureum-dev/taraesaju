@@ -18,7 +18,11 @@ import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServe
 import { columnSipsinData } from '@/server/service/sipsinDataServerService';
 import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
 import { checkOhaengStrength, checkOhaengTemp } from '@/server/service/ohaengDataServerService';
-import { checkTargetDaeun, checkTargetSeun } from '@/server/service/luckyDataServerService';
+import {
+    checkTargetDaeun,
+    checkTargetSeun,
+    checkYearOheang,
+} from '@/server/service/luckyDataServerService';
 
 /** Data */
 import division24Json from '@/server/data/division24.json';
@@ -79,12 +83,6 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
     );
 
     if (chartCol) {
-        const point: BirthPointData = createInfoData(chartCol);
-        const ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] } =
-            checkOhaengStrength(chartCol, true);
-        const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
-            checkSinsalData(chartCol);
-
         const daeun = checkTargetDaeun(
             birthDate.gender,
             targetDivision,
@@ -98,10 +96,11 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
 
         return {
             chartCol: chartCol ?? null,
-            point: point,
-            ohaengStrength: ohaengStrength,
+            point: createInfoData(chartCol),
+            ohaengStrength: checkOhaengStrength(chartCol, true),
             ohaengTemp: checkOhaengTemp(chartCol),
-            sinsal: sinsalData,
+            yearOhaeng: checkYearOheang(dayjs().year(), solarBirthDate.year, daeun[0]),
+            sinsal: checkSinsalData(chartCol),
             daeun: daeun,
             seun: seun,
         };
