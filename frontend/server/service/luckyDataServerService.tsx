@@ -9,19 +9,10 @@ import { checkSipsinData } from './sipsinDataServerService';
 import { check12Sinsal } from './sinsalDataServerService';
 
 /** Type & Interface */
-import {
-    CheonganType,
-    JijiType,
-    OhaengType,
-    SipsinType,
-    ColumnKeyType,
-    SeasonType,
-} from '@/type/basicType';
-import { BirthColumnItem, BirthColumnGroup } from '@/type/baseInterface';
+import { CheonganType, JijiType } from '@/type/basicType';
+import { BirthColumnItem } from '@/type/baseInterface';
 import { DivisionJsonData } from '@/type/jsonDataInterface';
 import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
-import { BirthColumnData } from '@/type/birthDataInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 
 /**
  * 대운 계산 - 태양력
@@ -35,7 +26,7 @@ export const checkTargetDaeun = (
     dayColumn: BirthColumnItem<CheonganType, JijiType>,
 ): DaeunData[] => {
     const yearGanEumyang = cheongan[yearColumn.gan].eumyang;
-    let flowStr;
+    let flowStr: '순행' | '역행' = '순행';
     if (gender === 'M') {
         flowStr = yearGanEumyang === '양' ? '순행' : '역행';
     } else {

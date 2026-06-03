@@ -11,8 +11,15 @@ export interface DaeunData {
     sinsal: string;
 }
 
-export interface SeunData extends DaeunData {
+export interface SeunData {
+    daeunNum: number;
     yearNum: number;
+    gan: CheonganType;
+    jiji: JijiType;
+    ganSipsin: SipsinType;
+    jijiSipsin: SipsinType;
+    woonsung: string;
+    sinsal: string;
 }
 
 export interface YearListData {

@@ -36,9 +36,7 @@ import {
     CorrectTargetDivision,
     BirthAllData,
     BirthColumnData,
-    BirthPointData,
 } from '@/type/birthDataInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { birthDataInterface } from '@/service/birthDataService';
 
 dayjs.extend(isSameOrBefore);
