@@ -188,7 +188,6 @@ export default function DashboardPage() {
             })),
         };
 
-        console.log(option);
         return option;
     }, [yearEleListData, elementListData]);
 
@@ -265,7 +264,7 @@ export default function DashboardPage() {
                 title: '신강/신약',
                 children: (
                     <div className="text-lg text-center font-extrabold">
-                        {data?.point.strength.strengthType}
+                        {data?.ohaengStrength.strengthType}
                     </div>
                 ),
             },

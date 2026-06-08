@@ -127,7 +127,7 @@ export default function ManseryeokPage() {
             {
                 title: '신강/신약',
                 icon: null,
-                value: <span>{`${data.point.strength.strengthType}사주`}</span>,
+                value: <span>{`${data.ohaengStrength.strengthType}사주`}</span>,
                 prerequisite: true,
             },
             {
@@ -342,13 +342,13 @@ export default function ManseryeokPage() {
                             <SajuChartGroupComp columnData={columnData} />
                         </div>
                         {/** 내 사주 한 줄 요약 */}
-                        <div className="overflow-hidden flex justify-start items-center w-full h-20 p-6 bg-mint-400 rounded-2xl">
+                        <div className="overflow-hidden flex justify-start items-center w-full h-20 p-6 bg-mint-400 rounded-2xl dark:bg-mint-700">
                             <ul className="flex flex-wrap flex-row gap-2 text-sm rounded-2xl">
                                 <SajuKeyword>
                                     {data.chartCol.day.gan + data.chartCol.day.jiji + '일주'}
                                 </SajuKeyword>
                                 <SajuKeyword>
-                                    {data.point.strength.strengthType + '사주'}
+                                    {data.ohaengStrength.strengthType + '사주'}
                                 </SajuKeyword>
                                 <SajuKeyword>
                                     {isElementBalance ? '오행 균형(오행구족)' : '오행 불균형'}
@@ -368,7 +368,7 @@ export default function ManseryeokPage() {
                                         <div className="w-1/2 h-full">
                                             <EchartComp chartType={'pie'} data={elementChartData} />
                                         </div>
-                                        <div className="flex justify-center items-center w-1/2 h-full bg-mint-50 border border-background rounded-2xl ">
+                                        <div className="flex justify-center items-center w-1/2 h-full bg-mint-50 border border-background rounded-2xl dark:bg-mint-900">
                                             <div className="flex flex-col w-full h-full">
                                                 {elementListData.map((item, idx) => {
                                                     return (

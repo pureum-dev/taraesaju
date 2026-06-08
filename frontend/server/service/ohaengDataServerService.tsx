@@ -1,7 +1,9 @@
 /** Custom */
+import { ohaeng } from '@/common/const/ohaengConst';
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 import { findSipsinList, checkSipsinData } from '@/server/service/sipsinDataServerService';
+import { checkStrength } from '@/server/service/pointDataServerService';
 
 /** Type & Interface */
 import {
@@ -9,18 +11,19 @@ import {
     JijiType,
     OhaengType,
     SipsinType,
+    SipsinGroupType,
     ColumnKeyType,
     SeasonType,
 } from '@/type/basicType';
 import { BirthColumnData } from '@/type/birthDataInterface';
 import { BirthColumnGroup } from '@/type/baseInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import { OhaengStrengthData, OhaengTempData } from '@/type/ohaengDataInterface';
 
 export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,
     adjustScore: boolean,
-): { isBalanced: boolean; ohaeng: OhaengStrengthData[] } => {
-    const allScore = adjustScore ? 25 : 8;
+): { isBalanced: boolean; strengthType: string; ohaeng: OhaengStrengthData[] } => {
+    const allScore = adjustScore ? (data.time ? 25 : 19) : data.time ? 8 : 6;
     const ohaengList: OhaengType[] = ['목', '화', '토', '금', '수'];
 
     const ohaengCountMap = new Map<OhaengType, number>();
@@ -109,6 +112,7 @@ export const checkOhaengStrength = (
 
     return {
         isBalanced: isBalanced,
+        strengthType: checkStrength(data, adjustScore),
         ohaeng: scoreList,
     };
 };
@@ -128,9 +132,7 @@ export const checkScore = (key: string, type: 'gan' | 'jiji'): number => {
     }
 };
 
-export const checkOhaengTemp = (
-    data: BirthColumnGroup<BirthColumnData>,
-): { name: string; temp: number; humidity: number; season: SeasonType; timeName: string } => {
+export const checkOhaengTemp = (data: BirthColumnGroup<BirthColumnData>): OhaengTempData => {
     let temp: number = 0;
     let humidity: number = 0;
     let seasonTemp: number = 0;
@@ -173,63 +175,6 @@ export const checkOhaengTemp = (
         season,
         timeName,
     };
-};
-
-const elementTempScore = {
-    목: { temp: 2, humidity: 2 },
-    화: { temp: 4, humidity: -4 },
-    토: { temp: 0, humidity: 0 },
-    금: { temp: -2, humidity: -2 },
-    수: { temp: -4, humidity: 4 },
-};
-
-const tempScore = {
-    조: { temp: 0, humidity: -4 },
-    습: { temp: 0, humidity: 4 },
-    한: { temp: -4, humidity: 0 },
-    난: { temp: 4, humidity: 0 },
-};
-
-const seasonScore = (monthNum: number): { season: SeasonType; temp: number } => {
-    switch (monthNum) {
-        case 0:
-        case 1:
-        case 2:
-            return { season: '겨울', temp: -4 };
-        case 3:
-        case 4:
-        case 5:
-            return { season: '봄', temp: 2 };
-        case 6:
-        case 7:
-        case 8:
-            return { season: '여름', temp: 4 };
-        default:
-            return { season: '가을', temp: -2 };
-    }
-};
-
-const timeScore = (jiji: JijiType): { timeName: string; temp: number } => {
-    switch (jiji) {
-        case '축':
-        case '인':
-            return { timeName: '새벽', temp: -1 };
-        case '묘':
-        case '진':
-            return { timeName: '아침', temp: 0 };
-        case '사':
-            return { timeName: '오전', temp: 1 };
-        case '오':
-            return { timeName: '낮', temp: 2 };
-        case '미':
-        case '신':
-            return { timeName: '오후', temp: 1 };
-        case '유':
-        case '술':
-            return { timeName: '저녁', temp: -1 };
-        default:
-            return { timeName: '밤', temp: 2 };
-    }
 };
 
 export const adjustCheonganTempScore = (cheongan: CheonganType) => {
@@ -391,14 +336,76 @@ export const adjustJijiTempScore = (
     }
 };
 
+export const checkNeedOhaeng = (
+    ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] },
+    ohaengTemp: OhaengTempData,
+) => {};
+
+const elementTempScore = {
+    목: { temp: 2, humidity: 2 },
+    화: { temp: 4, humidity: -4 },
+    토: { temp: 0, humidity: 0 },
+    금: { temp: -2, humidity: -2 },
+    수: { temp: -4, humidity: 4 },
+};
+
+const tempScore = {
+    조: { temp: 0, humidity: -4 },
+    습: { temp: 0, humidity: 4 },
+    한: { temp: -4, humidity: 0 },
+    난: { temp: 4, humidity: 0 },
+};
+
+const seasonScore = (monthNum: number): { season: SeasonType; temp: number } => {
+    switch (monthNum) {
+        case 0:
+        case 1:
+        case 2:
+            return { season: '겨울', temp: -4 };
+        case 3:
+        case 4:
+        case 5:
+            return { season: '봄', temp: 2 };
+        case 6:
+        case 7:
+        case 8:
+            return { season: '여름', temp: 4 };
+        default:
+            return { season: '가을', temp: -2 };
+    }
+};
+
+const timeScore = (jiji: JijiType): { timeName: string; temp: number } => {
+    switch (jiji) {
+        case '축':
+        case '인':
+            return { timeName: '새벽', temp: -1 };
+        case '묘':
+        case '진':
+            return { timeName: '아침', temp: 0 };
+        case '사':
+            return { timeName: '오전', temp: 1 };
+        case '오':
+            return { timeName: '낮', temp: 2 };
+        case '미':
+        case '신':
+            return { timeName: '오후', temp: 1 };
+        case '유':
+        case '술':
+            return { timeName: '저녁', temp: -1 };
+        default:
+            return { timeName: '밤', temp: 2 };
+    }
+};
+
 export const checkTempName = (score: number): string => {
-    if (score <= -12) {
+    if (score <= -8) {
         return '춥고';
     } else if (score <= -4) {
         return '서늘하고';
     } else if (score <= 4) {
         return '온화하고';
-    } else if (score <= 12) {
+    } else if (score <= 8) {
         return '따뜻하고';
     } else {
         return '뜨겁고';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 /** Lib */
@@ -12,13 +12,11 @@ import { useRegionStore } from '@/lib/store/useRegionStore';
 import { useDataStore } from '@/lib/store/useDataStore';
 
 /** Custom */
-import { createAllBirthData } from '@/server/service/birthDataServerService';
 import LogoSvg from '@/public/svg/logo.svg';
 
 /** Type & Interface */
 import { RegionJsonData } from '@/type/jsonDataInterface';
-import { birthDataInterface } from '@/service/birthDataService';
-import { BirthAllData } from '@/type/birthDataInterface';
+import { birthDataInterface, birthDataService } from '@/service/birthDataService';
 
 const genderList = [
     { value: 'M', label: '남성', icon: <Mars size={15} className="mr-1" /> },
@@ -27,7 +25,6 @@ const genderList = [
 
 export default function BirthdayInputComp() {
     const router = useRouter();
-    const searchParam = useSearchParams();
 
     const RegionJsonData = useRegionStore((state) => state.RegionJsonData);
     const resetRegionJsonData = useRegionStore((state) => state.resetRegionJsonData);
@@ -61,18 +58,17 @@ export default function BirthdayInputComp() {
         router.push('/info/modal');
     };
 
-    const onClickEvent = handleSubmit((data: Omit<birthDataInterface, 'location'>) => {
+    const onClickEvent = handleSubmit(async (data: Omit<birthDataInterface, 'location'>) => {
         if (!RegionJsonData) return;
 
-        const request: birthDataInterface = {
+        const request = {
             ...data,
             location: RegionJsonData as RegionJsonData,
         };
-
-        const birthData: BirthAllData | null = createAllBirthData(request);
-        if (birthData) {
+        const response = await birthDataService.getBirthData(request);
+        if (response) {
             setProfileData(request);
-            setData(birthData);
+            setData(response);
             router.push('/dashboard');
         }
     });

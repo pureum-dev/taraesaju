@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /** Lib */
 import { Search } from 'lucide-react';
@@ -66,6 +66,10 @@ export default function InfoModal() {
                 </div>
             </form>
         );
+    }, []);
+
+    useEffect(() => {
+        if (inputRef) inputRef.current?.focus();
     }, []);
 
     return (

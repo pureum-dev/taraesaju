@@ -1,5 +1,9 @@
+/** Custom */
 import fetchConfig from '@/util/fetchConfig';
+
+/** Type & Interface */
 import { RegionJsonData } from '@/type/jsonDataInterface';
+import { BirthAllData } from '@/type/birthDataInterface';
 
 export interface birthDataInterface {
     nickName: string;
@@ -13,11 +17,11 @@ export interface birthDataInterface {
     location: RegionJsonData;
 }
 
-export const regionService = {
-    getUserAttendanceApplication: (keyword: string) =>
-        fetchConfig<RegionJsonData[]>({
-            url: '/api/region',
+export const birthDataService = {
+    getBirthData: (req: birthDataInterface) =>
+        fetchConfig<BirthAllData>({
+            url: '/api/info',
             method: 'POST',
-            body: { keyword: keyword },
+            body: req,
         }),
 };
