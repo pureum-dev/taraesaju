@@ -59,8 +59,8 @@ export default function BasicModalComp({
     };
 
     return (
-        <div className="fixed top-0 left-0 w-full h-dvh bg-gray-900/30 z-500">
-            <div className="absolute top-1/2 left-1/2 -translate-1/2 flex flex-col bg-background px-6 py-8 w-auto min-w-96 max-w-[calc(100% - 8rem)] min-h-1/2 max-h-4/5 rounded-3xl">
+        <div className="fixed top-0 left-0 w-full h-dvh bg-gray-900/30 z-500 dark:bg-gray-50/30">
+            <div className="absolute top-1/2 left-1/2 -translate-1/2 flex flex-col bg-background px-6 py-8 w-auto min-w-96 max-w-[calc(100% - 8rem)] min-h-1/2 max-h-4/5 rounded-3xl shadow-2xl">
                 <div className="mb-4">{header}</div>
                 <div className="overflow-y-auto flex-1">{children}</div>
                 <div className="flex flex-row justify-end w-full gap-3 mt-4">

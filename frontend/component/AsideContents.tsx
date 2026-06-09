@@ -10,6 +10,7 @@ import { useModalStore } from '@/lib/store/useModalDataStore';
 /** Custom */
 import { calculateCalendar } from '@/util/commonFunc';
 import IljuCharacterComp from '@/component/IljuCharacterComp';
+import TooltipIconComp from '@/component/TooltipIconComp';
 
 /** type & interface*/
 import { birthDataInterface } from '@/service/birthDataService';
@@ -164,7 +165,15 @@ export default function AsideContents({
                         checked={isAdjustElement}
                         onChange={onChangeAdjustScore}
                     />
-                    <label htmlFor="adjustScore">계절 및 위치 보정</label>
+                    <label htmlFor="adjustScore" className="flex flex-row items-center">
+                        <span>계절 및 위치 보정</span>
+                        <TooltipIconComp className="ml-1">
+                            <span>
+                                계절을 상징하는 월지와 시간을 상징하는 시지에 추가점수를 주어 오행을
+                                보정
+                            </span>
+                        </TooltipIconComp>
+                    </label>
                 </div>
                 <div className="flex flex-col items-center">
                     <IljuCharacterComp gan={data.chartCol.day.gan} jiji={data.chartCol.day.jiji} />

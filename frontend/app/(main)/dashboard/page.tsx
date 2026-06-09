@@ -20,6 +20,7 @@ import EchartComp from '@/lib/EchartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 import AsideContents from '@/component/AsideContents';
 import TooltipComp from '@/component/TooltipComp';
+import TooltipIconComp from '@/component/TooltipIconComp';
 
 /** type & interface*/
 import { OhaengType } from '@/type/basicType';
@@ -241,11 +242,15 @@ export default function DashboardPage() {
                             </span>
                             <TooltipComp>
                                 <div className="flex flex-col justify-start">
-                                    <div className="flex flex-row gap-2">
-                                        <span>계절:</span> <span>{data?.ohaengTemp.season}</span>
+                                    <div className="flex flex-row gap-2.5">
+                                        <span>계절:</span>
+                                        <span className="font-bold">{data?.ohaengTemp.season}</span>
                                     </div>
-                                    <div className="flex flex-row gap-2">
-                                        <span>시간: </span> <span>{data?.ohaengTemp.timeName}</span>
+                                    <div className="flex flex-row gap-2.5">
+                                        <span>시간: </span>
+                                        <span className="font-bold">
+                                            {data?.ohaengTemp.timeName}
+                                        </span>
                                     </div>
                                 </div>
                             </TooltipComp>
@@ -309,9 +314,14 @@ export default function DashboardPage() {
                     data={data}
                     onChangeScore={onChangeAdjustScore}
                 >
-                    <div className="flex flex-col w-full h-full p-4">
-                        <div className="flex flex-row justify-start items-center w-full h-1/2 gap-4">
-                            <span className="text-sm font-bold">필요한 오행</span>
+                    <div className="flex flex-col w-full h-full p-4 ">
+                        <div className="flex flex-row justify-start items-center w-full gap-4">
+                            <div className="flex flex-row items-center gap-1">
+                                <span className="text-sm font-bold">필요한 오행</span>
+                                <TooltipIconComp>
+                                    <span>조후 + 십신 흐름에 따른 필요 오행</span>
+                                </TooltipIconComp>
+                            </div>
                             <ul className="flex flex-row gap-2">
                                 {Array.from(needOhaeng).map((item, idx) => {
                                     return (
@@ -325,8 +335,16 @@ export default function DashboardPage() {
                                 })}
                             </ul>
                         </div>
-                        <div className="flex flex-row justify-start items-center w-full h-1/2 gap-4">
-                            <span className="text-sm font-bold">잘맞는 일주</span>
+                        <div className="flex flex-row justify-start items-center w-full gap-4">
+                            <div className="flex flex-row items-center gap-1">
+                                <span className="text-sm font-bold">잘맞는 일주</span>
+                                <TooltipIconComp>
+                                    <span>
+                                        나의 일주 천간과 합이되는 천간, 일주 지지와 합이되거나 일주
+                                        천간을 생하는 지지
+                                    </span>
+                                </TooltipIconComp>
+                            </div>
                             <ul className="flex flex-row gap-2">
                                 {data.point.compatibleSaju.map((item, idx) => {
                                     return (
@@ -346,6 +364,10 @@ export default function DashboardPage() {
                                     );
                                 })}
                             </ul>
+                        </div>
+                        <div className="mt-3 text-xs text-gray-400 dark:text-gray-700">
+                            본 결과는 단식적인 해석으로 사주 원국 전체를 분석한 결과에 따라 달라질
+                            수 있습니다.
                         </div>
                     </div>
                 </AsideContents>
