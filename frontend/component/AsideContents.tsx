@@ -4,20 +4,17 @@ import { Fragment, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 /** lib */
-import dayjs from 'dayjs';
 import { UserRoundIcon, SunIcon, MoonIcon, MapPinnedIcon } from 'lucide-react';
 import { useModalStore } from '@/lib/store/useModalDataStore';
 
 /** Custom */
 import { calculateCalendar } from '@/util/commonFunc';
-import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
-
 import IljuCharacterComp from '@/component/IljuCharacterComp';
 
 /** type & interface*/
 import { birthDataInterface } from '@/service/birthDataService';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { BirthAllData } from '@/type/birthDataInterface';
+import { oheangDataService, OheangChangeInterface } from '@/service/ohaengDataService';
 
 /** type */
 interface AsideProps {
@@ -25,7 +22,7 @@ interface AsideProps {
     profileData: birthDataInterface | null;
     data: BirthAllData;
     children: ReactNode;
-    onChangeScore: (data: { isBalanced: boolean; ohaeng: OhaengStrengthData[] }) => void;
+    onChangeScore: (data: OheangChangeInterface) => void;
 }
 
 export default function AsideContents({
@@ -43,14 +40,19 @@ export default function AsideContents({
     const [ohaengStrength, setOhaengStrength] = useState(() => data?.ohaengStrength);
 
     // useCallback
-    const onChangeAdjustScore = useCallback(() => {
+    const onChangeAdjustScore = useCallback(async () => {
         if (data) {
-            const ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] } =
-                checkOhaengStrength(data.chartCol, !isAdjustElement);
+            const response = await oheangDataService.getOheangData({
+                data: data.chartCol,
+                adjustScore: !isAdjustElement,
+            });
 
-            if (onChangeScore) onChangeScore(ohaengStrength);
-            setOhaengStrength(ohaengStrength);
-            setIsAdjustment((prev) => !prev);
+            if (response) {
+                setIsAdjustment((prev) => !prev);
+                setOhaengStrength(response.ohaengStrength);
+
+                if (onChangeScore) onChangeScore(response);
+            }
         }
     }, [data, isAdjustElement, onChangeScore]);
 

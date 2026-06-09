@@ -2,14 +2,14 @@
 import dayjs from 'dayjs';
 
 /** Custom */
-import { cheongan } from '@/common/const/cheonganConst';
-import { jiji } from '@/common/const/jijiConst';
+import { cheongan, cheonganRelation } from '@/common/const/cheonganConst';
+import { jiji, jijiRelation } from '@/common/const/jijiConst';
+import { ohaeng } from '@/common/const/ohaengConst';
 
 /** Type & Interface */
 import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup } from '@/type/baseInterface';
 import { BirthColumnData, BirthPointData } from '@/type/birthDataInterface';
-import { ohaeng } from '@/common/const/ohaengConst';
 
 export const createInfoData = (data: BirthColumnGroup<BirthColumnData>): BirthPointData => {
     return {
@@ -17,6 +17,7 @@ export const createInfoData = (data: BirthColumnGroup<BirthColumnData>): BirthPo
         samjae: checkSamJaeList(data.year.jiji),
         deukryung: isDeuk(data.month.jijiSipsin as SipsinType),
         deukji: isDeuk(data.day.jijiSipsin as SipsinType),
+        compatibleSaju: checkCompatibleSaju(data),
     };
 };
 
@@ -115,6 +116,28 @@ export const checkStrength = (
     }
 
     return strengthType;
+};
+
+export const checkCompatibleSaju = (data: BirthColumnGroup<BirthColumnData>) => {
+    const dayGan = cheongan[data.day.gan];
+
+    const targetGan = cheonganRelation[data.day.gan].hap;
+    const targetGanData = cheongan[targetGan];
+    const targetGanResource = ohaeng[dayGan.element].resource;
+    const targetYukhap = jijiRelation[data.day.jiji].yukhap;
+
+    return Object.entries(jiji)
+        .filter(([key, value]) => {
+            const isYukhap = key === targetYukhap;
+
+            const isCompatibleElement =
+                value.element === dayGan.element || value.element === targetGanResource;
+
+            const isSameEumyang = value.eumyang === targetGanData.eumyang;
+
+            return isYukhap || (isSameEumyang && isCompatibleElement);
+        })
+        .map(([key]) => `${targetGan}${key}`);
 };
 
 /** 삼재 */

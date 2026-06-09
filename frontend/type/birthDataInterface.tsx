@@ -41,13 +41,15 @@ export interface BirthPointData {
     samjae: number[];
     deukryung: boolean;
     deukji: boolean;
+    compatibleSaju: string[];
 }
 
 export interface BirthAllData {
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
-    ohaengStrength: { isBalanced: boolean; strengthType: string; ohaeng: OhaengStrengthData[] };
+    ohaengStrength: OhaengStrengthData;
     ohaengTemp: OhaengTempData;
+    needOhaeng: OhaengType[];
     yearOhaeng: YearListData[];
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];

@@ -31,7 +31,7 @@ import AsideContents from '@/component/AsideContents';
 
 /** type & interface*/
 import { ColumnItem } from '@/type/basicType';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
 
 interface ChartData {
     value: number;
@@ -57,7 +57,7 @@ export default function ManseryeokPage() {
     const [isElementBalance, setIsElementBalance] = useState<boolean>(
         () => data?.ohaengStrength.isBalanced ?? false,
     );
-    const [elementListData, setElementListData] = useState<OhaengStrengthData[]>(
+    const [elementListData, setElementListData] = useState<OhaengStrengthEachData[]>(
         () => data?.ohaengStrength.ohaeng ?? [],
     );
     const [targetDaeun, setTargetDaeun] = useState(() =>
@@ -68,7 +68,7 @@ export default function ManseryeokPage() {
     );
 
     const onChangeAdjustScore = useCallback(
-        (adjustData: { isBalanced: boolean; ohaeng: OhaengStrengthData[] }) => {
+        (adjustData: { isBalanced: boolean; ohaeng: OhaengStrengthEachData[] }) => {
             setElementListData(adjustData.ohaeng);
             setIsElementBalance(adjustData.isBalanced);
         },
@@ -219,7 +219,7 @@ export default function ManseryeokPage() {
     }, [data, targetDaeun]);
 
     const elementChartData = useMemo(() => {
-        const elementList: OhaengStrengthData[] = elementListData ?? [];
+        const elementList: OhaengStrengthEachData[] = elementListData ?? [];
 
         //오행 배열 구하기
         const ohaengChartArr: ChartData[] = elementList.map((item) => {

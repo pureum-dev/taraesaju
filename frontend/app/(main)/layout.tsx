@@ -10,7 +10,6 @@ export default function MainLayout({
     modal: React.ReactNode;
 }>) {
     const pathUrl = headers();
-    console.log(pathUrl);
     return (
         <>
             <div className="flex flex-col justify-start items-start w-full min-h-dvh p-4 bg-gray-100 dark:bg-gray-950">

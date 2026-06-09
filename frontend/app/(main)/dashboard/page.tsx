@@ -2,6 +2,7 @@
 
 import { ReactNode, useCallback, useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 /** lib */
 import { useDataStore } from '@/lib/store/useDataStore';
@@ -9,6 +10,7 @@ import { useDataStore } from '@/lib/store/useDataStore';
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
 import { ohaeng } from '@/common/const/ohaengConst';
+import { jiji } from '@/common/const/jijiConst';
 
 import { calculateInitialIdx } from '@/util/commonFunc';
 import { makeBgColor, defaultTextColor, makeColorName } from '@/util/colorFunc';
@@ -16,12 +18,13 @@ import { makeBgColor, defaultTextColor, makeColorName } from '@/util/colorFunc';
 import EchartComp from '@/lib/EchartComp';
 import ElementBoxComp from '@/component/ElementBoxComp';
 import AsideContents from '@/component/AsideContents';
+import TooltipComp from '@/component/TooltipComp';
 
 /** type & interface*/
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
+import { OhaengType } from '@/type/basicType';
+import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
 import { YearListData } from '@/type/luckyDataInterface';
-import { jiji } from '@/common/const/jijiConst';
-import TooltipComp from '@/component/TooltipComp';
+import { OheangChangeInterface } from '@/service/ohaengDataService';
 
 const SmallContents = ({ title, children }: { title: string; children: ReactNode }) => {
     return (
@@ -39,19 +42,20 @@ export default function DashboardPage() {
     const profileData = useDataStore((state) => state.profileData);
     const data = useDataStore((state) => state.data);
 
-    const [elementListData, setElementListData] = useState<OhaengStrengthData[]>(
+    const [elementListData, setElementListData] = useState<OhaengStrengthEachData[]>(
         () => data?.ohaengStrength.ohaeng ?? [],
     );
+
+    const [needOhaeng, setNeedOhaeng] = useState<OhaengType[]>(() => data?.needOhaeng ?? []);
+
     const [yearEleListData, setYearEleListData] = useState<YearListData[]>(
         () => data?.yearOhaeng ?? [],
     );
 
-    const onChangeAdjustScore = useCallback(
-        (adjustData: { isBalanced: boolean; ohaeng: OhaengStrengthData[] }) => {
-            setElementListData(adjustData.ohaeng);
-        },
-        [],
-    );
+    const onChangeAdjustScore = useCallback((data: OheangChangeInterface) => {
+        setElementListData(data.ohaengStrength.ohaeng);
+        setNeedOhaeng(data.needOhaeng);
+    }, []);
 
     const elementChartData = useMemo(() => {
         const indicatorDefault = ['목', '수', '금', '토', '화'];
@@ -273,6 +277,7 @@ export default function DashboardPage() {
 
     // useEffect
     useEffect(() => {
+        console.log(data);
         if (data === null || profileData === null) {
             router.push('/');
         }
@@ -287,7 +292,45 @@ export default function DashboardPage() {
                     data={data}
                     onChangeScore={onChangeAdjustScore}
                 >
-                    <div></div>
+                    <div className="flex flex-col w-full h-full p-4">
+                        <div className="flex flex-row justify-start items-center w-full h-1/2 gap-4">
+                            <span className="text-sm font-bold">필요한 오행</span>
+                            <ul className="flex flex-row gap-2">
+                                {Array.from(needOhaeng).map((item, idx) => {
+                                    return (
+                                        <li
+                                            key={idx}
+                                            className="flex flex-row justify-center items-center w-10 h-10 "
+                                        >
+                                            {ohaeng[item].icon}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                        <div className="flex flex-row justify-start items-center w-full h-1/2 gap-4">
+                            <span className="text-sm font-bold">잘맞는 일주</span>
+                            <ul className="flex flex-row gap-2">
+                                {data.point.compatibleSaju.map((item, idx) => {
+                                    return (
+                                        <li
+                                            key={idx}
+                                            className="flex flex-row justify-center items-center w-10 h-10"
+                                        >
+                                            <Image
+                                                src={`/svg/character_head/${item}.svg`}
+                                                width={38}
+                                                height={38}
+                                                alt={`${item} 동물 이미지`}
+                                                style={{ zIndex: 2 }}
+                                                unoptimized
+                                            />
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    </div>
                 </AsideContents>
                 <section className="flex flex-col w-full gap-4 md:w-2/3 ">
                     <article className="flex flex-row flex-1 w-full gap-4 ">

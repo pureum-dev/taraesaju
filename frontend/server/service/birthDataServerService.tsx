@@ -96,12 +96,14 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
             chartCol.day,
         );
         const seun = checkTargetSeun(solarBirth, daeun[0].daeunNum, chartCol.year, chartCol.day);
+        const needOhaeng = checkNeedOhaeng(ohaengStrength, ohaengTemp);
 
         return {
             chartCol: chartCol ?? null,
             point: createInfoData(chartCol),
             ohaengStrength,
             ohaengTemp,
+            needOhaeng,
             yearOhaeng: checkYearOheang(dayjs().year(), solarBirthDate.year, daeun[0]),
             sinsal: checkSinsalData(chartCol),
             daeun: daeun,

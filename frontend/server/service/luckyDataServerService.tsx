@@ -202,8 +202,8 @@ export const checkYearOheang = (
         const daeunIdx = Math.floor((year - birthYear + 1 - firstDaeun.daeunNum) / 10);
         const flowNum = firstDaeun.flowStr === '순행' ? 1 : -1;
 
-        const daeunGanNum = (cheongan[firstDaeun.gan].number + daeunIdx * flowNum) % 10;
-        const daeunJijiNum = (jiji[firstDaeun.jiji].number + daeunIdx * flowNum) % 10;
+        const daeunGanNum = (10 + cheongan[firstDaeun.gan].number + daeunIdx * flowNum) % 10;
+        const daeunJijiNum = (12 + jiji[firstDaeun.jiji].number + daeunIdx * flowNum) % 10;
         const seunGanNum = (cheongan[standardGan].number + year - standardYear) % 10;
         const seunJiNum = (jiji[standardJiji].number + year - standardYear) % 12;
 

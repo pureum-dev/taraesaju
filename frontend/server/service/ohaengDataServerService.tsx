@@ -1,5 +1,5 @@
 /** Custom */
-import { ohaeng } from '@/common/const/ohaengConst';
+import { ohaeng, sipsin } from '@/common/const/ohaengConst';
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 import { findSipsinList, checkSipsinData } from '@/server/service/sipsinDataServerService';
@@ -17,12 +17,16 @@ import {
 } from '@/type/basicType';
 import { BirthColumnData } from '@/type/birthDataInterface';
 import { BirthColumnGroup } from '@/type/baseInterface';
-import { OhaengStrengthData, OhaengTempData } from '@/type/ohaengDataInterface';
+import {
+    OhaengStrengthEachData,
+    OhaengStrengthData,
+    OhaengTempData,
+} from '@/type/ohaengDataInterface';
 
 export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,
     adjustScore: boolean,
-): { isBalanced: boolean; strengthType: string; ohaeng: OhaengStrengthData[] } => {
+): OhaengStrengthData => {
     const allScore = adjustScore ? (data.time ? 25 : 19) : data.time ? 8 : 6;
     const ohaengList: OhaengType[] = ['목', '화', '토', '금', '수'];
 
@@ -70,7 +74,7 @@ export const checkOhaengStrength = (
     });
 
     let isBalanced = true;
-    const scoreList: OhaengStrengthData[] = ohaengList.map((item) => {
+    const scoreList: OhaengStrengthEachData[] = ohaengList.map((item) => {
         const score = ohaengCountMap.get(item) ?? 0;
 
         const percent = score == 0 ? 0 : Math.round((score / allScore) * 10000) / 100;
@@ -80,7 +84,7 @@ export const checkOhaengStrength = (
         }
 
         let standard = '';
-        if (percent >= 37.5) {
+        if (percent >= 35) {
             standard = '과다';
         } else if (percent >= 25.0) {
             standard = '적정';
@@ -337,9 +341,49 @@ export const adjustJijiTempScore = (
 };
 
 export const checkNeedOhaeng = (
-    ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] },
+    ohaengStrength: { isBalanced: boolean; strengthType: string; ohaeng: OhaengStrengthEachData[] },
     ohaengTemp: OhaengTempData,
-) => {};
+): OhaengType[] => {
+    const needOhaengSet = new Set<OhaengType>();
+
+    //1.조후확인
+    const temp = ohaengTemp.temp;
+    if (temp <= -8) needOhaengSet.add('화');
+    else if (temp > 8) needOhaengSet.add('수');
+
+    //2.억부확인
+    const cycle: SipsinGroupType[] = ['비겁', '식상', '재성', '관성', '인성'];
+    const strengthType = ohaengStrength.strengthType;
+    const strengthMap = new Map<SipsinGroupType, OhaengStrengthEachData>();
+
+    ohaengStrength.ohaeng.forEach((item) => {
+        strengthMap.set(item.sipsinGroup as SipsinGroupType, item);
+    });
+
+    const muchSipsin: SipsinGroupType[] = [];
+    cycle.forEach((item, idx) => {
+        const current = strengthMap.get(item);
+        const next = strengthMap.get(cycle[(idx + 1) % cycle.length]);
+
+        if (current && next && current.percent >= 20 && next.percent < 12.5) {
+            needOhaengSet.add(next.element);
+            muchSipsin.push(item);
+        }
+    });
+
+    if (strengthType === '태약' || strengthType === '신약') {
+        const _self = strengthMap.get('비겁');
+        const _resource = strengthMap.get('인성');
+
+        if (_self && _self.percent < 12.5) {
+            if (!muchSipsin.includes('식상')) needOhaengSet.add(_self.element);
+        } else if (_resource && _resource.percent < 12.5) {
+            if (!muchSipsin.includes('비겁')) needOhaengSet.add(_resource.element);
+        }
+    }
+
+    return Array.from(needOhaengSet);
+};
 
 const elementTempScore = {
     목: { temp: 2, humidity: 2 },

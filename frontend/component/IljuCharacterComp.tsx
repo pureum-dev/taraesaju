@@ -1,8 +1,4 @@
-'use client';
-
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
