@@ -35,8 +35,6 @@ const SmallContents = ({ title, children }: { title: string; children: ReactNode
     );
 };
 
-//함께하면 좋은 친구 궁합
-
 export default function DashboardPage() {
     const router = useRouter();
     const profileData = useDataStore((state) => state.profileData);
