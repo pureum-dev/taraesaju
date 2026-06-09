@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 /** lib */
 import { useDataStore } from '@/lib/store/useDataStore';
+import { format as echartFormat } from 'echarts';
 
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
@@ -117,6 +118,24 @@ export default function DashboardPage() {
                     bottom: 32,
                 },
             ],
+            tooltip: {
+                formatter: (params) => {
+                    let str = `<div class="flex flex-col gap-1"> <div class=" font-bold">${params[0].axisValueLabel}</div>`;
+                    params.forEach((element) => {
+                        str +=
+                            '<div class="flex flex-row justify-start items-center">' +
+                            element.marker +
+                            echartFormat.encodeHTML(element.name) +
+                            '<b class="ml-3">' +
+                            echartFormat.encodeHTML(element.value + '%') +
+                            '</b>' +
+                            '</div>';
+                    });
+
+                    str += '</div>';
+                    return str;
+                },
+            },
             yAxis: {
                 type: 'category',
                 data: indicatorDefault,
