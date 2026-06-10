@@ -13,6 +13,7 @@ import { useDataStore } from '@/lib/store/useDataStore';
 
 /** Custom */
 import LogoSvg from '@/public/svg/logo.svg';
+import LogoDarkSvg from '@/public/svg/logo_dark.svg';
 
 /** Type & Interface */
 import { RegionJsonData } from '@/type/jsonDataInterface';
@@ -90,7 +91,11 @@ export default function BirthdayInputComp() {
         <div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160">
             <form className="flex flex-col items-start gap-5 w-full px-8 py-12 border rounded-3xl">
                 <div className="flex flex-row justify-center items-center w-full">
-                    <Image src={LogoSvg} alt="logo" className="w-40 mr-4" />
+                    {/* 라이트 모드일 때만 보임 */}
+                    <Image src={LogoSvg} alt="logo" className="w-40 mr-4 dark:hidden" />
+
+                    {/* 다크 모드일 때만 보임 */}
+                    <Image src={LogoDarkSvg} alt="logo" className="hidden w-40 mr-4 dark:block" />
                 </div>
                 <label htmlFor="nickName" className="flex flex-col gap-1 w-full">
                     <span className="text-sm">닉네임</span>

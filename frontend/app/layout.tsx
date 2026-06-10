@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     description: 'Manseryeok Website',
     icons: {
         icon: [
+            { url: '/favicon/favicon.ico', type: 'image/x-icon' },
             /*{ url: '/images/favicon/favicon.ico', type: 'image/x-icon' },
             { url: '/images/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
             { url: '/images/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
                 type: 'image/png',
             },*/
         ],
-        apple: /*[{ url: '/images/favicon/apple-touch-icon.png', sizes: '180x180' }],*/ [],
+        apple: [{ url: '/favicon/favicon_image.png', sizes: '180x180' }],
     },
 };
 
