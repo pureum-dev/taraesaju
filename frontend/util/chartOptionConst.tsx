@@ -1,4 +1,28 @@
 const primaryColor = '#76c7b0';
+const secondaryColor = '#d8bfa9';
+
+export const BAR_OPTION = {
+    tooltip: {
+        trigger: 'item',
+    },
+    xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+        type: 'value',
+    },
+    series: [
+        {
+            data: [120, 200, 150, 80, 70, 110, 130],
+            type: 'bar',
+            showBackground: false,
+            backgroundStyle: {
+                color: 'rgba(115, 115, 115, 0.1)',
+            },
+        },
+    ],
+};
 
 export const PIE_OPTION = {
     tooltip: {
@@ -51,7 +75,7 @@ export const PIE_OPTION = {
 };
 
 export const LINE_AREA_OPTION = {
-    color: primaryColor,
+    color: [primaryColor, secondaryColor],
     xAxis: {
         type: 'category',
         boundaryGap: false,
@@ -74,7 +98,7 @@ export const LINE_AREA_OPTION = {
 };
 
 export const RADAR_OPTION = {
-    color: primaryColor,
+    color: [primaryColor, secondaryColor],
     radar: {
         indicator: [],
         axisName: {
@@ -191,7 +215,7 @@ export const GAUGE_OPTION = {
 };
 
 export const RANK_BAR_OPTION = {
-    color: primaryColor,
+    color: [primaryColor, secondaryColor],
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -212,12 +236,15 @@ export const RANK_BAR_OPTION = {
         {
             type: 'bar',
             data: [0, 0, 0, 0, 0],
+            backgroundStyle: {
+                color: 'rgba(115, 115, 115, 0.1)',
+            },
         },
     ],
 };
 
 export const STACK_BAR_OPTION = {
-    color: primaryColor,
+    color: [primaryColor, secondaryColor],
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -241,6 +268,9 @@ export const STACK_BAR_OPTION = {
             name: 'Direct',
             type: 'bar',
             stack: 'total',
+            backgroundStyle: {
+                color: 'rgba(115, 115, 115, 0.1)',
+            },
             label: {
                 show: true,
             },

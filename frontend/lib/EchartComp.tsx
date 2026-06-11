@@ -11,7 +11,7 @@ import React, {
 
 /** lib */
 import _ from 'lodash';
-import { EChartsOption } from 'echarts';
+import { EChartsType } from 'echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import * as echarts from 'echarts/core';
 import {
@@ -77,6 +77,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 /** custom */
 import {
+    BAR_OPTION,
     PIE_OPTION,
     LINE_AREA_OPTION,
     RADAR_OPTION,
@@ -100,7 +101,7 @@ echarts.use([
 ]);
 echarts.registerTheme('_theme', {});
 
-export type EchartCompRef = ReactEChartsCore | null;
+export type EchartCompRef = EChartsType | null;
 
 interface ChartOptionProps {
     chartType: 'pie' | 'bar' | 'line' | 'line_area' | 'radar' | 'gauge' | 'rank_bar' | 'stack_bar';
@@ -110,58 +111,21 @@ interface ChartOptionProps {
 
 const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
     ({ chartType, option, data }, ref) => {
-        const echartRef = useRef<ReactEChartsCore>(null);
+        const echartRef = useRef<EChartsType>(null);
 
         useImperativeHandle(ref, () => {
             if (!echartRef.current) {
-                return {} as ReactEChartsCore; // 또는 에러 방지를 위한 빈 객체
+                return {} as EChartsType; // 또는 에러 방지를 위한 빈 객체
             }
             return echartRef.current;
         });
 
-        /*useEffect(() => {
-            switch (chartType) {
-                case 'pie':
-                    const pieChartOption = _.merge(_.cloneDeep(PIE_OPTION), option);
-                    setChartOption(pieChartOption);
-                    if (data) {
-                        pieChartOption.series[0].data = data;
-                    }
-                    break;
-
-                case 'line_area':
-                    const lineAreaChartOption = _.merge(_.cloneDeep(LINE_AREA_OPTION), option);
-                    setChartOption(lineAreaChartOption);
-                    break;
-
-                case 'radar':
-                    const radarChartOption = _.merge(_.cloneDeep(RADAR_OPTION), option);
-                    setChartOption(radarChartOption);
-                    break;
-
-                case 'gauge':
-                    const gaugeChartOption = _.merge(_.cloneDeep(GAUGE_OPTION), option);
-                    setChartOption(gaugeChartOption);
-                    if (data) {
-                        gaugeChartOption.series[0].data = data;
-                    }
-                    break;
-
-                case 'rank_bar':
-                    const rankBarChartOption = _.merge(_.cloneDeep(RANK_BAR_OPTION), option);
-                    setChartOption(rankBarChartOption);
-                    break;
-
-                case 'stack_bar':
-                    const stackBarChartOption = _.merge(_.cloneDeep(STACK_BAR_OPTION), option);
-                    setChartOption(stackBarChartOption);
-                    break;
-                default:
-            }
-        }, [chartType, option, data]);*/
-
         const chartOption = useMemo(() => {
             switch (chartType) {
+                case 'bar':
+                    const barChartOption = _.merge(_.cloneDeep(BAR_OPTION), option);
+                    return barChartOption;
+
                 case 'pie':
                     const pieChartOption = _.merge(_.cloneDeep(PIE_OPTION), option);
                     if (data) {
@@ -200,9 +164,10 @@ const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
             chartOption && (
                 <ReactEChartsCore
                     ref={(instance) => {
-                        echartRef.current = instance;
+                        echartRef.current = instance?.getEchartsInstance() ?? null;
                     }}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ display: 'flex', flex: 1, width: '100%', height: '100%' }}
+                    autoResize={true}
                     echarts={echarts}
                     option={chartOption}
                     notMerge={true}

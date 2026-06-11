@@ -9,10 +9,15 @@ export const jiji: Record<
         endTime: string;
         element: OhaengType;
         eumyang: '양' | '음';
-        isEumyangInverse: boolean;
+        isInvert: boolean;
         animal: string;
-        jijanggan: CheonganType[];
+        jijanggan: {
+            name: CheonganType;
+            percent: number;
+            type: '여기' | '중기' | '정기';
+        }[];
         samjae: JijiType[];
+        seasonAdjustment?: { element: OhaengType; percent: number }[];
     }
 > = {
     자: {
@@ -22,9 +27,12 @@ export const jiji: Record<
         endTime: '01:00',
         element: '수',
         eumyang: '양',
-        isEumyangInverse: true,
+        isInvert: true,
         animal: '쥐',
-        jijanggan: ['임', '계'],
+        jijanggan: [
+            { name: '임', percent: 1 / 3, type: '여기' },
+            { name: '계', percent: 2 / 3, type: '정기' },
+        ],
         samjae: ['인', '묘', '진'],
     },
     축: {
@@ -34,10 +42,18 @@ export const jiji: Record<
         endTime: '03:00',
         element: '토',
         eumyang: '음',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '소',
-        jijanggan: ['계', '신', '기'],
+        jijanggan: [
+            { name: '계', percent: 3 / 10, type: '여기' },
+            { name: '신', percent: 1 / 10, type: '중기' },
+            { name: '기', percent: 6 / 10, type: '정기' },
+        ],
         samjae: ['해', '자', '축'],
+        seasonAdjustment: [
+            { element: '수', percent: 0.6 },
+            { element: '토', percent: 0.4 },
+        ],
     },
     인: {
         hanja: '寅',
@@ -46,9 +62,13 @@ export const jiji: Record<
         endTime: '05:00',
         element: '목',
         eumyang: '양',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '호랑이',
-        jijanggan: ['무', '병', '갑'],
+        jijanggan: [
+            { name: '무', percent: 7 / 30, type: '여기' },
+            { name: '병', percent: 7 / 30, type: '중기' },
+            { name: '갑', percent: 16 / 30, type: '정기' },
+        ],
         samjae: ['신', '유', '술'],
     },
     묘: {
@@ -58,9 +78,12 @@ export const jiji: Record<
         endTime: '07:00',
         element: '목',
         eumyang: '음',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '토끼',
-        jijanggan: ['갑', '을'],
+        jijanggan: [
+            { name: '갑', percent: 1 / 3, type: '여기' },
+            { name: '을', percent: 2 / 3, type: '정기' },
+        ],
         samjae: ['사', '오', '미'],
     },
     진: {
@@ -70,10 +93,18 @@ export const jiji: Record<
         endTime: '09:00',
         element: '토',
         eumyang: '양',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '용',
-        jijanggan: ['을', '계', '무'],
+        jijanggan: [
+            { name: '을', percent: 3 / 10, type: '여기' },
+            { name: '계', percent: 1 / 10, type: '중기' },
+            { name: '무', percent: 6 / 10, type: '정기' },
+        ],
         samjae: ['인', '묘', '진'],
+        seasonAdjustment: [
+            { element: '목', percent: 0.6 },
+            { element: '토', percent: 0.4 },
+        ],
     },
     사: {
         hanja: '巳',
@@ -82,9 +113,13 @@ export const jiji: Record<
         endTime: '11:00',
         element: '화',
         eumyang: '음',
-        isEumyangInverse: true,
+        isInvert: true,
         animal: '뱀',
-        jijanggan: ['무', '경', '병'],
+        jijanggan: [
+            { name: '무', percent: 7 / 30, type: '여기' },
+            { name: '경', percent: 7 / 30, type: '중기' },
+            { name: '병', percent: 16 / 30, type: '정기' },
+        ],
         samjae: ['해', '자', '축'],
     },
     오: {
@@ -94,9 +129,13 @@ export const jiji: Record<
         endTime: '13:00',
         element: '화',
         eumyang: '양',
-        isEumyangInverse: true,
+        isInvert: true,
         animal: '말',
-        jijanggan: ['병', '기', '정'],
+        jijanggan: [
+            { name: '병', percent: 1 / 3, type: '여기' },
+            { name: '기', percent: 1 / 3, type: '중기' },
+            { name: '정', percent: 1 / 3, type: '정기' },
+        ],
         samjae: ['신', '유', '술'],
     },
     미: {
@@ -106,10 +145,18 @@ export const jiji: Record<
         endTime: '15:00',
         element: '토',
         eumyang: '음',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '양',
-        jijanggan: ['정', '을', '기'],
+        jijanggan: [
+            { name: '정', percent: 3 / 10, type: '여기' },
+            { name: '을', percent: 1 / 10, type: '중기' },
+            { name: '기', percent: 6 / 10, type: '정기' },
+        ],
         samjae: ['사', '오', '미'],
+        seasonAdjustment: [
+            { element: '화', percent: 0.6 },
+            { element: '토', percent: 0.4 },
+        ],
     },
     신: {
         hanja: '申',
@@ -118,9 +165,13 @@ export const jiji: Record<
         endTime: '17:00',
         element: '금',
         eumyang: '양',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '원숭이',
-        jijanggan: ['무', '임', '경'],
+        jijanggan: [
+            { name: '무', percent: 7 / 30, type: '여기' },
+            { name: '임', percent: 7 / 30, type: '중기' },
+            { name: '경', percent: 16 / 30, type: '정기' },
+        ],
         samjae: ['인', '묘', '진'],
     },
     유: {
@@ -130,9 +181,12 @@ export const jiji: Record<
         endTime: '19:00',
         element: '금',
         eumyang: '음',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '닭',
-        jijanggan: ['경', '신'],
+        jijanggan: [
+            { name: '경', percent: 1 / 3, type: '여기' },
+            { name: '신', percent: 2 / 3, type: '정기' },
+        ],
         samjae: ['해', '자', '축'],
     },
     술: {
@@ -142,10 +196,18 @@ export const jiji: Record<
         endTime: '21:00',
         element: '토',
         eumyang: '양',
-        isEumyangInverse: false,
+        isInvert: false,
         animal: '개',
-        jijanggan: ['신', '정', '무'],
+        jijanggan: [
+            { name: '신', percent: 3 / 10, type: '여기' },
+            { name: '정', percent: 1 / 10, type: '중기' },
+            { name: '무', percent: 6 / 10, type: '정기' },
+        ],
         samjae: ['신', '유', '술'],
+        seasonAdjustment: [
+            { element: '금', percent: 0.6 },
+            { element: '토', percent: 0.4 },
+        ],
     },
     해: {
         hanja: '亥',
@@ -154,9 +216,13 @@ export const jiji: Record<
         endTime: '23:00',
         element: '수',
         eumyang: '음',
-        isEumyangInverse: false,
+        isInvert: true,
         animal: '돼지',
-        jijanggan: ['무', '갑', '임'],
+        jijanggan: [
+            { name: '무', percent: 7 / 30, type: '여기' },
+            { name: '갑', percent: 7 / 30, type: '중기' },
+            { name: '임', percent: 16 / 30, type: '정기' },
+        ],
         samjae: ['사', '오', '미'],
     },
 };

@@ -93,16 +93,39 @@ export default function ManseryeokModal() {
 
             const solarDate = calendar.getSolarCalendar();
 
-            const dupArr = [
-                modalData.data?.chartCol.year.ganDuplication,
-                modalData.data?.chartCol.year.jijiDuplication,
-                modalData.data?.chartCol.month.ganDuplication,
-                modalData.data?.chartCol.month.jijiDuplication,
-                modalData.data?.chartCol.day.ganDuplication,
-                modalData.data?.chartCol.day.jijiDuplication,
-                modalData.data?.chartCol.time?.ganDuplication,
-                modalData.data?.chartCol.time?.jijiDuplication,
-            ];
+            let dupArr: string[] = [];
+            let sinsalSet: Set<string> = new Set();
+
+            if (modalData.data) {
+                dupArr = [
+                    modalData.data.chartCol.year.ganDuplication,
+                    modalData.data.chartCol.year.jijiDuplication,
+                    modalData.data.chartCol.month.ganDuplication,
+                    modalData.data.chartCol.month.jijiDuplication,
+                    modalData.data.chartCol.day.ganDuplication,
+                    modalData.data.chartCol.day.jijiDuplication,
+                ];
+
+                sinsalSet = new Set<string>([
+                    ...modalData.data.sinsal.year.gan,
+                    ...modalData.data.sinsal.year.jiji,
+                    ...modalData.data.sinsal.month.gan,
+                    ...modalData.data.sinsal.month.jiji,
+                    ...modalData.data.sinsal.day.gan,
+                    ...modalData.data.sinsal.day.jiji,
+                ]);
+
+                if (modalData.data.chartCol.time) {
+                    dupArr.push(modalData.data?.chartCol.time.ganDuplication);
+                    dupArr.push(modalData.data?.chartCol.time.jijiDuplication);
+
+                    sinsalSet = new Set([
+                        ...sinsalSet,
+                        ...modalData.data.sinsal.time.gan,
+                        ...modalData.data.sinsal.time.jiji,
+                    ]);
+                }
+            }
 
             const dupSet = new Set<string>();
             dupArr.forEach((item) => item && dupSet.add(item));
@@ -113,17 +136,6 @@ export default function ManseryeokModal() {
                 else if (item.percent === 0) pointList.push(`${item.element} 부족`);
             });
 
-            const sinsalSet = new Set<string>([
-                ...modalData.data?.sinsal.year.gan,
-                ...modalData.data?.sinsal.year.jiji,
-                ...modalData.data?.sinsal.month.gan,
-                ...modalData.data?.sinsal.month.jiji,
-                ...modalData.data?.sinsal.day.gan,
-                ...modalData.data?.sinsal.day.jiji,
-                ...modalData.data?.sinsal.time?.gan,
-                ...modalData.data?.sinsal.time?.jiji,
-            ]);
-
             const currentDaeun = modalData.data.daeun[modalData.daeunIdx];
 
             return (
@@ -131,7 +143,7 @@ export default function ManseryeokModal() {
                     <ul className="flex flex-col gap-1">
                         <li>
                             <span>생년월일(양력): </span>
-                            <span>{`${solarDate.year}-${solarDate.month}-${solarDate.day}`}</span>
+                            <span>{`${solarDate.year}-${String(solarDate.month).padStart(2, '0')}-${String(solarDate.day).padStart(2, '0')}`}</span>
                         </li>
                         <li>
                             <span>성별: </span>
@@ -143,8 +155,9 @@ export default function ManseryeokModal() {
                                 {`${modalData.data.chartCol.year.gan}${modalData.data.chartCol.year.jiji}년`}
                                 {` ${modalData.data.chartCol.month.gan}${modalData.data.chartCol.month.jiji}월`}
                                 {` ${modalData.data.chartCol.day.gan}${modalData.data.chartCol.day.jiji}일`}
-                                {modalData.data.chartCol.time &&
-                                    ` ${modalData.data.chartCol.time.gan}${modalData.data.chartCol.time.jiji}시`}
+                                {modalData.data.chartCol.time
+                                    ? ` ${modalData.data.chartCol.time.gan}${modalData.data.chartCol.time.jiji}시`
+                                    : ' 시간모름'}
                             </span>
                         </li>
                         <li>
@@ -169,10 +182,10 @@ export default function ManseryeokModal() {
                                     ),
                             )}
                         </li>
-                        <li>
+                        {/*<li>
                             <span>현재 대운 (대운 수: {modalData.data.daeun[0].daeunNum}): </span>
                             <span>{`${currentDaeun.gan}${currentDaeun.jiji}대운`}</span>
-                        </li>
+                        </li>*/}
                     </ul>
                 )
             );

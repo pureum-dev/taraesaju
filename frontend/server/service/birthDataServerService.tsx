@@ -17,8 +17,16 @@ import { columnRelation } from '@/server/service/relationDataServerService';
 import { check12Sinsal, checkSinsalData } from '@/server/service/sinsalDataServerService';
 import { columnSipsinData } from '@/server/service/sipsinDataServerService';
 import { createInfoData, checkDuplication } from '@/server/service/pointDataServerService';
-import { checkOhaengStrength } from '@/server/service/ohaengDataServerService';
-import { checkTargetDaeun, checkTargetSeun } from '@/server/service/luckyDataServerService';
+import {
+    checkOhaengStrength,
+    checkOhaengTemp,
+    checkNeedOhaeng,
+} from '@/server/service/ohaengDataServerService';
+import {
+    checkTargetDaeun,
+    checkTargetSeun,
+    checkYearOheang,
+} from '@/server/service/luckyDataServerService';
 
 /** Data */
 import division24Json from '@/server/data/division24.json';
@@ -32,9 +40,7 @@ import {
     CorrectTargetDivision,
     BirthAllData,
     BirthColumnData,
-    BirthPointData,
 } from '@/type/birthDataInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
 import { birthDataInterface } from '@/service/birthDataService';
 
 dayjs.extend(isSameOrBefore);
@@ -79,12 +85,8 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
     );
 
     if (chartCol) {
-        const point: BirthPointData = createInfoData(chartCol);
-        const ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] } =
-            checkOhaengStrength(chartCol, true);
-        const sinsalData: BirthColumnGroup<BirthColumnItem<string[], string[]>> =
-            checkSinsalData(chartCol);
-
+        const ohaengStrength = checkOhaengStrength(chartCol, true);
+        const ohaengTemp = checkOhaengTemp(chartCol);
         const daeun = checkTargetDaeun(
             birthDate.gender,
             targetDivision,
@@ -93,14 +95,17 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
             chartCol.month,
             chartCol.day,
         );
-
         const seun = checkTargetSeun(solarBirth, daeun[0].daeunNum, chartCol.year, chartCol.day);
+        const needOhaeng = checkNeedOhaeng(ohaengStrength, ohaengTemp);
 
         return {
             chartCol: chartCol ?? null,
-            point: point,
-            ohaengStrength: ohaengStrength,
-            sinsal: sinsalData,
+            point: createInfoData(chartCol),
+            ohaengStrength,
+            ohaengTemp,
+            needOhaeng,
+            yearOhaeng: checkYearOheang(dayjs().year(), solarBirthDate.year, daeun[0]),
+            sinsal: checkSinsalData(chartCol),
             daeun: daeun,
             seun: seun,
         };

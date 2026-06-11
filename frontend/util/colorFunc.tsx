@@ -5,7 +5,7 @@ import { CheonganType, JijiType } from '@/type/basicType';
 
 export const makeColorName = (name: string, type: 'gan' | 'jiji') => {
     let _colorName = '';
-    if (name != '') {
+    if (name && name != '') {
         const _element =
             type === 'gan'
                 ? cheongan[name as CheonganType].element
@@ -39,13 +39,13 @@ export const makeBgColorAlpha = (_colorName: string) => {
         case '검은':
             return 'bg-gray-700/20';
         case '하얀':
-            return 'bg-gray-200/20';
+            return 'bg-gray-300/20';
         case '푸른':
-            return 'bg-greenmint-400/20 dark:bg-greenmint-500/20';
+            return 'bg-greenmint-300/20 dark:bg-greenmint-500/20';
         case '붉은':
-            return 'bg-coral-400/20 dark:bg-coral-500/20';
+            return 'bg-coral-300/20 dark:bg-coral-500/20';
         case '노란':
-            return 'bg-lemon-400/20 dark:bg-lemon-500/20';
+            return 'bg-lemon-300/20 dark:bg-lemon-500/20';
         default:
             return '';
     }

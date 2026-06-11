@@ -4,12 +4,15 @@ import Image from 'next/image';
 /** Lib */
 import { CalendarDays, FileText } from 'lucide-react';
 
-/** custom */
+/** Custom */
 import LogoSvg from '@/public/svg/logo.svg';
+import BirthdayInputComp from '@/component/BirthdayInputComp';
 
 export default function Home() {
     return (
-        <div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160 ">
+        <>
+            <BirthdayInputComp />
+            {/*<div className="flex justify-center items-center w-full h-screen mx-auto p-8 md:max-w-160 ">
             <div className="flex flex-col items-start gap-10 w-full px-8 py-12 border border-gray-200 rounded-3xl">
                 <div className="flex flex-row justify-center items-center w-full">
                     <Image src={LogoSvg} alt="logo" className="w-40 mr-4" />
@@ -31,6 +34,7 @@ export default function Home() {
                     </Link>
                 </div>
             </div>
-        </div>
+        </div>*/}
+        </>
     );
 }

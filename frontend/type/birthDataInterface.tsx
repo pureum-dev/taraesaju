@@ -1,8 +1,8 @@
-import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
-import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
+import { DivisionJsonData } from '@/type/jsonDataInterface';
+import { CheonganType, JijiType, OhaengType, SipsinType } from '@/type/basicType';
 import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
-import { OhaengStrengthData } from '@/type/ohaengDataInterface';
-import { DaeunData, SeunData } from '@/type/luckyDataInterface';
+import { OhaengStrengthData, OhaengTempData } from '@/type/ohaengDataInterface';
+import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
 
 export interface CorrectBirthDay {
     date: string;
@@ -38,16 +38,19 @@ export interface BirthColumnData {
 
 export interface BirthPointData {
     gongmang: JijiType[];
-    strength: { score: number; strengthType: string };
     samjae: number[];
     deukryung: boolean;
     deukji: boolean;
+    compatibleSaju: string[];
 }
 
 export interface BirthAllData {
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
-    ohaengStrength: { isBalanced: boolean; ohaeng: OhaengStrengthData[] };
+    ohaengStrength: OhaengStrengthData;
+    ohaengTemp: OhaengTempData;
+    needOhaeng: OhaengType[];
+    yearOhaeng: YearListData[];
     sinsal: BirthColumnGroup<BirthColumnItem<string[], string[]>>;
     daeun: DaeunData[];
     seun: SeunData[][];

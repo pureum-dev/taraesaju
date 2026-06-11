@@ -160,9 +160,9 @@ const SajuChartGroupComp = ({
                         jijanggan.map((item, idx) => (
                             <div
                                 key={idx}
-                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(makeColorName(item, 'gan'))} ${defaultTextColor(makeColorName(item, 'gan'))}`}
+                                className={`flex justify-center items-center w-6 h-6 m-0.5 rounded-full font-bold ${makeBgColor(makeColorName(item.name, 'gan'))} ${defaultTextColor(makeColorName(item.name, 'gan'))}`}
                             >
-                                {item}
+                                {item.name}
                             </div>
                         ))
                     ) : (
@@ -266,7 +266,7 @@ const SajuChartGroupComp = ({
         <div className="flex flex-col">
             <ul className="flex flex-row justify-end items-center gap-6 mb-4">
                 {checkList.map((item: Record<string, string>, idx: number) => (
-                    <li key={idx} className="flex flex-row items-center">
+                    <li key={idx} className="flex flex-row items-center text-sm">
                         <input
                             type="checkbox"
                             id={item.key}

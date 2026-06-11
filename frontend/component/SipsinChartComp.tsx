@@ -46,7 +46,7 @@ const SipsinChartComp = ({ columnData }: DivChartProps) => {
     }, []);
 
     return (
-        <div className="flex flex-col w-full h-full rounded-2xl border ">
+        <div className="flex flex-col w-full h-full bg-mint-50 rounded-2xl border border-background dark:bg-mint-800">
             {sinsalRowData.map((rowItem, rowIdx) => {
                 return (
                     <div
@@ -57,7 +57,7 @@ const SipsinChartComp = ({ columnData }: DivChartProps) => {
                                     ? '3rem'
                                     : `calc((100% - 3rem) / ${sinsalRowData.length - 1})`,
                         }}
-                        className={`flex flex-row items-center w-full ${
+                        className={`flex flex-row items-center w-full border-background ${
                             rowIdx !== sinsalRowData.length - 1 && 'border-b'
                         } `}
                     >
@@ -66,7 +66,7 @@ const SipsinChartComp = ({ columnData }: DivChartProps) => {
                                 <div
                                     key={`${colItem.key}_${rowItem.key}`}
                                     style={{ width: `calc(100% / ${columnData.length})` }}
-                                    className={`flex justify-center items-center min-w-20 h-full p-2 ${
+                                    className={`flex justify-center items-center min-w-20 h-full p-2 border-background ${
                                         colIdx !== columnData.length - 1 && 'border-r'
                                     }  text-center ${rowItem.className}`}
                                 >

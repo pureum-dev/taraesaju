@@ -2,8 +2,9 @@
 import dayjs from 'dayjs';
 
 /** Custom */
-import { cheongan } from '@/common/const/cheonganConst';
-import { jiji } from '@/common/const/jijiConst';
+import { cheongan, cheonganRelation } from '@/common/const/cheonganConst';
+import { jiji, jijiRelation } from '@/common/const/jijiConst';
+import { ohaeng } from '@/common/const/ohaengConst';
 
 /** Type & Interface */
 import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
@@ -11,19 +12,12 @@ import { BirthColumnGroup } from '@/type/baseInterface';
 import { BirthColumnData, BirthPointData } from '@/type/birthDataInterface';
 
 export const createInfoData = (data: BirthColumnGroup<BirthColumnData>): BirthPointData => {
-    const sipsinData: BirthColumnGroup<{ gan: SipsinType | null; jiji: SipsinType | null }> = {
-        year: { gan: data.year.ganSipsin, jiji: data.year.jijiSipsin },
-        month: { gan: data.month.ganSipsin, jiji: data.month.jijiSipsin },
-        day: { gan: null, jiji: data.day.jijiSipsin },
-        time: data.time ? { gan: data.time.ganSipsin, jiji: data.time.jijiSipsin } : null,
-    };
-
     return {
         gongmang: checkGongmang(data.day.gan, data.day.jiji),
-        strength: checkStrength(sipsinData),
         samjae: checkSamJaeList(data.year.jiji),
         deukryung: isDeuk(data.month.jijiSipsin as SipsinType),
         deukji: isDeuk(data.day.jijiSipsin as SipsinType),
+        compatibleSaju: checkCompatibleSaju(data),
     };
 };
 
@@ -77,34 +71,73 @@ export const checkGongmang = (dayGan: CheonganType, dayJiji: JijiType): JijiType
 };
 
 export const checkStrength = (
-    sipsinData: BirthColumnGroup<{ gan: SipsinType | null; jiji: SipsinType | null }>,
-): { score: number; strengthType: string } => {
-    const powerList = ['비견', '겁재', '정인', '편인'];
+    data: BirthColumnGroup<BirthColumnData>,
+    adjustScore: boolean,
+): string => {
+    const allScore = adjustScore ? (data.time ? 100 : 70) : data.time ? 75 : 50;
     let score = 0;
+    const powerList = ['비견', '겁재', '정인', '편인'];
 
-    if (powerList.includes(sipsinData.year.gan as SipsinType)) score += 10;
-    if (powerList.includes(sipsinData.year.jiji as SipsinType)) score += 10;
-    if (powerList.includes(sipsinData.month.gan as SipsinType)) score += 10;
-    if (powerList.includes(sipsinData.month.jiji as SipsinType)) score += 30;
-    if (powerList.includes(sipsinData.day.jiji as SipsinType)) score += 15;
-    if (sipsinData.time && powerList.includes(sipsinData.time.gan as SipsinType)) score += 10;
-    if (sipsinData.time && powerList.includes(sipsinData.time.jiji as SipsinType)) score += 15;
+    if (powerList.includes(data.year.ganSipsin as SipsinType)) score += 10;
+    if (powerList.includes(data.year.jijiSipsin as SipsinType)) score += 10;
+    if (powerList.includes(data.month.ganSipsin as SipsinType)) score += 10;
+    if (powerList.includes(data.day.jijiSipsin as SipsinType)) score += adjustScore ? 15 : 10;
+    if (data.time && powerList.includes(data.time.ganSipsin as SipsinType)) score += 10;
+    if (data.time && powerList.includes(data.time.jijiSipsin as SipsinType))
+        score += adjustScore ? 15 : 10;
 
+    //월지 조후 구분
+    if (adjustScore) {
+        const seasonAdjustment = jiji[data.month.jiji].seasonAdjustment;
+        if (seasonAdjustment) {
+            const ilgan = cheongan[data.day.gan].element;
+            seasonAdjustment.forEach((item) => {
+                if (item.element === ilgan || item.element === ohaeng[ilgan].resource) {
+                    score += 30 * item.percent;
+                }
+            });
+        } else {
+            if (powerList.includes(data.month.jijiSipsin as SipsinType)) score += 30;
+        }
+    } else {
+        if (powerList.includes(data.month.jijiSipsin as SipsinType)) score += 10;
+    }
+
+    const percent = (score / allScore) * 100;
     let strengthType = '';
-    if (score >= 75) {
+    if (percent >= 75) {
         strengthType = '태강';
-    } else if (score >= 50) {
+    } else if (percent >= 50) {
         strengthType = '신강';
-    } else if (score >= 25) {
+    } else if (percent >= 25) {
         strengthType = '신약';
     } else {
         strengthType = '태약';
     }
 
-    return {
-        score: score,
-        strengthType: strengthType,
-    };
+    return strengthType;
+};
+
+export const checkCompatibleSaju = (data: BirthColumnGroup<BirthColumnData>) => {
+    const dayGan = cheongan[data.day.gan];
+
+    const targetGan = cheonganRelation[data.day.gan].hap;
+    const targetGanData = cheongan[targetGan];
+    const targetGanResource = ohaeng[dayGan.element].resource;
+    const targetYukhap = jijiRelation[data.day.jiji].yukhap;
+
+    return Object.entries(jiji)
+        .filter(([key, value]) => {
+            const isYukhap = key === targetYukhap;
+
+            const isCompatibleElement =
+                value.element === dayGan.element || value.element === targetGanResource;
+
+            const isSameEumyang = value.eumyang === targetGanData.eumyang;
+
+            return isYukhap || (isSameEumyang && isCompatibleElement);
+        })
+        .map(([key]) => `${targetGan}${key}`);
 };
 
 /** 삼재 */

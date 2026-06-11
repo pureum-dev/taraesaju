@@ -20,13 +20,9 @@ const SectionContents = ({
     children,
 }: sectionProps) => {
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full p-6 border rounded-2xl">
             <SubTitleComp title={title} subTitle={subTitle} titleSide={titleSide} icon={icon} />
-            <div
-                className={`flex flex-col grow gap-2 w-full p-6 rounded-2xl bg-gray-100 dark:bg-gray-900 ${className}`}
-            >
-                {children}
-            </div>
+            <div className={`flex flex-col grow gap-2 w-full ${className}`}>{children}</div>
         </div>
     );
 };

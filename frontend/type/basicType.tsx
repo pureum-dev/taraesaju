@@ -6,6 +6,8 @@ export type RowItem = {
 };
 
 export type ColumnKeyType = 'year' | 'month' | 'day' | 'time';
+export type SeasonType = '봄' | '여름' | '가을' | '겨울';
+
 export type OhaengType = '목' | '화' | '토' | '금' | '수';
 export type CheonganType = '갑' | '을' | '병' | '정' | '무' | '기' | '경' | '신' | '임' | '계';
 export type JijiType =
@@ -47,6 +49,8 @@ export type DivisionType =
     | '동지'
     | '소한'
     | '대한';
+
+export type SipsinGroupType = '비겁' | '식상' | '재성' | '관성' | '인성';
 
 export type SipsinType =
     | '비견'
