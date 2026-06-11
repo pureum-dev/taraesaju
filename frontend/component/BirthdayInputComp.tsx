@@ -159,11 +159,23 @@ export default function BirthdayInputComp() {
                         </select>
                         <div className="flex flex-col gap-1 w-3/4 ">
                             <input
-                                {...register('birthday', { required: '생년월일을 입력해주세요' })}
+                                {...register('birthday', {
+                                    required: '생년월일을 입력해주세요',
+                                    min: {
+                                        value: '1901-01-01',
+                                        message:
+                                            '1901년 ~ 2049년 사이의 생년월일만 입력할 수 있어요.',
+                                    },
+                                    max: {
+                                        value: '2049-12-31',
+                                        message:
+                                            '1901년 ~ 2049년 사이의 생년월일만 입력할 수 있어요.',
+                                    },
+                                })}
                                 id="birthday"
                                 type="date"
-                                min="1900-01-01"
-                                max="2050-11-30"
+                                min="1901-01-01"
+                                max="2049-12-31"
                                 className={`w-full ${errors.birthday && 'border-red-500 focus-visible:ring-2 focus-visible:ring-red-500'}`}
                             />
                             {errors.birthday?.message && (
