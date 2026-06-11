@@ -48,7 +48,7 @@ export const PIE_OPTION = {
                 alignTo: 'none',
                 fontSize: 18,
                 fontWeight: 'bold',
-                formatter: (params) => {
+                formatter: (params: any) => {
                     // value가 0이면 label 숨김
                     return params.value === 0 ? '' : `${params.name}`;
                 },
@@ -123,93 +123,6 @@ export const RADAR_OPTION = {
 
             areaStyle: { color: primaryColor, opacity: 0.4 },
             data: [{}],
-        },
-    ],
-};
-
-export const GAUGE_OPTION = {
-    tooltip: {
-        trigger: 'item',
-    },
-    series: [
-        {
-            type: 'gauge',
-            startAngle: 180,
-            endAngle: 0,
-            center: ['50%', '75%'],
-            radius: '100%',
-            min: 0,
-            max: 100,
-            splitNumber: 8,
-            axisLine: {
-                lineStyle: {
-                    width: 6,
-                    color: [
-                        [0.249, '#ADB5BD'],
-                        [0.499, '#A8DADC'],
-                        [0.749, '#FDDD60'],
-                        [1, '#FF6E76'],
-                    ],
-                },
-            },
-            pointer: {
-                icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-                length: '12%',
-                width: 20,
-                offsetCenter: [0, '-60%'],
-                itemStyle: {
-                    color: 'auto',
-                },
-            },
-            axisTick: {
-                length: 12,
-                lineStyle: {
-                    color: 'auto',
-                    width: 2,
-                },
-            },
-            splitLine: {
-                length: 20,
-                lineStyle: {
-                    color: 'auto',
-                    width: 5,
-                },
-            },
-            axisLabel: {
-                color: '#a0a1a1',
-                fontSize: 14,
-                distance: -50,
-                rotate: 'tangential',
-                formatter: (value: number) => {
-                    if (value === 87.5) {
-                        return '태강';
-                    } else if (value === 62.5) {
-                        return '신강';
-                    } else if (value === 37.5) {
-                        return '신약';
-                    } else if (value === 12.5) {
-                        return '태약';
-                    }
-                    return '';
-                },
-            },
-            title: {
-                offsetCenter: [0, '-10%'],
-                fontSize: 16,
-                fontWeight: 800,
-                color: 'inherit',
-            },
-            detail: {
-                fontSize: 40,
-                offsetCenter: [0, '-35%'],
-                valueAnimation: true,
-                color: 'inherit',
-            },
-            data: [
-                {
-                    value: 70,
-                },
-            ],
         },
     ],
 };

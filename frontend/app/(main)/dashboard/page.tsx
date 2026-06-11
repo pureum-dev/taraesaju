@@ -52,9 +52,9 @@ export default function DashboardPage() {
         () => data?.yearOhaeng ?? [],
     );
 
-    const onChangeAdjustScore = useCallback((data: OheangChangeInterface) => {
-        setElementListData(data.ohaengStrength.ohaeng);
-        setNeedOhaeng(data.needOhaeng);
+    const onChangeAdjustScore = useCallback((adjustData: OheangChangeInterface) => {
+        setElementListData(adjustData.ohaengStrength.ohaeng);
+        setNeedOhaeng(adjustData.needOhaeng);
     }, []);
 
     const elementChartData = useMemo(() => {
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                 },
             ],
             tooltip: {
-                formatter: (params) => {
+                formatter: (params: any[]) => {
                     let str = `<div class="flex flex-col gap-1"> <div class=" font-bold">${params[0].axisValueLabel}</div>`;
                     params.forEach((element) => {
                         str +=

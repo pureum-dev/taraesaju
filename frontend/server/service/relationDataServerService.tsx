@@ -120,16 +120,16 @@ export const columnRelation = (
         },
         time: time
             ? {
-                  gan: [..._checkCheonganRelation.time],
+                  gan: [...(_checkCheonganRelation.time ?? [])],
                   jiji: [
-                      ..._checkJijiYukhapRelation.time,
-                      ..._checkJijiBanghapRelation.time,
-                      ..._checkJijiSamhapRelation.time,
-                      ..._checkJijiYukChungRelation.time,
-                      ..._checkJijiSamhyungRelation.time,
-                      ..._checkJijiHyungRelation.time,
-                      ..._checkJijiHaeRelation.time,
-                      ..._checkJijiPaRelation.time,
+                      ...(_checkJijiYukhapRelation.time ?? []),
+                      ...(_checkJijiBanghapRelation.time ?? []),
+                      ...(_checkJijiSamhapRelation.time ?? []),
+                      ...(_checkJijiYukChungRelation.time ?? []),
+                      ...(_checkJijiSamhyungRelation.time ?? []),
+                      ...(_checkJijiHyungRelation.time ?? []),
+                      ...(_checkJijiHaeRelation.time ?? []),
+                      ...(_checkJijiPaRelation.time ?? []),
                   ],
               }
             : null,

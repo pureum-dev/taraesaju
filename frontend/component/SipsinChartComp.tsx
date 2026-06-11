@@ -71,7 +71,10 @@ const SipsinChartComp = ({ columnData }: DivChartProps) => {
                                     }  text-center ${rowItem.className}`}
                                 >
                                     {rowItem.cellRender
-                                        ? rowItem.cellRender(colItem)
+                                        ? rowItem.cellRender({
+                                              key: `${colItem.key}_${rowItem.key}`,
+                                              ...colItem,
+                                          })
                                         : (colItem[rowItem.key] ?? '-')}
                                 </div>
                             );

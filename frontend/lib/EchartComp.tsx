@@ -81,7 +81,6 @@ import {
     PIE_OPTION,
     LINE_AREA_OPTION,
     RADAR_OPTION,
-    GAUGE_OPTION,
     RANK_BAR_OPTION,
     STACK_BAR_OPTION,
 } from '@/util/chartOptionConst';
@@ -104,7 +103,7 @@ echarts.registerTheme('_theme', {});
 export type EchartCompRef = EChartsType | null;
 
 interface ChartOptionProps {
-    chartType: 'pie' | 'bar' | 'line' | 'line_area' | 'radar' | 'gauge' | 'rank_bar' | 'stack_bar';
+    chartType: 'pie' | 'bar' | 'line' | 'line_area' | 'radar' | 'rank_bar' | 'stack_bar';
     option?: Record<string, any>;
     data?: Record<string, any>[]; // pie 차트용
 }
@@ -140,13 +139,6 @@ const EchartComp = forwardRef<EchartCompRef, ChartOptionProps>(
                 case 'radar':
                     const radarChartOption = _.merge(_.cloneDeep(RADAR_OPTION), option);
                     return radarChartOption;
-
-                case 'gauge':
-                    const gaugeChartOption = _.merge(_.cloneDeep(GAUGE_OPTION), option);
-                    if (data) {
-                        gaugeChartOption.series[0].data = data;
-                    }
-                    return gaugeChartOption;
 
                 case 'rank_bar':
                     const rankBarChartOption = _.merge(_.cloneDeep(RANK_BAR_OPTION), option);

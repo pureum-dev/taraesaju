@@ -43,7 +43,7 @@ export default function ColumnButtonChartComp({
             {
                 key: 'gan',
                 className: '',
-                cellRender: (col) => {
+                cellRender: (col: any) => {
                     return (
                         col && (
                             <div className={`flex justify-center items-center w-full h-full p-2`}>
@@ -56,7 +56,7 @@ export default function ColumnButtonChartComp({
             {
                 key: 'jiji',
                 className: '',
-                cellRender: (col) => {
+                cellRender: (col: any) => {
                     return (
                         col && (
                             <div className={`flex justify-center items-center w-full h-full p-2`}>
@@ -92,7 +92,7 @@ export default function ColumnButtonChartComp({
             {
                 key: 'gan',
                 className: '',
-                cellRender: (col) => {
+                cellRender: (col: any) => {
                     return (
                         col && (
                             <div className={`flex justify-center items-center w-full h-full p-2`}>
@@ -105,7 +105,7 @@ export default function ColumnButtonChartComp({
             {
                 key: 'jiji',
                 className: '',
-                cellRender: (col) => {
+                cellRender: (col: any) => {
                     return (
                         col && (
                             <div className={`flex justify-center items-center w-full h-full p-2`}>

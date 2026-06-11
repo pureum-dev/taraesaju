@@ -17,7 +17,6 @@ import { birthDataInterface } from '@/service/birthDataService';
 import { BirthAllData } from '@/type/birthDataInterface';
 import { oheangDataService, OheangChangeInterface } from '@/service/ohaengDataService';
 
-/** type */
 interface AsideProps {
     className?: string;
     profileData: birthDataInterface | null;

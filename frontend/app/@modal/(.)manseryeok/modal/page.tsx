@@ -6,8 +6,10 @@ import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Custom */
 import BasicModalComp from '../../_component/BasicModalComp';
-
 import { useModalStore } from '@/lib/store/useModalDataStore';
+
+/** Type & Interface */
+import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
 
 const arr = [
     {
@@ -78,7 +80,7 @@ export default function ManseryeokModal() {
             const calendar = new KoreanLunarCalendar();
             const splitBirthday = modalData.profileData.birthday
                 .split('-')
-                .map((item) => Number(item));
+                .map((item: string) => Number(item));
 
             if (modalData.profileData.calendarType === 'solar') {
                 calendar.setSolarDate(splitBirthday[0], splitBirthday[1], splitBirthday[2]);
@@ -131,7 +133,7 @@ export default function ManseryeokModal() {
             dupArr.forEach((item) => item && dupSet.add(item));
 
             const pointList = [...dupSet];
-            modalData.elementListData.forEach((item) => {
+            modalData.elementListData.forEach((item: OhaengStrengthEachData) => {
                 if (item.percent >= 37.5) pointList.push(`${item.element} 과다`);
                 else if (item.percent === 0) pointList.push(`${item.element} 부족`);
             });

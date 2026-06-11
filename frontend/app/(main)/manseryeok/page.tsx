@@ -32,6 +32,7 @@ import AsideContents from '@/component/AsideContents';
 /** type & interface*/
 import { ColumnItem } from '@/type/basicType';
 import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
+import { OheangChangeInterface } from '@/service/ohaengDataService';
 
 interface ChartData {
     value: number;
@@ -67,13 +68,10 @@ export default function ManseryeokPage() {
         data && profileData ? calculateInitialIdx(profileData, data.daeun, data.seun).seunIdx : 0,
     );
 
-    const onChangeAdjustScore = useCallback(
-        (adjustData: { isBalanced: boolean; ohaeng: OhaengStrengthEachData[] }) => {
-            setElementListData(adjustData.ohaeng);
-            setIsElementBalance(adjustData.isBalanced);
-        },
-        [],
-    );
+    const onChangeAdjustScore = useCallback((adjustData: OheangChangeInterface) => {
+        setElementListData(adjustData.ohaengStrength.ohaeng);
+        setIsElementBalance(adjustData.ohaengStrength.isBalanced);
+    }, []);
 
     const onClickAddColumn = useCallback((index: number, type: 'daeun' | 'seun') => {
         if (type === 'daeun') {
