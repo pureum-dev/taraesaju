@@ -29,6 +29,32 @@
 # 프로젝트 구조
 
 ```
+/frontend
+  ├── /app
+  ├── /common
+  │     ├── /component
+  │     ├── /const
+  │     ├── /lib
+  │     ├── /type
+  │     ├── /util
+  ├── /public
+  │     ├── /favicon
+  │     ├── /fonts
+  │     ├── /svg
+  ├── /server
+  │     ├── /data
+  │     │   └── division24.json
+  │     │   └── region.json
+  │     ├── /service
+  │     │   └── birthDataServerService.tsx
+  │     │   └── luckyDataServerService.tsx
+  ├── /client
+  │     └── birthDataService.tsx
+  │     └── ohaengDataService.tsx
+  │     └── regionService.tsx
+  ├── /style
+  │     └── font.css
+  │     └── global.css
 
 ```
 
