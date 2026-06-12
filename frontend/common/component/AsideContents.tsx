@@ -5,17 +5,17 @@ import { useRouter } from 'next/navigation';
 
 /** lib */
 import { UserRoundIcon, SunIcon, MoonIcon, MapPinnedIcon } from 'lucide-react';
-import { useModalStore } from '@/lib/store/useModalDataStore';
+import { useModalStore } from '@/common/lib/store/useModalDataStore';
 
 /** Custom */
-import { calculateCalendar } from '@/util/commonFunc';
-import IljuCharacterComp from '@/component/IljuCharacterComp';
-import TooltipIconComp from '@/component/TooltipIconComp';
+import { calculateCalendar } from '@/common/util/commonFunc';
+import IljuCharacterComp from '@/common/component/IljuCharacterComp';
+import TooltipIconComp from '@/common/component/TooltipIconComp';
 
 /** type & interface*/
-import { birthDataInterface } from '@/service/birthDataService';
-import { BirthAllData } from '@/type/birthDataInterface';
-import { oheangDataService, OheangChangeInterface } from '@/service/ohaengDataService';
+import { birthDataInterface } from '@/client/birthDataService';
+import { BirthAllData } from '@/common/type/birthDataInterface';
+import { oheangDataService, OheangChangeInterface } from '@/client/ohaengDataService';
 
 interface AsideProps {
     className?: string;

@@ -4,8 +4,14 @@ import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 
 /** Type & Interface */
-import { CheonganType, OhaengType, SipsinGroupType, SipsinType, JijiType } from '@/type/basicType';
-import { BirthColumnItem } from '@/type/baseInterface';
+import {
+    CheonganType,
+    OhaengType,
+    SipsinGroupType,
+    SipsinType,
+    JijiType,
+} from '@/common/type/basicType';
+import { BirthColumnItem } from '@/common/type/baseInterface';
 
 export const columnSipsinData = (
     year: BirthColumnItem<CheonganType, JijiType>,

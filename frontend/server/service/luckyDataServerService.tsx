@@ -9,10 +9,10 @@ import { checkSipsinData } from './sipsinDataServerService';
 import { check12Sinsal } from './sinsalDataServerService';
 
 /** Type & Interface */
-import { CheonganType, JijiType } from '@/type/basicType';
-import { BirthColumnItem } from '@/type/baseInterface';
-import { DivisionJsonData } from '@/type/jsonDataInterface';
-import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
+import { CheonganType, JijiType } from '@/common/type/basicType';
+import { BirthColumnItem } from '@/common/type/baseInterface';
+import { DivisionJsonData } from '@/common/type/jsonDataInterface';
+import { DaeunData, SeunData, YearListData } from '@/common/type/luckyDataInterface';
 
 /**
  * 대운 계산 - 태양력

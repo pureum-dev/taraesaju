@@ -30,7 +30,7 @@
         ".next/types/**/*.ts",
         ".next/dev/types/**/*.ts",
         "**/*.mts",
-        "lib/supabaseClient.js"
+        "common/lib/supabaseClient.js"
     ],
     "exclude": ["node_modules"]
 }

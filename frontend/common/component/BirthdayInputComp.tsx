@@ -8,16 +8,16 @@ import Image from 'next/image';
 import { Mars, Venus, Search } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { useRegionStore } from '@/lib/store/useRegionStore';
-import { useDataStore } from '@/lib/store/useDataStore';
+import { useRegionStore } from '@/common/lib/store/useRegionStore';
+import { useDataStore } from '@/common/lib/store/useDataStore';
 
 /** Custom */
 import LogoSvg from '@/public/svg/logo.svg';
 import LogoDarkSvg from '@/public/svg/logo_dark.svg';
 
 /** Type & Interface */
-import { RegionJsonData } from '@/type/jsonDataInterface';
-import { birthDataInterface, birthDataService } from '@/service/birthDataService';
+import { RegionJsonData } from '@/common/type/jsonDataInterface';
+import { birthDataInterface, birthDataService } from '@/client/birthDataService';
 
 const genderList = [
     { value: 'M', label: '남성', icon: <Mars size={15} className="mr-1" /> },

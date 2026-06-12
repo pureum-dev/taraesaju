@@ -2,9 +2,9 @@
 import { jiji } from '@/common/const/jijiConst';
 
 /** Type & Interface */
-import { CheonganType, JijiType, ColumnKeyType } from '@/type/basicType';
-import { BirthColumnData } from '@/type/birthDataInterface';
-import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
+import { CheonganType, JijiType, ColumnKeyType } from '@/common/type/basicType';
+import { BirthColumnData } from '@/common/type/birthDataInterface';
+import { BirthColumnGroup, BirthColumnItem } from '@/common/type/baseInterface';
 import { cheongan } from '@/common/const/cheonganConst';
 import { sinsal } from '@/common/const/sinsalConst';
 

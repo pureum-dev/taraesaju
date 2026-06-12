@@ -1,5 +1,5 @@
 /** Custom */
-import BirthdayInputComp from '@/component/BirthdayInputComp';
+import BirthdayInputComp from '@/common/component/BirthdayInputComp';
 
 export default function Home() {
     return <BirthdayInputComp />;

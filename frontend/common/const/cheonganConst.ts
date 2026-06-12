@@ -1,4 +1,4 @@
-import { CheonganType, OhaengType } from '@/type/basicType';
+import { CheonganType, OhaengType } from '@/common/type/basicType';
 
 export const cheongan: Record<
     CheonganType,

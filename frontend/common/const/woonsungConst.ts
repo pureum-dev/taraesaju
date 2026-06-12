@@ -1,4 +1,4 @@
-import { CheonganType, JijiType } from '@/type/basicType';
+import { CheonganType, JijiType } from '@/common/type/basicType';
 
 export const woonsung: Record<CheonganType, Record<JijiType, string>> = {
     갑: {

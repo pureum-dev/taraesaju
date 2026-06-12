@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
 
-import { OhaengType, SipsinType } from '@/type/basicType';
+import { OhaengType, SipsinType } from '@/common/type/basicType';
 import elementTreeSvg from '@/public/svg/element/목.svg';
 import elementFireSvg from '@/public/svg/element/화.svg';
 import elementEarthSvg from '@/public/svg/element/토.svg';

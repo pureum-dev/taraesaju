@@ -12,27 +12,27 @@ import {
     GhostIcon,
     ClubIcon,
 } from 'lucide-react';
-import { useDataStore } from '@/lib/store/useDataStore';
+import { useDataStore } from '@/common/lib/store/useDataStore';
 
 /** Custom */
 import { jiji } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
 
-import { getCSSVariable } from '@/util/colorFunc';
-import { calculateInitialIdx } from '@/util/commonFunc';
+import { getCSSVariable } from '@/common/util/colorFunc';
+import { calculateInitialIdx } from '@/common/util/commonFunc';
 
-import SajuChartGroupComp from '@/component/SajuChartGroupComp';
-import EchartComp from '@/lib/EchartComp';
-import SubTitleComp from '@/component/SubTitleComp';
-import SipsinChartComp from '@/component/SipsinChartComp';
-import SectionContents from '@/component/SectionContents';
-import ColumnButtonChartComp from '@/component/ColumnButtonChartComp';
-import AsideContents from '@/component/AsideContents';
+import SajuChartGroupComp from '@/common/component/SajuChartGroupComp';
+import EchartComp from '@/common/lib/EchartComp';
+import SubTitleComp from '@/common/component/SubTitleComp';
+import SipsinChartComp from '@/common/component/SipsinChartComp';
+import SectionContents from '@/common/component/SectionContents';
+import ColumnButtonChartComp from '@/common/component/ColumnButtonChartComp';
+import AsideContents from '@/common/component/AsideContents';
 
 /** type & interface*/
-import { ColumnItem } from '@/type/basicType';
-import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
-import { OheangChangeInterface } from '@/service/ohaengDataService';
+import { ColumnItem } from '@/common/type/basicType';
+import { OhaengStrengthEachData } from '@/common/type/ohaengDataInterface';
+import { OheangChangeInterface } from '@/client/ohaengDataService';
 
 interface ChartData {
     value: number;

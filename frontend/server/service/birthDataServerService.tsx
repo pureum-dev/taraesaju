@@ -32,16 +32,16 @@ import {
 import division24Json from '@/server/data/division24.json';
 
 /** Type & Interface */
-import { CheonganType, JijiType, DivisionType } from '@/type/basicType';
-import { RegionJsonData, DivisionJsonData } from '@/type/jsonDataInterface';
-import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
+import { CheonganType, JijiType, DivisionType } from '@/common/type/basicType';
+import { RegionJsonData, DivisionJsonData } from '@/common/type/jsonDataInterface';
+import { BirthColumnGroup, BirthColumnItem } from '@/common/type/baseInterface';
 import {
     CorrectBirthDay,
     CorrectTargetDivision,
     BirthAllData,
     BirthColumnData,
-} from '@/type/birthDataInterface';
-import { birthDataInterface } from '@/service/birthDataService';
+} from '@/common/type/birthDataInterface';
+import { birthDataInterface } from '@/client/birthDataService';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);

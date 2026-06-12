@@ -1,4 +1,4 @@
-import { DivisionType, JijiType } from '@/type/basicType';
+import { DivisionType, JijiType } from '@/common/type/basicType';
 
 export const division24: Record<
     DivisionType,

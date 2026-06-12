@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 /** lib */
-import { useDataStore } from '@/lib/store/useDataStore';
+import { useDataStore } from '@/common/lib/store/useDataStore';
 import { format as echartFormat } from 'echarts';
 
 /** Custom */
@@ -13,20 +13,20 @@ import { cheongan } from '@/common/const/cheonganConst';
 import { ohaeng } from '@/common/const/ohaengConst';
 import { jiji } from '@/common/const/jijiConst';
 
-import { calculateInitialIdx } from '@/util/commonFunc';
-import { makeBgColor, defaultTextColor, makeColorName } from '@/util/colorFunc';
+import { calculateInitialIdx } from '@/common/util/commonFunc';
+import { makeBgColor, defaultTextColor, makeColorName } from '@/common/util/colorFunc';
 
-import EchartComp from '@/lib/EchartComp';
-import ElementBoxComp from '@/component/ElementBoxComp';
-import AsideContents from '@/component/AsideContents';
-import TooltipComp from '@/component/TooltipComp';
-import TooltipIconComp from '@/component/TooltipIconComp';
+import EchartComp from '@/common/lib/EchartComp';
+import ElementBoxComp from '@/common/component/ElementBoxComp';
+import AsideContents from '@/common/component/AsideContents';
+import TooltipComp from '@/common/component/TooltipComp';
+import TooltipIconComp from '@/common/component/TooltipIconComp';
 
 /** type & interface*/
-import { OhaengType } from '@/type/basicType';
-import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
-import { YearListData } from '@/type/luckyDataInterface';
-import { OheangChangeInterface } from '@/service/ohaengDataService';
+import { OhaengType } from '@/common/type/basicType';
+import { OhaengStrengthEachData } from '@/common/type/ohaengDataInterface';
+import { YearListData } from '@/common/type/luckyDataInterface';
+import { OheangChangeInterface } from '@/client/ohaengDataService';
 
 const SmallContents = ({ title, children }: { title: string; children: ReactNode }) => {
     return (

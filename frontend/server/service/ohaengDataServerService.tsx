@@ -14,14 +14,14 @@ import {
     SipsinGroupType,
     ColumnKeyType,
     SeasonType,
-} from '@/type/basicType';
-import { BirthColumnData } from '@/type/birthDataInterface';
-import { BirthColumnGroup } from '@/type/baseInterface';
+} from '@/common/type/basicType';
+import { BirthColumnData } from '@/common/type/birthDataInterface';
+import { BirthColumnGroup } from '@/common/type/baseInterface';
 import {
     OhaengStrengthEachData,
     OhaengStrengthData,
     OhaengTempData,
-} from '@/type/ohaengDataInterface';
+} from '@/common/type/ohaengDataInterface';
 
 export const checkOhaengStrength = (
     data: BirthColumnGroup<BirthColumnData>,

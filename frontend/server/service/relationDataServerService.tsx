@@ -5,9 +5,9 @@ import { cheonganRelation } from '@/common/const/cheonganConst';
 import { jijiRelation } from '@/common/const/jijiConst';
 
 /** Type & Interface */
-import { CheonganType, JijiType } from '@/type/basicType';
-import { Relation } from '@/type/birthDataInterface';
-import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
+import { CheonganType, JijiType } from '@/common/type/basicType';
+import { Relation } from '@/common/type/birthDataInterface';
+import { BirthColumnGroup, BirthColumnItem } from '@/common/type/baseInterface';
 
 export const columnRelation = (
     year: BirthColumnItem<CheonganType, JijiType>,

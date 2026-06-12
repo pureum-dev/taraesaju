@@ -1,8 +1,8 @@
-import { DivisionJsonData } from '@/type/jsonDataInterface';
-import { CheonganType, JijiType, OhaengType, SipsinType } from '@/type/basicType';
-import { BirthColumnGroup, BirthColumnItem } from '@/type/baseInterface';
-import { OhaengStrengthData, OhaengTempData } from '@/type/ohaengDataInterface';
-import { DaeunData, SeunData, YearListData } from '@/type/luckyDataInterface';
+import { DivisionJsonData } from '@/common/type/jsonDataInterface';
+import { CheonganType, JijiType, OhaengType, SipsinType } from '@/common/type/basicType';
+import { BirthColumnGroup, BirthColumnItem } from '@/common/type/baseInterface';
+import { OhaengStrengthData, OhaengTempData } from '@/common/type/ohaengDataInterface';
+import { DaeunData, SeunData, YearListData } from '@/common/type/luckyDataInterface';
 
 export interface CorrectBirthDay {
     date: string;

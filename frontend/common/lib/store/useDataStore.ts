@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 /** Type & Interface */
-import { birthDataInterface } from '@/service/birthDataService';
-import { BirthAllData } from '@/type/birthDataInterface';
+import { birthDataInterface } from '@/client/birthDataService';
+import { BirthAllData } from '@/common/type/birthDataInterface';
 
 interface DataState {
     profileData: birthDataInterface | null;

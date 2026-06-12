@@ -1,5 +1,5 @@
-import fetchConfig from '@/util/fetchConfig';
-import { RegionJsonData } from '@/type/jsonDataInterface';
+import fetchConfig from '@/common/util/fetchConfig';
+import { RegionJsonData } from '@/common/type/jsonDataInterface';
 
 export const regionService = {
     getUserAttendanceApplication: (keyword: string) =>

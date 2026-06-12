@@ -5,13 +5,18 @@ import { ZapIcon, HeartIcon } from 'lucide-react';
 
 /** Custom */
 import { jiji } from '@/common/const/jijiConst';
-import { makeBgColor, defaultTextColor, makeBgColorAlpha, makeColorName } from '@/util/colorFunc';
+import {
+    makeBgColor,
+    defaultTextColor,
+    makeBgColorAlpha,
+    makeColorName,
+} from '@/common/util/colorFunc';
 import SajuChartComp from './SajuChartComp';
-import ElementBoxComp from '@/component/ElementBoxComp';
+import ElementBoxComp from '@/common/component/ElementBoxComp';
 
 /** type & interface*/
-import { ColumnItem, JijiType, RowItem } from '@/type/basicType';
-import { Relation } from '@/type/birthDataInterface';
+import { ColumnItem, JijiType, RowItem } from '@/common/type/basicType';
+import { Relation } from '@/common/type/birthDataInterface';
 
 interface SajuChartGroupProps {
     columnData: ColumnItem[];

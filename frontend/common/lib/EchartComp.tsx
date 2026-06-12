@@ -83,7 +83,7 @@ import {
     RADAR_OPTION,
     RANK_BAR_OPTION,
     STACK_BAR_OPTION,
-} from '@/util/chartOptionConst';
+} from '@/common/const/chartOptionConst';
 
 echarts.use([
     TitleComponent,

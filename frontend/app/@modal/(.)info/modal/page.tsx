@@ -4,14 +4,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 /** Lib */
 import { Search } from 'lucide-react';
-import { useRegionStore } from '@/lib/store/useRegionStore';
+import { useRegionStore } from '@/common/lib/store/useRegionStore';
 
 /** Custom */
 import BasicModalComp from '../../_component/BasicModalComp';
 
 /** Type & Interface */
-import { RegionJsonData } from '@/type/jsonDataInterface';
-import { regionService } from '@/service/regionService';
+import { RegionJsonData } from '@/common/type/jsonDataInterface';
+import { regionService } from '@/client/regionService';
 import { useRouter } from 'next/navigation';
 
 export default function InfoModal() {

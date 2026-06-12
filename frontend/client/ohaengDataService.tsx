@@ -1,11 +1,11 @@
 /** Custom */
-import fetchConfig from '@/util/fetchConfig';
+import fetchConfig from '@/common/util/fetchConfig';
 
 /** Type & Interface */
-import { BirthColumnGroup } from '@/type/baseInterface';
-import { BirthColumnData } from '@/type/birthDataInterface';
-import { OhaengType } from '@/type/basicType';
-import { OhaengStrengthData, OhaengTempData } from '@/type/ohaengDataInterface';
+import { BirthColumnGroup } from '@/common/type/baseInterface';
+import { BirthColumnData } from '@/common/type/birthDataInterface';
+import { OhaengType } from '@/common/type/basicType';
+import { OhaengStrengthData, OhaengTempData } from '@/common/type/ohaengDataInterface';
 
 export interface OheangChangeInterface {
     ohaengStrength: OhaengStrengthData;

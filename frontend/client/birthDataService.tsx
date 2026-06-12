@@ -1,9 +1,9 @@
 /** Custom */
-import fetchConfig from '@/util/fetchConfig';
+import fetchConfig from '@/common/util/fetchConfig';
 
 /** Type & Interface */
-import { RegionJsonData } from '@/type/jsonDataInterface';
-import { BirthAllData } from '@/type/birthDataInterface';
+import { RegionJsonData } from '@/common/type/jsonDataInterface';
+import { BirthAllData } from '@/common/type/birthDataInterface';
 
 export interface birthDataInterface {
     nickName: string;

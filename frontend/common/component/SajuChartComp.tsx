@@ -1,5 +1,5 @@
 /** type & interface*/
-import { ColumnItem, RowItem } from '@/type/basicType';
+import { ColumnItem, RowItem } from '@/common/type/basicType';
 
 interface SajuChartProps {
     columnData: ColumnItem[];

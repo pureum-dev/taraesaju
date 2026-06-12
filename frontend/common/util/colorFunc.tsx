@@ -1,7 +1,7 @@
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
-import { CheonganType, JijiType } from '@/type/basicType';
+import { CheonganType, JijiType } from '@/common/type/basicType';
 
 export const makeColorName = (name: string, type: 'gan' | 'jiji') => {
     let _colorName = '';

@@ -6,10 +6,10 @@ import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Custom */
 import BasicModalComp from '../../_component/BasicModalComp';
-import { useModalStore } from '@/lib/store/useModalDataStore';
+import { useModalStore } from '@/common/lib/store/useModalDataStore';
 
 /** Type & Interface */
-import { OhaengStrengthEachData } from '@/type/ohaengDataInterface';
+import { OhaengStrengthEachData } from '@/common/type/ohaengDataInterface';
 
 const arr = [
     {

@@ -7,9 +7,9 @@ import { jiji, jijiRelation } from '@/common/const/jijiConst';
 import { ohaeng } from '@/common/const/ohaengConst';
 
 /** Type & Interface */
-import { CheonganType, JijiType, SipsinType } from '@/type/basicType';
-import { BirthColumnGroup } from '@/type/baseInterface';
-import { BirthColumnData, BirthPointData } from '@/type/birthDataInterface';
+import { CheonganType, JijiType, SipsinType } from '@/common/type/basicType';
+import { BirthColumnGroup } from '@/common/type/baseInterface';
+import { BirthColumnData, BirthPointData } from '@/common/type/birthDataInterface';
 
 export const createInfoData = (data: BirthColumnGroup<BirthColumnData>): BirthPointData => {
     return {

@@ -3,10 +3,10 @@ import Image from 'next/image';
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
 import { ohaeng } from '@/common/const/ohaengConst';
-import { makeBgColorAlpha } from '@/util/colorFunc';
+import { makeBgColorAlpha } from '@/common/util/colorFunc';
 
 /** Type & Interface */
-import { CheonganType, JijiType } from '@/type/basicType';
+import { CheonganType, JijiType } from '@/common/type/basicType';
 
 export default function IljuCharacterComp({ gan, jiji }: { gan: CheonganType; jiji: JijiType }) {
     return (

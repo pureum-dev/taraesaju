@@ -1,7 +1,7 @@
 import { cheongan } from '@/common/const/cheonganConst';
 import { jiji } from '@/common/const/jijiConst';
-import { CheonganType, JijiType } from '@/type/basicType';
-import { makeBgColor, defaultTextColor, makeColorName } from '@/util/colorFunc';
+import { CheonganType, JijiType } from '@/common/type/basicType';
+import { makeBgColor, defaultTextColor, makeColorName } from '@/common/util/colorFunc';
 
 const ElementBoxComp = ({
     name,

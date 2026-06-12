@@ -3,10 +3,10 @@
 import { useMemo } from 'react';
 
 /** Lib */
-import ElementBoxComp from '@/component/ElementBoxComp';
+import ElementBoxComp from '@/common/component/ElementBoxComp';
 
 /** Type & Interface */
-import { ColumnItem, RowItem } from '@/type/basicType';
+import { ColumnItem, RowItem } from '@/common/type/basicType';
 
 interface ColumnButtonChartProps {
     columnData: ColumnItem[];

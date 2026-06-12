@@ -1,4 +1,4 @@
-import { OhaengType, CheonganType, JijiType } from '@/type/basicType';
+import { OhaengType, CheonganType, JijiType } from '@/common/type/basicType';
 
 export const jiji: Record<
     JijiType,

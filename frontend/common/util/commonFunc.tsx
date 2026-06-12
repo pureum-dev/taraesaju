@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import KoreanLunarCalendar from 'korean-lunar-calendar';
 
 /** Type & Interface */
-import { birthDataInterface } from '@/service/birthDataService';
-import { DaeunData, SeunData } from '@/type/luckyDataInterface';
+import { birthDataInterface } from '@/client/birthDataService';
+import { DaeunData, SeunData } from '@/common/type/luckyDataInterface';
 
 export const calculateCalendar = (profileData: birthDataInterface) => {
     const calendar = new KoreanLunarCalendar();

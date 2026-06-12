@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /** Type & Interface */
-import { RegionJsonData } from '@/type/jsonDataInterface';
+import { RegionJsonData } from '@/common/type/jsonDataInterface';
 
 interface RegionlState {
     RegionJsonData: RegionJsonData | null;

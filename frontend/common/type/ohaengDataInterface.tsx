@@ -1,4 +1,4 @@
-import { OhaengType, SipsinGroupType, SipsinType, SeasonType } from '@/type/basicType';
+import { OhaengType, SipsinGroupType, SipsinType, SeasonType } from '@/common/type/basicType';
 
 export interface SipsinStrengthData {
     name: SipsinType;

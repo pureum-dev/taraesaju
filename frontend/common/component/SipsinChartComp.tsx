@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { RowItem } from '@/type/basicType';
+import { RowItem } from '@/common/type/basicType';
 
 interface DivChartProps {
     columnData: Record<string, any>[];
