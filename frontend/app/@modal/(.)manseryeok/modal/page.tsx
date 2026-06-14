@@ -1,15 +1,15 @@
 'use client';
 import { useMemo } from 'react';
 
-/** Lib */
-import KoreanLunarCalendar from 'korean-lunar-calendar';
-
 /** Custom */
 import BasicModalComp from '../../_component/BasicModalComp';
+import { calculateCurrentDaeun } from '@/common/util/commonFunc';
+
 import { useModalStore } from '@/common/lib/store/useModalDataStore';
 
 /** Type & Interface */
 import { OhaengStrengthEachData } from '@/common/type/ohaengDataInterface';
+import dayjs from 'dayjs';
 
 const arr = [
     {
@@ -77,24 +77,6 @@ export default function ManseryeokModal() {
     // useMemo
     const profileComp = useMemo(() => {
         if (modalData) {
-            const calendar = new KoreanLunarCalendar();
-            const splitBirthday = modalData.profileData.birthday
-                .split('-')
-                .map((item: string) => Number(item));
-
-            if (modalData.profileData.calendarType === 'solar') {
-                calendar.setSolarDate(splitBirthday[0], splitBirthday[1], splitBirthday[2]);
-            } else {
-                calendar.setLunarDate(
-                    splitBirthday[0],
-                    splitBirthday[1],
-                    splitBirthday[2],
-                    modalData.profileData.calendarType === 'leap',
-                );
-            }
-
-            const solarDate = calendar.getSolarCalendar();
-
             let dupArr: string[] = [];
             let sinsalSet: Set<string> = new Set();
 
@@ -132,21 +114,20 @@ export default function ManseryeokModal() {
             const dupSet = new Set<string>();
             dupArr.forEach((item) => item && dupSet.add(item));
 
-            const pointList = [...dupSet];
+            const pointList = [...dupSet, modalData.data.ohaengStrength.strengthType];
             modalData.elementListData.forEach((item: OhaengStrengthEachData) => {
                 if (item.percent >= 37.5) pointList.push(`${item.element} 과다`);
                 else if (item.percent === 0) pointList.push(`${item.element} 부족`);
             });
 
-            const currentDaeun = modalData.data.daeun[modalData.daeunIdx];
+            const targetDaeun =
+                modalData.profileData && modalData.data
+                    ? calculateCurrentDaeun(modalData.profileData, modalData.data.daeun)
+                    : null;
 
             return (
                 modalData && (
                     <ul className="flex flex-col gap-1">
-                        <li>
-                            <span>생년월일(양력): </span>
-                            <span>{`${solarDate.year}-${String(solarDate.month).padStart(2, '0')}-${String(solarDate.day).padStart(2, '0')}`}</span>
-                        </li>
                         <li>
                             <span>성별: </span>
                             <span>{modalData.profileData.gender === 'M' ? '남성' : '여성'}</span>
@@ -162,6 +143,22 @@ export default function ManseryeokModal() {
                                     : ' 시간모름'}
                             </span>
                         </li>
+                        <li>
+                            <span>나이: </span>
+                            <span>
+                                {`${dayjs().year() - dayjs(modalData.profileData.birthday, 'YYYY-MM-DD').year() + 1}세`}
+                                {` (만 ${dayjs().diff(
+                                    dayjs(modalData.profileData.birthday, 'YYYY-MM-DD'),
+                                    'year',
+                                )}세)`}
+                            </span>
+                        </li>
+                        {targetDaeun && (
+                            <li>
+                                <span>현재 대운: </span>
+                                <span>{`${targetDaeun.gan}${targetDaeun.jiji}대운 (대운수: ${modalData.data.daeun[0].daeunNum})`}</span>
+                            </li>
+                        )}
                         <li>
                             <span>사주 특징: </span>
                             {pointList.map(
@@ -184,10 +181,6 @@ export default function ManseryeokModal() {
                                     ),
                             )}
                         </li>
-                        {/*<li>
-                            <span>현재 대운 (대운 수: {modalData.data.daeun[0].daeunNum}): </span>
-                            <span>{`${currentDaeun.gan}${currentDaeun.jiji}대운`}</span>
-                        </li>*/}
                     </ul>
                 )
             );
@@ -211,10 +204,11 @@ export default function ManseryeokModal() {
                 <div>
                     <div className="mb-2 font-bold">{`[시스템 설정]`}</div>
                     <div>
-                        아래 제공하는 정보를 오행과 십신의 원칙을 기반으로 심층적으로 해석해 주세요.
-                        제공되는 정보는 입춘을 기준으로 출생지 반영하여 시간 보정을 완료해 사주를
-                        구성한 내용입니다. 전문 용어는 한글로 쉽게 풀이하고 이모티콘과 숫자 소제목을
-                        활용하여 가독성을 높여주세요.
+                        사주 전문가로서 아래 제공하는 정보를 오행과 십신의 원칙을 기반으로
+                        **심층적으로** 해석해 주세요. 제공되는 정보는 입춘을 기준으로 출생지
+                        반영하여 시간 보정을 완료해 사주를 구성한 내용입니다. 전문 용어는 한글로
+                        쉽게 풀이하고 상세하게 설명하되 이모티콘과 숫자 소제목을 활용하여 가독성을
+                        높여주세요.
                     </div>
                 </div>
                 <div>
