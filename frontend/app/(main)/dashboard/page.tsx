@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 /** lib */
-import { useDataStore } from '@/common/lib/store/useDataStore';
+import { SunSnow, Clock4 } from 'lucide-react';
 import { format as echartFormat } from 'echarts';
+
+import { useDataStore } from '@/common/lib/store/useDataStore';
 
 /** Custom */
 import { cheongan } from '@/common/const/cheonganConst';
@@ -240,14 +242,18 @@ export default function DashboardPage() {
                             <TooltipComp>
                                 <div className="flex flex-col justify-start">
                                     <div className="flex flex-row gap-2.5">
-                                        <span>계절:</span>
-                                        <span className="font-bold">{data?.ohaengTemp.season}</span>
+                                        <span className="flex flex-row items-center font-bold gap-1">
+                                            <SunSnow className="w-4 h-4" />
+                                            <span>계절: </span>
+                                        </span>
+                                        <span>{data?.ohaengTemp.season}</span>
                                     </div>
                                     <div className="flex flex-row gap-2.5">
-                                        <span>시간: </span>
-                                        <span className="font-bold">
-                                            {data?.ohaengTemp.timeName}
+                                        <span className="flex flex-row items-center font-bold gap-1">
+                                            <Clock4 className="w-4 h-4" />
+                                            <span>시간: </span>
                                         </span>
+                                        <span>{data?.ohaengTemp.timeName}</span>
                                     </div>
                                 </div>
                             </TooltipComp>
@@ -311,6 +317,7 @@ export default function DashboardPage() {
     // useEffect
     useEffect(() => {
         console.log(data);
+        console.log(profileData);
         if (data === null || profileData === null) {
             router.push('/');
         }
@@ -361,7 +368,7 @@ export default function DashboardPage() {
                                     return (
                                         <li
                                             key={idx}
-                                            className="flex flex-row justify-center items-center w-10 h-10"
+                                            className="relative group flex flex-row justify-center items-center w-10 h-10"
                                         >
                                             <Image
                                                 src={`/svg/character_head/${item}.svg`}
@@ -371,6 +378,9 @@ export default function DashboardPage() {
                                                 style={{ zIndex: 2 }}
                                                 unoptimized
                                             />
+                                            <TooltipComp>
+                                                <div>{item}일주</div>
+                                            </TooltipComp>
                                         </li>
                                     );
                                 })}

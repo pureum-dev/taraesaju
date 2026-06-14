@@ -4,7 +4,8 @@ import { Fragment, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 /** lib */
-import { UserRoundIcon, SunIcon, MoonIcon, MapPinnedIcon } from 'lucide-react';
+
+import { UserRoundIcon, SunIcon, MoonIcon, MapPinnedIcon, Wand, Parasol } from 'lucide-react';
 import { useModalStore } from '@/common/lib/store/useModalDataStore';
 
 /** Custom */
@@ -118,36 +119,48 @@ export default function AsideContents({
                 ),
                 prerequisite: true,
             },
-            /*{
-                title: '보정값',
-                icon: <SparkleIcon className="w-3.5" />,
-                value: (
-                    <div className="flex flex-col gap-0.5">
-                        <span className="flex items-center gap-2 border-b border-gray-900 font-bold dark:border-gray-50">
-                            <span>
-                                {`${data.birthData.solYear}-${data.birthData.solMonth}-${data.birthData.solDay}`}
-                            </span>
-                            <span>{`${data.birthData.time}`}</span>
-                        </span>
-                        <span className="text-mint-600 font-bold dark:text-mint-400">
-                            {`( 지역보정: ${Math.trunc(data.birthData.deltaMinutes)}분 ${
-                                data.birthData.summertimeMinutes
-                                    ? ', 서머타임: ' +
-                                      Math.trunc(data.birthData.summertimeMinutes) +
-                                      '분'
-                                    : ''
-                            } )`}
-                        </span>
-                    </div>
-                ),
-                prerequisite: !data.info.timeNone,
-            },*/
             {
                 title: `도시`,
                 icon: <MapPinnedIcon className="w-4" />,
                 value: (
-                    <span>{`${profileData.location.geo_name}/${profileData.location.alternate_name}`}</span>
+                    <span>{`${profileData.location.geo_name} / ${profileData.location.alternate_name}`}</span>
                 ),
+                prerequisite: true,
+            },
+        ];
+    }, [profileData]);
+
+    const correctList = useMemo<Record<string, any>[]>(() => {
+        const correctBirth = data.correctBirth;
+        if (!correctBirth || !profileData) return [];
+
+        const splitBirthday = correctBirth.date.split('-').map((item) => Number(item));
+        return [
+            {
+                title: '보정일',
+                icon: <SunIcon className="w-4" />,
+                value: (
+                    <span className="font-bold underline">
+                        <span>
+                            {`${splitBirthday[0]}-${String(splitBirthday[1]).padStart(2, '0')}-${String(splitBirthday[2]).padStart(2, '0')}`}
+                        </span>
+                        <span className="hidden ml-2 lg:inline">{`${correctBirth.time ?? ''}`}</span>
+                    </span>
+                ),
+                prerequisite: true,
+            },
+            {
+                title: `지역 보정`,
+                icon: <Wand className="w-4" />,
+                value: (
+                    <span>{`${correctBirth.deltaMinutes}분 (${profileData.location.alternate_name})`}</span>
+                ),
+                prerequisite: true,
+            },
+            {
+                title: `썸머타임`,
+                icon: <Parasol className="w-4" />,
+                value: <span>{` ${correctBirth.summertimeMinutes}분`}</span>,
                 prerequisite: true,
             },
         ];
@@ -179,28 +192,63 @@ export default function AsideContents({
                     <span className="truncate w-full text-center text-xl font-extrabold mt-2">
                         {profileData?.nickName}
                     </span>
-                    <div className="flex flex-row gap-1 text-sm">
-                        {(Object.keys(data.chartCol) as Array<keyof typeof data.chartCol>).map(
-                            (item) => {
-                                return (
-                                    data.chartCol[item] && (
-                                        <div key={item}>
-                                            <span>{data.chartCol[item].gan}</span>
-                                            <span>{data.chartCol[item].jiji}</span>
-                                            <span>
-                                                {item === 'year'
-                                                    ? '년'
-                                                    : item === 'month'
-                                                      ? '월'
-                                                      : item === 'day'
-                                                        ? '일'
-                                                        : '시'}
-                                            </span>
-                                        </div>
-                                    )
-                                );
-                            },
-                        )}
+                    <div className="flex flex-row items-center">
+                        <div className="flex flex-row gap-1 text-sm">
+                            {(Object.keys(data.chartCol) as Array<keyof typeof data.chartCol>).map(
+                                (item) => {
+                                    return (
+                                        data.chartCol[item] && (
+                                            <div key={item}>
+                                                <span>{data.chartCol[item].gan}</span>
+                                                <span>{data.chartCol[item].jiji}</span>
+                                                <span>
+                                                    {item === 'year'
+                                                        ? '년'
+                                                        : item === 'month'
+                                                          ? '월'
+                                                          : item === 'day'
+                                                            ? '일'
+                                                            : '시'}
+                                                </span>
+                                            </div>
+                                        )
+                                    );
+                                },
+                            )}
+                        </div>
+                        <TooltipIconComp>
+                            <div className="flex flex-col">
+                                <ul className="flex flex-col gap-0.5">
+                                    {correctList &&
+                                        correctList.map((correctItem, profileIdx) => {
+                                            return (
+                                                correctItem.prerequisite && (
+                                                    <Fragment key={profileIdx}>
+                                                        <li className="flex flex-col w-1/4 text-nowrap text-sm md:flex-row md:w-full">
+                                                            <span className="flex items-center w-24 font-bold text-gray-700 dark:text-gray-300">
+                                                                {correctItem.icon && (
+                                                                    <span className="flex justify-start items-center w-4 h-4 mr-1">
+                                                                        {correctItem.icon}
+                                                                    </span>
+                                                                )}
+                                                                {correctItem.title}
+                                                            </span>
+                                                            <span>{correctItem.value}</span>
+                                                        </li>
+                                                    </Fragment>
+                                                )
+                                            );
+                                        })}
+                                </ul>
+                                {profileData?.isDivideTime && (
+                                    <div className="mt-3">
+                                        <span className="bg-mint-500 text-background px-2 py-0.5 rounded-2xl text-sm">
+                                            야자시/조자시 적용
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </TooltipIconComp>
                     </div>
                 </div>
                 <div className="flex justify-center items-center w-full">

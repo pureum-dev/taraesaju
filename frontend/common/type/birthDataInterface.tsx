@@ -45,6 +45,7 @@ export interface BirthPointData {
 }
 
 export interface BirthAllData {
+    correctBirth: CorrectBirthDay;
     chartCol: BirthColumnGroup<BirthColumnData>;
     point: BirthPointData;
     ohaengStrength: OhaengStrengthData;

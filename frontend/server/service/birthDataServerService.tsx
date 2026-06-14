@@ -99,6 +99,7 @@ export const createAllBirthData = (birthDate: birthDataInterface): BirthAllData 
         const needOhaeng = checkNeedOhaeng(ohaengStrength, ohaengTemp);
 
         return {
+            correctBirth,
             chartCol: chartCol ?? null,
             point: createInfoData(chartCol),
             ohaengStrength,
@@ -206,19 +207,25 @@ export const correctBirthDay = (
     isDivideTime: boolean,
 ): CorrectBirthDay => {
     const zoned = dayjs.tz(birthDateTime, region.timezone);
+    const rawOffset = zoned.utcOffset();
+
+    //1912년 이전 데이터의 경우 라이브러리 내 자체보정들어가므로 그 값 보정
+    const originalDate = dayjs(birthDateTime, 'YYYY-MM-DDTHH:mm');
+    const originalInputTotalMinutes = originalDate.hour() * 60 + originalDate.minute();
+    const dayjsGeneratedTotalMinutes = zoned.hour() * 60 + zoned.minute();
+    const dynamicHistoryGap = originalInputTotalMinutes - dayjsGeneratedTotalMinutes;
+
+    // 지리적 경도 보정 계산 (당시 자오선 기준)
+    // 지구 한바퀴에 24시간 => 1시간당 15도, 1분당 0.25도 이동
+    const epochStandardMeridian = rawOffset * 0.25;
+    const deltaMinutes = Math.round((region.longitude - epochStandardMeridian) * 4);
 
     // DST 보정 - 기준점 (썸머타임이 보통 없는 1월 1일의 오프셋과 현재 오프셋 비교 해서 썸머타임 계산)
     const januaryOffset = dayjs.tz(`${zoned.year()}-01-01`, region.timezone).utcOffset();
-    const summertimeMinutes = (zoned.utcOffset() - januaryOffset) * -1;
-
-    // UTC offset → 표준 자오선 / 경도 보정
-    const utcOffset = zoned.utcOffset() / 60; // minutes → hours
-    const standardMeridian = utcOffset * 15;
-    const deltaMinutes = (region.longitude - standardMeridian) * 4;
-
-    const finalMinutes = deltaMinutes + summertimeMinutes;
+    const summertimeMinutes = Math.round((rawOffset - januaryOffset) * -1); //분단위
 
     // 태양시 계산
+    const finalMinutes = Math.round(deltaMinutes + summertimeMinutes + dynamicHistoryGap);
     const solarTime = zoned.add(finalMinutes, 'minute');
     let date = solarTime.format('YYYY-MM-DD');
     const time = solarTime.format('HH:mm');
@@ -245,11 +252,11 @@ export const correctBirthDay = (
     }
 
     return {
-        date: date,
-        time: time,
-        deltaMinutes: finalMinutes,
-        summertimeMinutes: summertimeMinutes,
-        isCalculateDate: isCalculateDate,
+        date,
+        time,
+        deltaMinutes,
+        summertimeMinutes,
+        isCalculateDate,
     };
 };
 
