@@ -168,6 +168,7 @@ export default function DashboardPage() {
             grid: { top: 0, bottom: '35%', left: '5%', right: '2%' },
             tooltip: {
                 triggerOn: 'none',
+                valueFormatter: (value: number | string) => value + '%',
             },
             yAxis: {
                 type: 'value',
@@ -207,7 +208,7 @@ export default function DashboardPage() {
                     if (seGanEle === item.element) per += 50 * 0.15;
                     if (seJiEle === item.element) per += 50 * 0.15;
 
-                    return per;
+                    return Math.floor(per * 100) / 100;
                 }),
             })),
         };
