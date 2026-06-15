@@ -365,7 +365,7 @@ export const checkNeedOhaeng = (
         const current = strengthMap.get(item);
         const next = strengthMap.get(cycle[(idx + 1) % cycle.length]);
 
-        if (current && next && current.percent >= 20 && next.percent < 12.5) {
+        if (current && next && current.percent >= 20 && next.percent <= 12.5) {
             needOhaengSet.add(next.element);
             muchSipsin.push(item);
         }
@@ -375,9 +375,9 @@ export const checkNeedOhaeng = (
         const _self = strengthMap.get('비겁');
         const _resource = strengthMap.get('인성');
 
-        if (_self && _self.percent < 12.5) {
+        if (_self && _self.percent <= 12.5) {
             if (!muchSipsin.includes('식상')) needOhaengSet.add(_self.element);
-        } else if (_resource && _resource.percent < 12.5) {
+        } else if (_resource && _resource.percent <= 12.5) {
             if (!muchSipsin.includes('비겁')) needOhaengSet.add(_resource.element);
         }
     }
