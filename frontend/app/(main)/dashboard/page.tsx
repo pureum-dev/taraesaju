@@ -317,8 +317,6 @@ export default function DashboardPage() {
 
     // useEffect
     useEffect(() => {
-        console.log(data);
-        console.log(profileData);
         if (data === null || profileData === null) {
             router.push('/');
         }
