@@ -394,6 +394,13 @@ export const calculateDayColumn = (solarBirth: Dayjs): BirthColumnItem<CheonganT
     const standardJi = '술'; // number = 10
     const diffDays = solarBirth.startOf('day').diff(standardDate.startOf('day'), 'day') + 1;
 
+    console.log({
+        standardDate_formatted: standardDate.format('YYYY-MM-DD HH:mm:ss'),
+        standardDate_month: standardDate.month(), // 0-indexed
+        now_month: dayjs().month(),
+        diffDays,
+    });
+
     const dayGan = Object.entries(cheongan).find(
         ([key, value]) => value.number === (10 + cheongan[standardGan].number + diffDays) % 10,
     )?.[0];
