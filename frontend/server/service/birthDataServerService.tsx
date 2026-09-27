@@ -389,10 +389,16 @@ export const calculateMonthColumn = (
  * 일주계산
  */
 export const calculateDayColumn = (solarBirth: Dayjs): BirthColumnItem<CheonganType, JijiType> => {
-    const standardDate = dayjs('1900-01-01', 'YYYY-mm-dd');
+    const standardDate = dayjs('1900-01-01', 'YYYY-MM-DD');
     const standardGan = '갑'; // number = 0
     const standardJi = '술'; // number = 10
     const diffDays = solarBirth.startOf('day').diff(standardDate.startOf('day'), 'day') + 1;
+    console.log({
+        standardDate_formatted: standardDate.format('YYYY-MM-DD HH:mm:ss'),
+        standardDate_month: standardDate.month(), // 0-indexed
+        now_month: dayjs().month(),
+        diffDays,
+    });
 
     const dayGan = Object.entries(cheongan).find(
         ([key, value]) => value.number === (10 + cheongan[standardGan].number + diffDays) % 10,
