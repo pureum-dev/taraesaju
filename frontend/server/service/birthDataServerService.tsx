@@ -394,19 +394,7 @@ export const calculateDayColumn = (solarBirth: Dayjs): BirthColumnItem<CheonganT
 
     const birthDateOnly = dayjs.utc(solarBirth.format('YYYY-MM-DD'), 'YYYY-MM-DD');
     const standardDate = dayjs.utc('1900-01-01', 'YYYY-MM-DD');
-    const diffDays = birthDateOnly.startOf('day').diff(standardDate.startOf('day'), 'day') + 1;
-
-    console.log({
-        solarBirth_raw: solarBirth.format(),
-        solarBirth_iso: solarBirth.toISOString(),
-        solarBirth_startOfDay: solarBirth.startOf('day').format(),
-
-        standardDate_raw: standardDate.format(),
-        standardDate_iso: standardDate.toISOString(),
-        standardDate_startOfDay: standardDate.startOf('day').format(),
-
-        timezoneOffset: new Date().getTimezoneOffset(),
-    });
+    const diffDays = birthDateOnly.startOf('day').diff(standardDate.startOf('day'), 'day');
 
     const dayGan = Object.entries(cheongan).find(
         ([key, value]) => value.number === (10 + cheongan[standardGan].number + diffDays) % 10,
